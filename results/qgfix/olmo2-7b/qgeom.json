@@ -1,0 +1,48 @@
+{
+  "model": "allenai/OLMo-2-1124-7B",
+  "revision": null,
+  "embed_md5": "61f22ef233d72e4f",
+  "code_md5": "8ffd7c06ecee",
+  "argv": "--model allenai/OLMo-2-1124-7B --layer 22 --out rerun/qgfix3/olmo2-7b",
+  "aborted": false,
+  "layer": 22,
+  "hidden": 4096,
+  "K": 6,
+  "D": 256,
+  "n": 1500,
+  "k": 26,
+  "chance": 0.04,
+  "decode_obl_full": 0.7733333333333333,
+  "decode_ent_full": 1.0,
+  "pr_state_classmeans": 14.958237648010254,
+  "pr_readout": 26.299535751342773,
+  "grad_frame": "mul",
+  "alignment": 0.176509827375412,
+  "alignment_random": 0.006246792653601978,
+  "alignment_null": 0.00634765625,
+  "decode_readout_k": 0.6888888888888889,
+  "decode_random_k": 0.3197777777777777,
+  "decode_random_k_sd": 0.026237091752385193,
+  "decode_random_k_ci": [
+    0.26594444444444443,
+    0.3686111111111111
+  ],
+  "n_null_draws": 50,
+  "decode_classmean_k": 0.7022222222222222,
+  "probe_C": {
+    "full": 0.01,
+    "readout_k": 0.01,
+    "classmean_k": 0.01
+  },
+  "C_grid": [
+    0.01,
+    0.03,
+    0.1,
+    0.3,
+    1.0,
+    3.0,
+    10.0
+  ],
+  "readout_beats_random": true,
+  "readout_vs_classmean": -0.013333333333333308
+}

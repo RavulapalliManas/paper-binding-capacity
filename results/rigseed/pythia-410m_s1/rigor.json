@@ -1,0 +1,20 @@
+{
+  "model": "EleutherAI/pythia-410m",
+  "best_layer": 14,
+  "nL": 24,
+  "pacc_wrong_nested": 0.0972972972972973,
+  "present_baseline": 0.125,
+  "cert_auroc": 0.4385585585585585,
+  "self_auroc": 0.6144144144144145,
+  "rawprobe_auroc": 0.6526126126126126,
+  "entropy_auroc": 0.678918918918919,
+  "selfcons_auroc": 0.6144144144144144,
+  "cert_minus_self": -0.17585585585585595,
+  "rawprobe_minus_self": 0.03819819819819814,
+  "cert_minus_entropy": -0.24036036036036046,
+  "cert_minus_selfcons": -0.17585585585585584,
+  "counterfactual_acc": 0.1,
+  "counterfactual_baseline": 0.125,
+  "model_acc": 0.105,
+  "seed": 1
+}

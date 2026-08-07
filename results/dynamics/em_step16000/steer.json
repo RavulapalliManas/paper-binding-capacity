@@ -1,0 +1,91 @@
+{
+  "model": "EleutherAI/pythia-1.4b",
+  "revision": "step16000",
+  "seed": 0,
+  "K": 6,
+  "D": 256,
+  "lstar": 14,
+  "n": 1200,
+  "n_fail": 298,
+  "results": {
+    "baseline": {
+      "repair": 0.0,
+      "damage_keep": 1.0
+    },
+    "linear_w": {
+      "oracle": true,
+      "0.5": {
+        "repair": 0.8087248322147651,
+        "damage_keep": 1.0
+      },
+      "1.0": {
+        "repair": 0.889261744966443,
+        "damage_keep": 1.0
+      }
+    },
+    "manifold_mu": {
+      "oracle": true,
+      "0.5": {
+        "repair": 0.8758389261744967,
+        "damage_keep": 1.0
+      },
+      "1.0": {
+        "repair": 0.9194630872483222,
+        "damage_keep": 1.0
+      }
+    },
+    "random": {
+      "oracle": true,
+      "0.5": {
+        "repair": 0.04697986577181208,
+        "damage_keep": 0.9117647058823529
+      },
+      "1.0": {
+        "repair": 0.13087248322147652,
+        "damage_keep": 0.7156862745098039
+      }
+    },
+    "linear_w_decoded": {
+      "oracle": false,
+      "0.5": {
+        "repair": 0.3087248322147651,
+        "damage_keep": 0.6176470588235294
+      },
+      "1.0": {
+        "repair": 0.32550335570469796,
+        "damage_keep": 0.6176470588235294
+      }
+    },
+    "manifold_mu_decoded": {
+      "oracle": false,
+      "0.5": {
+        "repair": 0.3221476510067114,
+        "damage_keep": 0.6176470588235294
+      },
+      "1.0": {
+        "repair": 0.33221476510067116,
+        "damage_keep": 0.6176470588235294
+      }
+    },
+    "gated_all": {
+      "0.5": {
+        "acc": 0.3975,
+        "base": 0.255,
+        "fired": 0.6875
+      },
+      "1.0": {
+        "acc": 0.405,
+        "base": 0.255,
+        "fired": 0.6875
+      }
+    },
+    "unembed_finallayer": {
+      "0.5": {
+        "repair": 1.0
+      },
+      "1.0": {
+        "repair": 1.0
+      }
+    }
+  }
+}

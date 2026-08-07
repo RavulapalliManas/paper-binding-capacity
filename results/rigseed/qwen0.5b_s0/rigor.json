@@ -1,0 +1,20 @@
+{
+  "model": "Qwen/Qwen2.5-0.5B",
+  "best_layer": 17,
+  "nL": 24,
+  "pacc_wrong_nested": 0.06666666666666667,
+  "present_baseline": 0.125,
+  "cert_auroc": 0.6775757575757576,
+  "self_auroc": 0.7284848484848485,
+  "rawprobe_auroc": 0.6590476190476192,
+  "entropy_auroc": 0.7421645021645021,
+  "selfcons_auroc": 0.7354978354978354,
+  "cert_minus_self": -0.050909090909090904,
+  "rawprobe_minus_self": -0.0694372294372293,
+  "cert_minus_entropy": -0.06458874458874453,
+  "cert_minus_selfcons": -0.05792207792207782,
+  "counterfactual_acc": 0.15666666666666668,
+  "counterfactual_baseline": 0.125,
+  "model_acc": 0.18333333333333332,
+  "seed": 0
+}

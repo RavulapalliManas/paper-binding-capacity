@@ -1,0 +1,11 @@
+{
+  "model": "EleutherAI/pythia-160m",
+  "revision": "step16000",
+  "layer": 6,
+  "grad_frame": "mul",
+  "decode_obl": 0.09777777777777778,
+  "chance": 0.04,
+  "embed_md5": "a29ea70a18a1a031",
+  "code_md5": "85cbb0004460",
+  "aborted": true
+}

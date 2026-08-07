@@ -1,0 +1,140 @@
+{
+  "model": "Qwen/Qwen2.5-7B",
+  "revision": null,
+  "K": 6,
+  "D": 256,
+  "lstar": 22,
+  "n": 1200,
+  "n_fail": 256,
+  "results": {
+    "baseline": {
+      "repair": 0.0,
+      "damage_keep": 1.0
+    },
+    "linear_w": {
+      "oracle": true,
+      "0.5": {
+        "repair": 0.51171875,
+        "damage_keep": 1.0
+      },
+      "1.0": {
+        "repair": 0.6796875,
+        "damage_keep": 1.0
+      },
+      "2.0": {
+        "repair": 0.7265625,
+        "damage_keep": 1.0
+      },
+      "4.0": {
+        "repair": 0.71875,
+        "damage_keep": 1.0
+      }
+    },
+    "manifold_mu": {
+      "oracle": true,
+      "0.5": {
+        "repair": 0.5390625,
+        "damage_keep": 1.0
+      },
+      "1.0": {
+        "repair": 0.61328125,
+        "damage_keep": 1.0
+      },
+      "2.0": {
+        "repair": 0.66015625,
+        "damage_keep": 1.0
+      },
+      "4.0": {
+        "repair": 0.69140625,
+        "damage_keep": 1.0
+      }
+    },
+    "random": {
+      "oracle": true,
+      "0.5": {
+        "repair": 0.05859375,
+        "damage_keep": 0.9166666666666666
+      },
+      "1.0": {
+        "repair": 0.14453125,
+        "damage_keep": 0.8263888888888888
+      },
+      "2.0": {
+        "repair": 0.1171875,
+        "damage_keep": 0.6597222222222222
+      },
+      "4.0": {
+        "repair": 0.1484375,
+        "damage_keep": 0.3125
+      }
+    },
+    "linear_w_decoded": {
+      "oracle": false,
+      "0.5": {
+        "repair": 0.30078125,
+        "damage_keep": 0.8194444444444444
+      },
+      "1.0": {
+        "repair": 0.35546875,
+        "damage_keep": 0.75
+      },
+      "2.0": {
+        "repair": 0.375,
+        "damage_keep": 0.6458333333333334
+      },
+      "4.0": {
+        "repair": 0.3671875,
+        "damage_keep": 0.5972222222222222
+      }
+    },
+    "manifold_mu_decoded": {
+      "oracle": false,
+      "0.5": {
+        "repair": 0.29296875,
+        "damage_keep": 0.7916666666666666
+      },
+      "1.0": {
+        "repair": 0.30859375,
+        "damage_keep": 0.6875
+      },
+      "2.0": {
+        "repair": 0.296875,
+        "damage_keep": 0.6111111111111112
+      },
+      "4.0": {
+        "repair": 0.3203125,
+        "damage_keep": 0.6041666666666666
+      }
+    },
+    "gated_all": {
+      "0.5": {
+        "acc": 0.4725,
+        "base": 0.36,
+        "fired": 0.68
+      },
+      "1.0": {
+        "acc": 0.445,
+        "base": 0.36,
+        "fired": 0.68
+      },
+      "2.0": {
+        "acc": 0.41,
+        "base": 0.36,
+        "fired": 0.68
+      },
+      "4.0": {
+        "acc": 0.4225,
+        "base": 0.36,
+        "fired": 0.68
+      }
+    },
+    "unembed_finallayer": {
+      "0.5": {
+        "repair": 1.0
+      },
+      "1.0": {
+        "repair": 1.0
+      }
+    }
+  }
+}

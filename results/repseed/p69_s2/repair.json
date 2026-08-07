@@ -1,0 +1,14 @@
+{
+  "model": "EleutherAI/pythia-6.9b",
+  "Lread": 21,
+  "baseline": 0.22333333333333333,
+  "repair": 0.6333333333333333,
+  "random_inject": 0.165,
+  "recovery": 0.41,
+  "gated_loop": 0.585,
+  "always": 0.6333333333333333,
+  "gate_minus_base": 0.36166666666666664,
+  "gate_minus_always": -0.04833333333333334,
+  "n": 600,
+  "seed": 2
+}

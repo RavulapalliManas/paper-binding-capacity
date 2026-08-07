@@ -1,0 +1,48 @@
+{
+  "model": "EleutherAI/pythia-1b",
+  "revision": "step32000",
+  "embed_md5": "cc1fe6eac2276a73",
+  "code_md5": "85cbb0004460",
+  "argv": "--model EleutherAI/pythia-1b --revision step32000 --grad-frame mul --K 6 --D 256 --n 1500 --n-grad 256 --out ./results/qgfix_p1b/step32000",
+  "aborted": false,
+  "layer": 8,
+  "hidden": 2048,
+  "K": 6,
+  "D": 256,
+  "n": 1500,
+  "k": 23,
+  "chance": 0.04,
+  "decode_obl_full": 0.48444444444444446,
+  "decode_ent_full": 1.0,
+  "pr_state_classmeans": 17.283815383911133,
+  "pr_readout": 23.165117263793945,
+  "grad_frame": "mul",
+  "alignment": 0.07112757861614227,
+  "alignment_random": 0.01072504210760404,
+  "alignment_null": 0.01123046875,
+  "decode_readout_k": 0.4444444444444444,
+  "decode_random_k": 0.2036444444444444,
+  "decode_random_k_sd": 0.019418401737184936,
+  "decode_random_k_ci": [
+    0.1625,
+    0.2385
+  ],
+  "n_null_draws": 50,
+  "decode_classmean_k": 0.4688888888888889,
+  "probe_C": {
+    "full": 1.0,
+    "readout_k": 0.03,
+    "classmean_k": 0.03
+  },
+  "C_grid": [
+    0.01,
+    0.03,
+    0.1,
+    0.3,
+    1.0,
+    3.0,
+    10.0
+  ],
+  "readout_beats_random": true,
+  "readout_vs_classmean": -0.02444444444444449
+}

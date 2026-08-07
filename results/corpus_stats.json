@@ -1,0 +1,14 @@
+{
+  "_provenance": "TRANSCRIBED from failure-grounding.md (exact-structure analysis of 11,583 SWE-bench attempts by DeepSWE-v11), via MASTER_STATUS.md sec. 2.2 and GEOMETRY_DYNAMICS_RESULTS.md sec. 0.1 (commit 245f873). failure-grounding.md itself is NOT in this repo -- committing it (or the analysis it summarizes) is a NEEDS-SOURCE item in paper/CLAIM_LEDGER.md sec. 7. HONESTY CONSTRAINT: these numbers describe DeepSWE-v11, not gpt-oss-20B; they MOTIVATE the account and do not test it, and any prose citing them must attribute the model. The retracted gpt-oss pair 0.16/0.83 (never measured) must not reappear.",
+  "model": "DeepSWE-v11",
+  "n_attempts": 11583,
+  "file_recall_fail": 0.68,
+  "file_recall_pass": 0.81,
+  "edit_coverage_fail": 0.55,
+  "edit_coverage_pass": 0.74,
+  "saw_never_edited_pct": 27,
+  "edited_all_still_failed_pct": 10.7,
+  "omission_share_pct": 53,
+  "wrong_logic_share_pct": 21,
+  "api_interface_share_pct": 55
+}

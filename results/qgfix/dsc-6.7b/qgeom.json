@@ -1,0 +1,48 @@
+{
+  "model": "deepseek-ai/deepseek-coder-6.7b-base",
+  "revision": null,
+  "embed_md5": "b08fa3dca7a14148",
+  "code_md5": "8ffd7c06ecee",
+  "argv": "--model deepseek-ai/deepseek-coder-6.7b-base --layer 14 --out rerun/qgfix3/dsc-6.7b",
+  "aborted": false,
+  "layer": 14,
+  "hidden": 4096,
+  "K": 6,
+  "D": 256,
+  "n": 1500,
+  "k": 21,
+  "chance": 0.043478260869565216,
+  "decode_obl_full": 0.24666666666666667,
+  "decode_ent_full": 1.0,
+  "pr_state_classmeans": 13.768728256225586,
+  "pr_readout": 21.300142288208008,
+  "grad_frame": "mul",
+  "alignment": 0.013120113871991634,
+  "alignment_random": 0.005318798709250645,
+  "alignment_null": 0.005126953125,
+  "decode_readout_k": 0.07333333333333333,
+  "decode_random_k": 0.06173333333333333,
+  "decode_random_k_sd": 0.008993600927702006,
+  "decode_random_k_ci": [
+    0.044444444444444446,
+    0.07555555555555556
+  ],
+  "n_null_draws": 50,
+  "decode_classmean_k": 0.14222222222222222,
+  "probe_C": {
+    "full": 0.3,
+    "readout_k": 0.1,
+    "classmean_k": 0.03
+  },
+  "C_grid": [
+    0.01,
+    0.03,
+    0.1,
+    0.3,
+    1.0,
+    3.0,
+    10.0
+  ],
+  "readout_beats_random": false,
+  "readout_vs_classmean": -0.06888888888888889
+}

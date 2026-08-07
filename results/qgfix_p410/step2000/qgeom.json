@@ -1,0 +1,11 @@
+{
+  "model": "EleutherAI/pythia-410m",
+  "revision": "step2000",
+  "layer": 12,
+  "grad_frame": "mul",
+  "decode_obl": 0.10222222222222223,
+  "chance": 0.04,
+  "embed_md5": "9dcc04a21f074033",
+  "code_md5": "85cbb0004460",
+  "aborted": true
+}

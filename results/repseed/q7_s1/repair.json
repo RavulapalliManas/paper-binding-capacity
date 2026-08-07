@@ -1,0 +1,14 @@
+{
+  "model": "Qwen/Qwen2.5-7B",
+  "Lread": 27,
+  "baseline": 0.7766666666666666,
+  "repair": 0.8833333333333333,
+  "random_inject": 0.6333333333333333,
+  "recovery": 0.10666666666666669,
+  "gated_loop": 0.9116666666666666,
+  "always": 0.8833333333333333,
+  "gate_minus_base": 0.135,
+  "gate_minus_always": 0.02833333333333332,
+  "n": 600,
+  "seed": 1
+}

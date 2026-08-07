@@ -1,0 +1,48 @@
+{
+  "model": "Qwen/Qwen2.5-7B",
+  "revision": null,
+  "embed_md5": "98448736f5fa5891",
+  "code_md5": "8ffd7c06ecee",
+  "argv": "--model Qwen/Qwen2.5-7B --layer 22 --out rerun/qgfix3/qwen2.5-7b",
+  "aborted": false,
+  "layer": 22,
+  "hidden": 3584,
+  "K": 6,
+  "D": 256,
+  "n": 1500,
+  "k": 6,
+  "chance": 0.04,
+  "decode_obl_full": 0.37333333333333335,
+  "decode_ent_full": 0.9844444444444445,
+  "pr_state_classmeans": 12.03600788116455,
+  "pr_readout": 6.492432594299316,
+  "grad_frame": "mul",
+  "alignment": 0.02393673174083233,
+  "alignment_random": 0.0017901978300902842,
+  "alignment_null": 0.0016741071428571428,
+  "decode_readout_k": 0.13333333333333333,
+  "decode_random_k": 0.05271111111111111,
+  "decode_random_k_sd": 0.009576994354267836,
+  "decode_random_k_ci": [
+    0.04,
+    0.06838888888888889
+  ],
+  "n_null_draws": 50,
+  "decode_classmean_k": 0.09333333333333334,
+  "probe_C": {
+    "full": 0.3,
+    "readout_k": 1.0,
+    "classmean_k": 0.03
+  },
+  "C_grid": [
+    0.01,
+    0.03,
+    0.1,
+    0.3,
+    1.0,
+    3.0,
+    10.0
+  ],
+  "readout_beats_random": true,
+  "readout_vs_classmean": 0.039999999999999994
+}

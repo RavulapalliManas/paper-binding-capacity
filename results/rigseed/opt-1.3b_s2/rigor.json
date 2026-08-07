@@ -1,0 +1,20 @@
+{
+  "model": "facebook/opt-1.3b",
+  "best_layer": 19,
+  "nL": 24,
+  "pacc_wrong_nested": 0.574468085106383,
+  "present_baseline": 0.125,
+  "cert_auroc": 0.9646728221597751,
+  "self_auroc": 0.7665094339622642,
+  "rawprobe_auroc": 0.7701726214371738,
+  "entropy_auroc": 0.7848253713368125,
+  "selfcons_auroc": 0.730228823765556,
+  "cert_minus_self": 0.1981633881975109,
+  "rawprobe_minus_self": 0.0036631874749095683,
+  "cert_minus_entropy": 0.1798474508229626,
+  "cert_minus_selfcons": 0.23444399839421914,
+  "counterfactual_acc": 0.7383333333333333,
+  "counterfactual_baseline": 0.125,
+  "model_acc": 0.5083333333333333,
+  "seed": 2
+}

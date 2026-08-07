@@ -1,0 +1,124 @@
+{
+  "models": {
+    "Qwen2.5-1.5B": {
+      "params_B": 1.5,
+      "model_acc": 0.334,
+      "gap_on_errors": 0.3157894736842105,
+      "gap_xchance": 16.421052631578945,
+      "gap_ci95": [
+        0.2631578947368421,
+        0.3684210526315789
+      ],
+      "recency_binding": 0.2967032967032967,
+      "recency_last": 0.05128205128205128,
+      "gold_eq_last": 0.174,
+      "cert_auroc": 0.7184345710165825,
+      "model_conf_auroc": 0.6707822638788753,
+      "probe_beats_conf": true,
+      "n_wrong_test": 304,
+      "best_layer": 24,
+      "nlayers": 28
+    },
+    "Qwen2.5-3B": {
+      "params_B": 3.1,
+      "model_acc": 0.35388888888888886,
+      "gap_on_errors": 0.2873900293255132,
+      "gap_xchance": 14.944281524926687,
+      "gap_ci95": [
+        0.2404692082111437,
+        0.3343108504398827
+      ],
+      "recency_binding": 0.26537216828478966,
+      "recency_last": 0.03559870550161812,
+      "gold_eq_last": 0.1711111111111111,
+      "cert_auroc": 0.6779203937576446,
+      "model_conf_auroc": 0.6776846107369693,
+      "probe_beats_conf": true,
+      "n_wrong_test": 341,
+      "best_layer": 33,
+      "nlayers": 36
+    },
+    "deepseek-coder-6.7b-base": {
+      "params_B": 6.7,
+      "model_acc": 0.5088,
+      "gap_on_errors": 0.3633879781420765,
+      "gap_xchance": 15.62568306010929,
+      "gap_ci95": [
+        0.31693989071038253,
+        0.412568306010929
+      ],
+      "recency_binding": NaN,
+      "recency_last": NaN,
+      "gold_eq_last": null,
+      "cert_auroc": 0.753265881147541,
+      "model_conf_auroc": NaN,
+      "probe_beats_conf": false,
+      "n_wrong_test": 366,
+      "best_layer": 20,
+      "nlayers": 32
+    },
+    "pythia-6.9b": {
+      "params_B": 6.9,
+      "model_acc": 0.35444444444444445,
+      "gap_on_errors": 0.2849162011173184,
+      "gap_xchance": 13.960893854748603,
+      "gap_ci95": [
+        0.24022346368715083,
+        0.33519553072625696
+      ],
+      "recency_binding": 0.2364217252396166,
+      "recency_last": 0.038338658146964855,
+      "gold_eq_last": 0.20777777777777778,
+      "cert_auroc": 0.681533550248634,
+      "model_conf_auroc": 0.6944563816072196,
+      "probe_beats_conf": false,
+      "n_wrong_test": 358,
+      "best_layer": 17,
+      "nlayers": 32
+    },
+    "OLMo-2-1124-7B": {
+      "params_B": 7.3,
+      "model_acc": 0.2783333333333333,
+      "gap_on_errors": 0.22666666666666666,
+      "gap_xchance": 11.786666666666665,
+      "gap_ci95": [
+        0.18666666666666668,
+        0.2693333333333333
+      ],
+      "recency_binding": 0.21084337349397592,
+      "recency_last": 0.03614457831325301,
+      "gold_eq_last": 0.1711111111111111,
+      "cert_auroc": 0.5553777777777779,
+      "model_conf_auroc": 0.580719191919192,
+      "probe_beats_conf": false,
+      "n_wrong_test": 375,
+      "best_layer": 26,
+      "nlayers": 32
+    },
+    "Qwen2.5-7B": {
+      "params_B": 7.6,
+      "model_acc": 0.386,
+      "gap_on_errors": 0.30517711171662126,
+      "gap_xchance": 15.869209809264305,
+      "gap_ci95": [
+        0.25885558583106266,
+        0.3542234332425068
+      ],
+      "recency_binding": NaN,
+      "recency_last": NaN,
+      "gold_eq_last": null,
+      "cert_auroc": 0.6323630877898749,
+      "model_conf_auroc": NaN,
+      "probe_beats_conf": false,
+      "n_wrong_test": 367,
+      "best_layer": 23,
+      "nlayers": 28
+    }
+  },
+  "summary": {
+    "n_models": 6,
+    "gap_gt3x_all": true,
+    "binding_gt2x_recency_all": true,
+    "cert_beats_conf": "2/6"
+  }
+}

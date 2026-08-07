@@ -1,0 +1,17 @@
+{
+  "_provenance": "TRANSCRIBED from GEOMETRY_DYNAMICS_RESULTS.md sec. 2g (2026-07-09 head-to-head vs the positional account of arXiv:2510.06182, run on the same trials with the two regressors made separable by the positional decomposition of sec. 1). The per-trial regression outputs live on the analysis box; committing them retires this file (NEEDS-SOURCE, paper/CLAIM_LEDGER.md sec. 4). The KILL discipline: the claim 'our geometry out-predicts the positional account' is RETRACTED -- these numbers are the loss, reported as such.",
+  "n_models": 7,
+  "models": {
+    "pythia-1.4b":        {"auroc_positional": 0.733, "auroc_overlap": 0.596, "overlap_increment": 0.0048, "foil_positional_neighbour": 0.275, "foil_pos_chance": 0.353, "foil_max_overlap": 0.147, "foil_ovl_chance": 0.200},
+    "pythia-6.9b":        {"auroc_positional": 0.662, "auroc_overlap": 0.558, "overlap_increment": 0.0015, "foil_positional_neighbour": 0.343, "foil_pos_chance": 0.346, "foil_max_overlap": 0.193, "foil_ovl_chance": 0.200},
+    "qwen2.5-1.5b":       {"auroc_positional": 0.722, "auroc_overlap": 0.678, "overlap_increment": 0.0029, "foil_positional_neighbour": 0.382, "foil_pos_chance": 0.353, "foil_max_overlap": 0.133, "foil_ovl_chance": 0.200},
+    "qwen2.5-7b":         {"auroc_positional": 0.771, "auroc_overlap": 0.621, "overlap_increment": 0.0048, "foil_positional_neighbour": 0.308, "foil_pos_chance": 0.361, "foil_max_overlap": 0.127, "foil_ovl_chance": 0.200},
+    "deepseek-coder-6.7b":{"auroc_positional": 0.843, "auroc_overlap": 0.769, "overlap_increment": -0.0003, "foil_positional_neighbour": 0.283, "foil_pos_chance": 0.351, "foil_max_overlap": 0.115, "foil_ovl_chance": 0.200},
+    "olmo2-7b":           {"auroc_positional": 0.625, "auroc_overlap": 0.568, "overlap_increment": -0.0005, "foil_positional_neighbour": 0.389, "foil_pos_chance": 0.349, "foil_max_overlap": 0.176, "foil_ovl_chance": 0.200},
+    "gpt-oss-20b":        {"auroc_positional": 0.593, "auroc_overlap": 0.522, "overlap_increment": 0.0036, "foil_positional_neighbour": 0.393, "foil_pos_chance": 0.345, "foil_max_overlap": 0.178, "foil_ovl_chance": 0.200}
+  },
+  "notes": {
+    "positional_curve": "primacy, not a U: the 256-token distractor block destroys recency, so the comparison to 2510.06182 is not apples-to-apples and the paper says so",
+    "synthesis": "what degrades is the positional pointer; the bound content survives"
+  }
+}

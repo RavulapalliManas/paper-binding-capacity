@@ -1,0 +1,14 @@
+{
+  "model": "deepseek-ai/deepseek-coder-6.7b-base",
+  "n": 800,
+  "k": 6,
+  "reassign": 2,
+  "best_layer": 28,
+  "chance": 0.023255813953488372,
+  "model_acc": 0.9325,
+  "model_acc_reassigned": 0.9325,
+  "probe_acc_all": 0.9708333333333333,
+  "probe_acc_on_wrong": 0.7333333333333333,
+  "n_wrong_test": 15,
+  "gap_xchance_on_wrong": 31.53333333333333
+}

@@ -1,0 +1,14 @@
+{
+  "model": "allenai/OLMo-2-1124-7B-Instruct",
+  "Lread": 28,
+  "baseline": 0.9466666666666667,
+  "repair": 0.905,
+  "random_inject": 0.865,
+  "recovery": -0.04166666666666663,
+  "gated_loop": 0.9416666666666667,
+  "always": 0.905,
+  "gate_minus_base": -0.0050000000000000044,
+  "gate_minus_always": 0.036666666666666625,
+  "n": 600,
+  "seed": 2
+}

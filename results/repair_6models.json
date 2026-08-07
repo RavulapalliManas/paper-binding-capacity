@@ -1,0 +1,75 @@
+{
+ "_provenance": "Re-derived from data by analysis/repair_seeds.py, from the seed-0 runs in results/repseed/. Seed 0 reproduces the previously transcribed table to three decimals on 6/6 models. Each row now carries the 3-seed band; the run's own read layer is recorded.",
+ "_columns": "baseline = no intervention; repair = re-inject the probe-decoded binding; random = format-matched random injection (control); gated = certificate-gated loop",
+ "task": "K bindings + D distractor tokens + recall query; accuracy restricted to the K present obligations",
+ "leak_free": true,
+ "n_seeds": 3,
+ "seeds": [
+  0,
+  1,
+  2
+ ],
+ "reported_seed": 0,
+ "models": {
+  "Pythia-1.4B": {
+   "baseline": 0.217,
+   "repair": 0.44,
+   "random": 0.098,
+   "gated": 0.403,
+   "read_layer": 11,
+   "n": 600,
+   "recovery_mean_over_seeds": 0.249,
+   "recovery_sd_over_seeds": 0.023
+  },
+  "Pythia-6.9B": {
+   "baseline": 0.208,
+   "repair": 0.59,
+   "random": 0.13,
+   "gated": 0.543,
+   "read_layer": 18,
+   "n": 600,
+   "recovery_mean_over_seeds": 0.402,
+   "recovery_sd_over_seeds": 0.017
+  },
+  "DeepSeek-Coder-6.7B": {
+   "baseline": 0.278,
+   "repair": 0.687,
+   "random": 0.242,
+   "gated": 0.687,
+   "read_layer": 20,
+   "n": 600,
+   "recovery_mean_over_seeds": 0.407,
+   "recovery_sd_over_seeds": 0.003
+  },
+  "OLMo-2-7B": {
+   "baseline": 0.695,
+   "repair": 0.842,
+   "random": 0.595,
+   "gated": 0.875,
+   "read_layer": 26,
+   "n": 600,
+   "recovery_mean_over_seeds": 0.121,
+   "recovery_sd_over_seeds": 0.024
+  },
+  "Qwen2.5-7B": {
+   "baseline": 0.755,
+   "repair": 0.853,
+   "random": 0.627,
+   "gated": 0.875,
+   "read_layer": 24,
+   "n": 600,
+   "recovery_mean_over_seeds": 0.106,
+   "recovery_sd_over_seeds": 0.008
+  },
+  "OLMo-2-Instruct": {
+   "baseline": 0.938,
+   "repair": 0.89,
+   "random": 0.807,
+   "gated": 0.918,
+   "read_layer": 23,
+   "n": 600,
+   "recovery_mean_over_seeds": -0.053,
+   "recovery_sd_over_seeds": 0.015
+  }
+ }
+}

@@ -1,0 +1,115 @@
+{
+  "model": "Qwen/Qwen2.5-1.5B",
+  "revision": null,
+  "K": 6,
+  "D": 256,
+  "lstar": 24,
+  "n": 1200,
+  "n_fail": 272,
+  "results": {
+    "baseline": {
+      "repair": 0.0,
+      "damage_keep": 1.0
+    },
+    "linear_w": {
+      "oracle": true,
+      "0.5": {
+        "repair": 0.9264705882352942,
+        "damage_keep": 1.0
+      },
+      "1.0": {
+        "repair": 0.9522058823529411,
+        "damage_keep": 1.0
+      },
+      "2.0": {
+        "repair": 0.9779411764705882,
+        "damage_keep": 1.0
+      }
+    },
+    "manifold_mu": {
+      "oracle": true,
+      "0.5": {
+        "repair": 0.9448529411764706,
+        "damage_keep": 1.0
+      },
+      "1.0": {
+        "repair": 0.9595588235294118,
+        "damage_keep": 1.0
+      },
+      "2.0": {
+        "repair": 0.9742647058823529,
+        "damage_keep": 1.0
+      }
+    },
+    "random": {
+      "oracle": true,
+      "0.5": {
+        "repair": 0.051470588235294115,
+        "damage_keep": 0.828125
+      },
+      "1.0": {
+        "repair": 0.08823529411764706,
+        "damage_keep": 0.5859375
+      },
+      "2.0": {
+        "repair": 0.1213235294117647,
+        "damage_keep": 0.359375
+      }
+    },
+    "linear_w_decoded": {
+      "oracle": false,
+      "0.5": {
+        "repair": 0.3235294117647059,
+        "damage_keep": 0.640625
+      },
+      "1.0": {
+        "repair": 0.3161764705882353,
+        "damage_keep": 0.640625
+      },
+      "2.0": {
+        "repair": 0.31985294117647056,
+        "damage_keep": 0.640625
+      }
+    },
+    "manifold_mu_decoded": {
+      "oracle": false,
+      "0.5": {
+        "repair": 0.3088235294117647,
+        "damage_keep": 0.640625
+      },
+      "1.0": {
+        "repair": 0.3088235294117647,
+        "damage_keep": 0.640625
+      },
+      "2.0": {
+        "repair": 0.3161764705882353,
+        "damage_keep": 0.640625
+      }
+    },
+    "gated_all": {
+      "0.5": {
+        "acc": 0.415,
+        "base": 0.32,
+        "fired": 0.615
+      },
+      "1.0": {
+        "acc": 0.415,
+        "base": 0.32,
+        "fired": 0.615
+      },
+      "2.0": {
+        "acc": 0.42,
+        "base": 0.32,
+        "fired": 0.615
+      }
+    },
+    "unembed_finallayer": {
+      "0.5": {
+        "repair": 1.0
+      },
+      "1.0": {
+        "repair": 1.0
+      }
+    }
+  }
+}

@@ -1,0 +1,91 @@
+{
+ "model": "EleutherAI/pythia-1.4b",
+ "K": 6,
+ "D": 256,
+ "decode_classes": 25,
+ "chance": 0.04,
+ "leak_free_layer_selection": true,
+ "rows": [
+  {
+   "step": 1000,
+   "lstar": 1,
+   "final_layer": 24,
+   "r_lstar": 0.1419753086419753,
+   "r_final": 0.19444444444444445,
+   "sep": -0.05246913580246915,
+   "chance": 0.04,
+   "n_fail": 324,
+   "behaviour": 0.19
+  },
+  {
+   "step": 8000,
+   "lstar": 23,
+   "final_layer": 24,
+   "r_lstar": 0.1476510067114094,
+   "r_final": 0.1476510067114094,
+   "sep": 0.0,
+   "chance": 0.04,
+   "n_fail": 298,
+   "behaviour": 0.255
+  },
+  {
+   "step": 16000,
+   "lstar": 14,
+   "final_layer": 24,
+   "r_lstar": 0.28187919463087246,
+   "r_final": 0.2348993288590604,
+   "sep": 0.04697986577181207,
+   "chance": 0.04,
+   "n_fail": 298,
+   "behaviour": 0.255
+  },
+  {
+   "step": 32000,
+   "lstar": 13,
+   "final_layer": 24,
+   "r_lstar": 0.2589928057553957,
+   "r_final": 0.18345323741007194,
+   "sep": 0.07553956834532374,
+   "chance": 0.04,
+   "n_fail": 278,
+   "behaviour": 0.305
+  },
+  {
+   "step": 64000,
+   "lstar": 13,
+   "final_layer": 24,
+   "r_lstar": 0.47474747474747475,
+   "r_final": 0.24915824915824916,
+   "sep": 0.2255892255892256,
+   "chance": 0.04,
+   "n_fail": 297,
+   "behaviour": 0.258
+  },
+  {
+   "step": 96000,
+   "lstar": 13,
+   "final_layer": 24,
+   "r_lstar": 0.5894736842105263,
+   "r_final": 0.3017543859649123,
+   "sep": 0.287719298245614,
+   "chance": 0.04,
+   "n_fail": 285,
+   "behaviour": 0.287
+  },
+  {
+   "step": 143000,
+   "lstar": 12,
+   "final_layer": 24,
+   "r_lstar": 0.7011070110701108,
+   "r_final": 0.3837638376383764,
+   "sep": 0.31734317343173435,
+   "chance": 0.04,
+   "n_fail": 271,
+   "behaviour": 0.323
+  }
+ ],
+ "sep_vs_step_spearman": 1.0,
+ "sep_vs_step_p": 0.0003968253968253968,
+ "r_final_first": 0.19444444444444445,
+ "r_final_last": 0.3837638376383764
+}

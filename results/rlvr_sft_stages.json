@@ -1,0 +1,26 @@
+{
+  "_provenance": "TRANSCRIBED from GEOMETRY_DYNAMICS_RESULTS.md sec. 2c (OLMo-2-7B stage chain) and sec. 2h (per-step RL-Zero-Code). The raw batteries are committed under results/rl_legibility/{st_rl_*,bat_code_*,fz_*} and results/dynamics/{rlvr_step_*,stg_rlvr,geo_stgrlvr}; a committed aggregator that re-derives these summary rows retires this file (NEEDS-SOURCE, CLAIM_LEDGER.md). NAMING: the metric sec. 2c/2h calls d_bind is stored here as d_decl, the declaration-site / entity-code participation ratio, per CLAIM_LEDGER sec. 9 (it is measured at the entity token and encodes the entity code, not the binding).",
+  "stage_chain": {
+    "model": "OLMo-2-7B (base -> SFT -> DPO -> Instruct/RLVR), four public checkpoints, one family, one seed",
+    "n_posterior": 400,
+    "stages": [
+      {"stage": "base", "probe_acc": 0.787, "failures": 194, "spearman_probe_model": 0.367, "d_decl": 59.95, "interference": 0.0079},
+      {"stage": "SFT",  "probe_acc": 0.953, "failures": 58,  "spearman_probe_model": 0.606, "d_decl": 62.56, "interference": 0.0064},
+      {"stage": "DPO",  "probe_acc": 0.927, "failures": 49,  "spearman_probe_model": 0.622, "d_decl": 64.04, "interference": 0.0064},
+      {"stage": "RLVR", "probe_acc": 0.932, "failures": 48,  "spearman_probe_model": 0.667, "d_decl": 63.97, "interference": 0.0064}
+    ]
+  },
+  "rl_steps": {
+    "model": "allenai/Olmo-3-7B-RL-Zero-Code, five collision-free step branches, GRPO on code, 7B",
+    "n_posterior": 300,
+    "n_capacity_per_K": 200,
+    "K": 10,
+    "steps": [
+      {"step": 500,  "probe_acc": 0.827, "failures": 87,  "d_decl": 68.43, "interference": 0.0068, "recall": 0.590, "margin": 0.310},
+      {"step": 1100, "probe_acc": 0.813, "failures": 87,  "d_decl": 68.56, "interference": 0.0067, "recall": 0.570, "margin": 0.285},
+      {"step": 1700, "probe_acc": 0.740, "failures": 95,  "d_decl": 68.57, "interference": 0.0068, "recall": 0.545, "margin": 0.121},
+      {"step": 2300, "probe_acc": 0.720, "failures": 105, "d_decl": 68.42, "interference": 0.0067, "recall": 0.520, "margin": -0.017},
+      {"step": 2900, "probe_acc": 0.720, "failures": 106, "d_decl": 68.53, "interference": 0.0067, "recall": 0.510, "margin": -0.020}
+    ]
+  }
+}

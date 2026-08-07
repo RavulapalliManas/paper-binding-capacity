@@ -1,0 +1,20 @@
+{
+  "_provenance": "TRANSCRIBED from plan.md 'Update 2026-07-01 -- G1 reproduce run + harness fixes' (gpt-oss-20B on the 500 SWE-bench Verified instances via tools/run_g1.py; run 1 bare greedy, run 2 temperature 1.0 + malformed-tool-call retry). The raw run artifacts (meta.json, per-episode trajectories) live in the gitignored runs/ tree on the dev box -- committing a summary derived from them is a NEEDS-SOURCE item in paper/CLAIM_LEDGER.md sec. 7. These are gpt-oss-20B's OWN behavioural numbers (unlike corpus_stats.json, which is DeepSWE-v11).",
+  "model": "openai/gpt-oss-20b",
+  "n_instances": 500,
+  "run1_bare": {
+    "solve": 0.128,
+    "solved": 64,
+    "errored": 29,
+    "never_edit_frac": 0.61,
+    "locate_to_edit_ratio": 42,
+    "solve_among_edited": 0.35
+  },
+  "run2_temp_retry": {
+    "solve": 0.300,
+    "solved": 150,
+    "errored": 0,
+    "never_edit_frac": 0.28,
+    "solve_among_edited": 0.42
+  }
+}

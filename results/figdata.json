@@ -1,0 +1,1386 @@
+{
+ "geom": [
+  {
+   "dir": "geom_bloom-1b7",
+   "label": "bloom-1b7",
+   "family": "BLOOM",
+   "recipe": "old",
+   "kstar": 3,
+   "d_bind": 27.179225054654207,
+   "pack": 0.11037842299980873,
+   "offdiag": 0.29675734639167783,
+   "ceiling": 0.98,
+   "model": "bigscience/bloom-1b7"
+  },
+  {
+   "dir": "geom_bloom560",
+   "label": "bloom560",
+   "family": "BLOOM",
+   "recipe": "old",
+   "kstar": 3,
+   "d_bind": 24.67344145341353,
+   "pack": 0.12158822698255442,
+   "offdiag": 0.2692210763692856,
+   "ceiling": 0.875,
+   "model": "bigscience/bloom-560m"
+  },
+  {
+   "dir": "geom_cereb",
+   "label": "cereb",
+   "family": "Cerebras",
+   "recipe": "old",
+   "kstar": 3,
+   "d_bind": 23.80312780900435,
+   "pack": 0.12603385672445588,
+   "offdiag": 0.359613835811615,
+   "ceiling": 0.885,
+   "model": "cerebras/Cerebras-GPT-1.3B"
+  },
+  {
+   "dir": "geom_dsc-6.7b",
+   "label": "dsc-6.7b",
+   "family": "DeepSeek",
+   "recipe": "modern",
+   "kstar": 16,
+   "d_bind": 32.131592432657875,
+   "pack": 0.4979522889516047,
+   "offdiag": 0.1839658498764038,
+   "ceiling": 0.98,
+   "model": "deepseek-ai/deepseek-coder-6.7b-base"
+  },
+  {
+   "dir": "geom_gn27",
+   "label": "gn27",
+   "family": "GPT-Neo",
+   "recipe": "old",
+   "kstar": 4,
+   "d_bind": 24.809755498712715,
+   "pack": 0.1612269012504504,
+   "offdiag": 0.9555638670921326,
+   "ceiling": 0.99,
+   "model": "EleutherAI/gpt-neo-2.7B"
+  },
+  {
+   "dir": "geom_gpt2-xl",
+   "label": "gpt2-xl",
+   "family": "GPT-2",
+   "recipe": "old",
+   "kstar": 3,
+   "d_bind": 24.858693556352094,
+   "pack": 0.12068212647935932,
+   "offdiag": 0.3738005042076111,
+   "ceiling": 0.965,
+   "model": "openai-community/gpt2-xl"
+  },
+  {
+   "dir": "geom_gpt2l",
+   "label": "gpt2l",
+   "family": "GPT-2",
+   "recipe": "old",
+   "kstar": 3,
+   "d_bind": 24.37349579551003,
+   "pack": 0.12308451873487762,
+   "offdiag": 0.3637393891811371,
+   "ceiling": 0.895,
+   "model": "openai-community/gpt2-large"
+  },
+  {
+   "dir": "geom_gpt2m",
+   "label": "gpt2m",
+   "family": "GPT-2",
+   "recipe": "old",
+   "kstar": 3,
+   "d_bind": 22.345748381181195,
+   "pack": 0.13425372686968232,
+   "offdiag": 0.5988572716712952,
+   "ceiling": 0.815,
+   "model": "openai-community/gpt2-medium"
+  },
+  {
+   "dir": "geom_gptneo-1.3b",
+   "label": "gptneo-1.3b",
+   "family": "GPT-Neo",
+   "recipe": "old",
+   "kstar": 3,
+   "d_bind": 19.870437188581988,
+   "pack": 0.15097805706926726,
+   "offdiag": 0.9669052600860596,
+   "ceiling": 0.955,
+   "model": "EleutherAI/gpt-neo-1.3B"
+  },
+  {
+   "dir": "geom_mistral-7b",
+   "label": "mistral-7b",
+   "family": "Mistral",
+   "recipe": "modern",
+   "kstar": 16,
+   "d_bind": 26.37507396274143,
+   "pack": 0.6066333699005227,
+   "offdiag": 0.1793277680873871,
+   "ceiling": 1.0,
+   "model": "mistralai/Mistral-7B-v0.1"
+  },
+  {
+   "dir": "geom_olmo1-7b",
+   "label": "olmo1-7b",
+   "family": "OLMo",
+   "recipe": "modern",
+   "kstar": 24,
+   "d_bind": 45.886213996193625,
+   "pack": 0.5230329092190484,
+   "offdiag": 0.06354091316461563,
+   "ceiling": 0.995,
+   "model": "allenai/OLMo-1.7-7B-hf"
+  },
+  {
+   "dir": "geom_olmo2-7b",
+   "label": "olmo2-7b",
+   "family": "OLMo",
+   "recipe": "modern",
+   "kstar": 16,
+   "d_bind": 34.29482184516059,
+   "pack": 0.4665427355701878,
+   "offdiag": 0.18126138746738435,
+   "ceiling": 0.975,
+   "model": "allenai/OLMo-2-1124-7B"
+  },
+  {
+   "dir": "geom_olmo2-dpo",
+   "label": "olmo2-dpo",
+   "family": "OLMo",
+   "recipe": "modern",
+   "kstar": 16,
+   "d_bind": 37.202305263943146,
+   "pack": 0.4300808749902196,
+   "offdiag": 0.1443367913365364,
+   "ceiling": 0.9,
+   "model": "allenai/OLMo-2-1124-7B-DPO"
+  },
+  {
+   "dir": "geom_olmo2-instruct",
+   "label": "olmo2-instruct",
+   "family": "OLMo",
+   "recipe": "modern",
+   "kstar": 16,
+   "d_bind": 37.110574298434784,
+   "pack": 0.4311439610419527,
+   "offdiag": 0.14519828259944917,
+   "ceiling": 0.89,
+   "model": "allenai/OLMo-2-1124-7B-Instruct"
+  },
+  {
+   "dir": "geom_olmo2-sft",
+   "label": "olmo2-sft",
+   "family": "OLMo",
+   "recipe": "modern",
+   "kstar": 16,
+   "d_bind": 35.045225355360245,
+   "pack": 0.45655292089871563,
+   "offdiag": 0.15580234825611114,
+   "ceiling": 0.995,
+   "model": "allenai/OLMo-2-1124-7B-SFT"
+  },
+  {
+   "dir": "geom_olmoe",
+   "label": "olmoe",
+   "family": "OLMo",
+   "recipe": "modern",
+   "kstar": 6,
+   "d_bind": 36.13852882385254,
+   "pack": 0.16602778793457104,
+   "offdiag": 0.21041188538074493,
+   "ceiling": 0.935,
+   "model": "allenai/OLMoE-1B-7B-0924"
+  },
+  {
+   "dir": "geom_opt-1.3b",
+   "label": "opt-1.3b",
+   "family": "OPT",
+   "recipe": "old",
+   "kstar": 10,
+   "d_bind": 27.379790219393644,
+   "pack": 0.36523289329483505,
+   "offdiag": 0.25460347533226013,
+   "ceiling": 0.99,
+   "model": "facebook/opt-1.3b"
+  },
+  {
+   "dir": "geom_opt-6.7b",
+   "label": "opt-6.7b",
+   "family": "OPT",
+   "recipe": "old",
+   "kstar": 24,
+   "d_bind": 29.807358134876598,
+   "pack": 0.8051703170269635,
+   "offdiag": 0.38766969442367555,
+   "ceiling": 0.97,
+   "model": "facebook/opt-6.7b"
+  },
+  {
+   "dir": "geom_opt27",
+   "label": "opt27",
+   "family": "OPT",
+   "recipe": "old",
+   "kstar": 6,
+   "d_bind": 29.544604214754973,
+   "pack": 0.20308276787815072,
+   "offdiag": 0.29563566446304324,
+   "ceiling": 0.965,
+   "model": "facebook/opt-2.7b"
+  },
+  {
+   "dir": "geom_opt350",
+   "label": "opt350",
+   "family": "OPT",
+   "recipe": "old",
+   "kstar": 3,
+   "d_bind": 23.805777463045988,
+   "pack": 0.126019828780258,
+   "offdiag": 0.22702480256557464,
+   "ceiling": 0.79,
+   "model": "facebook/opt-350m"
+  },
+  {
+   "dir": "geom_pythia-1.4b",
+   "label": "pythia-1.4b",
+   "family": "Pythia",
+   "recipe": "old",
+   "kstar": 4,
+   "d_bind": 26.81410810682509,
+   "pack": 0.14917520224484704,
+   "offdiag": 0.6054773926734924,
+   "ceiling": 0.99,
+   "model": "EleutherAI/pythia-1.4b"
+  },
+  {
+   "dir": "geom_pythia-12b",
+   "label": "pythia-12b",
+   "family": "Pythia",
+   "recipe": "old",
+   "kstar": 4,
+   "d_bind": 33.396594134244054,
+   "pack": 0.11977269250275809,
+   "offdiag": 0.8969613194465638,
+   "ceiling": 0.905,
+   "model": "EleutherAI/pythia-12b"
+  },
+  {
+   "dir": "geom_pythia-2.8b",
+   "label": "pythia-2.8b",
+   "family": "Pythia",
+   "recipe": "old",
+   "kstar": 6,
+   "d_bind": 30.159086651272244,
+   "pack": 0.19894501677649276,
+   "offdiag": 0.6252706170082092,
+   "ceiling": 0.985,
+   "model": "EleutherAI/pythia-2.8b"
+  },
+  {
+   "dir": "geom_pythia-410m",
+   "label": "pythia-410m",
+   "family": "Pythia",
+   "recipe": "old",
+   "kstar": 3,
+   "d_bind": 22.40651512145996,
+   "pack": 0.13388962913705596,
+   "offdiag": 0.44474539160728455,
+   "ceiling": 0.855,
+   "model": "EleutherAI/pythia-410m"
+  },
+  {
+   "dir": "geom_pythia-6.9b",
+   "label": "pythia-6.9b",
+   "family": "Pythia",
+   "recipe": "old",
+   "kstar": 4,
+   "d_bind": 31.53613323635525,
+   "pack": 0.12683863205086637,
+   "offdiag": 0.8345073342323304,
+   "ceiling": 0.905,
+   "model": "EleutherAI/pythia-6.9b"
+  },
+  {
+   "dir": "geom_pythia70",
+   "label": "pythia70",
+   "family": "Pythia",
+   "recipe": "old",
+   "kstar": 2,
+   "d_bind": 16.429055907509543,
+   "pack": 0.1217355404435678,
+   "offdiag": 0.4993128597736359,
+   "ceiling": 0.07,
+   "model": "EleutherAI/pythia-70m"
+  },
+  {
+   "dir": "geom_qwen2.5-0.5b",
+   "label": "qwen2.5-0.5b",
+   "family": "Qwen",
+   "recipe": "modern",
+   "kstar": 3,
+   "d_bind": 24.528086980183918,
+   "pack": 0.12230876392037307,
+   "offdiag": 0.3686869442462921,
+   "ceiling": 0.825,
+   "model": "Qwen/Qwen2.5-0.5B"
+  },
+  {
+   "dir": "geom_qwen2.5-1.5b",
+   "label": "qwen2.5-1.5b",
+   "family": "Qwen",
+   "recipe": "modern",
+   "kstar": 10,
+   "d_bind": 28.524133046468098,
+   "pack": 0.350580330815265,
+   "offdiag": 0.3763795614242554,
+   "ceiling": 0.935,
+   "model": "Qwen/Qwen2.5-1.5B"
+  },
+  {
+   "dir": "geom_qwen2.5-3b",
+   "label": "qwen2.5-3b",
+   "family": "Qwen",
+   "recipe": "modern",
+   "kstar": 24,
+   "d_bind": 28.37935881181197,
+   "pack": 0.8456850684436573,
+   "offdiag": 0.33240172266960144,
+   "ceiling": 0.92,
+   "model": "Qwen/Qwen2.5-3B"
+  },
+  {
+   "dir": "geom_qwen2.5-7b",
+   "label": "qwen2.5-7b",
+   "family": "Qwen",
+   "recipe": "modern",
+   "kstar": 16,
+   "d_bind": 32.15822558932834,
+   "pack": 0.49753988929078347,
+   "offdiag": 0.2960908591747284,
+   "ceiling": 0.945,
+   "model": "Qwen/Qwen2.5-7B"
+  }
+ ],
+ "robust": [
+  {
+   "dir": "cohb_d_dsc",
+   "label": "dsc",
+   "family": "DeepSeek",
+   "recipe": "modern",
+   "fixed_K": 8,
+   "curve": [
+    [
+     0,
+     0.705
+    ],
+    [
+     32,
+     0.385
+    ],
+    [
+     64,
+     0.255
+    ],
+    [
+     128,
+     0.19
+    ],
+    [
+     256,
+     0.205
+    ]
+   ],
+   "model": "deepseek-ai/deepseek-coder-6.7b-base"
+  },
+  {
+   "dir": "cohb_d_mist",
+   "label": "mist",
+   "family": "Mistral",
+   "recipe": "old",
+   "fixed_K": 8,
+   "curve": [
+    [
+     0,
+     0.91
+    ],
+    [
+     32,
+     0.54
+    ],
+    [
+     64,
+     0.425
+    ],
+    [
+     128,
+     0.375
+    ],
+    [
+     256,
+     0.26
+    ]
+   ],
+   "model": "mistralai/Mistral-7B-v0.1"
+  },
+  {
+   "dir": "cohb_d_olmo7",
+   "label": "olmo7",
+   "family": "OLMo",
+   "recipe": "modern",
+   "fixed_K": 8,
+   "curve": [
+    [
+     0,
+     0.875
+    ],
+    [
+     32,
+     0.72
+    ],
+    [
+     64,
+     0.61
+    ],
+    [
+     128,
+     0.475
+    ],
+    [
+     256,
+     0.195
+    ]
+   ],
+   "model": "allenai/OLMo-2-1124-7B"
+  },
+  {
+   "dir": "cohb_d_olmoe",
+   "label": "olmoe",
+   "family": "OLMo",
+   "recipe": "modern",
+   "fixed_K": 8,
+   "curve": [
+    [
+     0,
+     0.33
+    ],
+    [
+     32,
+     0.235
+    ],
+    [
+     64,
+     0.2
+    ],
+    [
+     128,
+     0.16
+    ],
+    [
+     256,
+     0.23
+    ]
+   ],
+   "model": "allenai/OLMoE-1B-7B-0924"
+  },
+  {
+   "dir": "cohb_d_p14",
+   "label": "p14",
+   "family": "Pythia",
+   "recipe": "old",
+   "fixed_K": 8,
+   "curve": [
+    [
+     0,
+     0.38
+    ],
+    [
+     32,
+     0.285
+    ],
+    [
+     64,
+     0.215
+    ],
+    [
+     128,
+     0.165
+    ],
+    [
+     256,
+     0.155
+    ]
+   ],
+   "model": "EleutherAI/pythia-1.4b"
+  },
+  {
+   "dir": "cohb_d_p69",
+   "label": "p69",
+   "family": "Pythia",
+   "recipe": "old",
+   "fixed_K": 8,
+   "curve": [
+    [
+     0,
+     0.285
+    ],
+    [
+     32,
+     0.245
+    ],
+    [
+     64,
+     0.19
+    ],
+    [
+     128,
+     0.2
+    ],
+    [
+     256,
+     0.105
+    ]
+   ],
+   "model": "EleutherAI/pythia-6.9b"
+  },
+  {
+   "dir": "cohb_d_q05",
+   "label": "q05",
+   "family": "Qwen",
+   "recipe": "old",
+   "fixed_K": 8,
+   "curve": [
+    [
+     0,
+     0.265
+    ],
+    [
+     32,
+     0.215
+    ],
+    [
+     64,
+     0.22
+    ],
+    [
+     128,
+     0.225
+    ],
+    [
+     256,
+     0.165
+    ]
+   ],
+   "model": "Qwen/Qwen2.5-0.5B-Instruct"
+  },
+  {
+   "dir": "cohb_d_q7",
+   "label": "q7",
+   "family": "Qwen",
+   "recipe": "old",
+   "fixed_K": 8,
+   "curve": [
+    [
+     0,
+     0.96
+    ],
+    [
+     32,
+     0.56
+    ],
+    [
+     64,
+     0.54
+    ],
+    [
+     128,
+     0.325
+    ],
+    [
+     256,
+     0.31
+    ]
+   ],
+   "model": "Qwen/Qwen2.5-7B"
+  }
+ ],
+ "repair": [
+  {
+   "dir": "causal_gptoss",
+   "label": "gptoss",
+   "family": "gpt-oss",
+   "recipe": "modern",
+   "orig": 0.9416666666666667,
+   "reinj": 0.9783333333333333,
+   "ctrl": 0.5233333333333333,
+   "byD": [
+    [
+     0,
+     0.9333333333333333,
+     0.9733333333333334,
+     0.33
+    ],
+    [
+     128,
+     0.94,
+     0.9733333333333334,
+     0.4633333333333333
+    ],
+    [
+     256,
+     0.9433333333333334,
+     0.9833333333333333,
+     0.5833333333333334
+    ]
+   ]
+  },
+  {
+   "dir": "causal_olmo2-7b",
+   "label": "olmo2-7b",
+   "family": "OLMo",
+   "recipe": "modern",
+   "orig": 0.5533333333333333,
+   "reinj": 0.8516666666666667,
+   "ctrl": 0.2,
+   "byD": [
+    [
+     0,
+     0.8766666666666667,
+     0.9233333333333333,
+     0.43666666666666665
+    ],
+    [
+     128,
+     0.6266666666666667,
+     0.89,
+     0.25333333333333335
+    ],
+    [
+     256,
+     0.48,
+     0.8133333333333334,
+     0.14666666666666667
+    ]
+   ]
+  },
+  {
+   "dir": "causal_olmoe",
+   "label": "olmoe",
+   "family": "OLMo",
+   "recipe": "modern",
+   "orig": 0.305,
+   "reinj": 0.5483333333333333,
+   "ctrl": 0.15166666666666667,
+   "byD": [
+    [
+     0,
+     0.43,
+     0.6566666666666666,
+     0.17333333333333334
+    ],
+    [
+     128,
+     0.3233333333333333,
+     0.61,
+     0.15666666666666668
+    ],
+    [
+     256,
+     0.2866666666666667,
+     0.4866666666666667,
+     0.14666666666666667
+    ]
+   ]
+  },
+  {
+   "dir": "causal_qwen2.5-1.5b-instruct",
+   "label": "qwen2.5-1.5b-instruct",
+   "family": "Qwen",
+   "recipe": "modern",
+   "orig": 0.8049999999999999,
+   "reinj": 0.935,
+   "ctrl": 0.19333333333333333,
+   "byD": [
+    [
+     0,
+     0.8233333333333334,
+     0.8933333333333333,
+     0.2833333333333333
+    ],
+    [
+     128,
+     0.7966666666666666,
+     0.9233333333333333,
+     0.15333333333333332
+    ],
+    [
+     256,
+     0.8133333333333334,
+     0.9466666666666667,
+     0.23333333333333334
+    ]
+   ]
+  },
+  {
+   "dir": "cohb_c_p14",
+   "label": "p14",
+   "family": "Pythia",
+   "recipe": "old",
+   "orig": 0.36333333333333334,
+   "reinj": 0.5349999999999999,
+   "ctrl": 0.24833333333333335,
+   "byD": [
+    [
+     0,
+     0.4033333333333333,
+     0.54,
+     0.16666666666666666
+    ],
+    [
+     128,
+     0.36333333333333334,
+     0.5666666666666667,
+     0.24333333333333335
+    ],
+    [
+     256,
+     0.36333333333333334,
+     0.5033333333333333,
+     0.25333333333333335
+    ]
+   ]
+  },
+  {
+   "dir": "cohb_c_p28",
+   "label": "p28",
+   "family": "Pythia",
+   "recipe": "old",
+   "orig": 0.38,
+   "reinj": 0.6733333333333333,
+   "ctrl": 0.21000000000000002,
+   "byD": [
+    [
+     0,
+     0.5233333333333333,
+     0.6466666666666666,
+     0.26666666666666666
+    ],
+    [
+     128,
+     0.47,
+     0.7433333333333333,
+     0.23
+    ],
+    [
+     256,
+     0.29,
+     0.6033333333333334,
+     0.19
+    ]
+   ]
+  },
+  {
+   "dir": "cohb_c_p69",
+   "label": "p69",
+   "family": "Pythia",
+   "recipe": "old",
+   "orig": 0.2866666666666666,
+   "reinj": 0.6100000000000001,
+   "ctrl": 0.2583333333333333,
+   "byD": [
+    [
+     0,
+     0.43,
+     0.6433333333333333,
+     0.17
+    ],
+    [
+     128,
+     0.3333333333333333,
+     0.6266666666666667,
+     0.2633333333333333
+    ],
+    [
+     256,
+     0.24,
+     0.5933333333333334,
+     0.25333333333333335
+    ]
+   ]
+  },
+  {
+   "dir": "cohb_c_q05",
+   "label": "q05",
+   "family": "Qwen",
+   "recipe": "old",
+   "orig": 0.29166666666666663,
+   "reinj": 0.5116666666666667,
+   "ctrl": 0.2033333333333333,
+   "byD": [
+    [
+     0,
+     0.3566666666666667,
+     0.44666666666666666,
+     0.25333333333333335
+    ],
+    [
+     128,
+     0.29333333333333333,
+     0.5566666666666666,
+     0.18
+    ],
+    [
+     256,
+     0.29,
+     0.4666666666666667,
+     0.22666666666666666
+    ]
+   ]
+  },
+  {
+   "dir": "cohb_c_q15",
+   "label": "q15",
+   "family": "Qwen",
+   "recipe": "old",
+   "orig": 0.7916666666666667,
+   "reinj": 0.9450000000000001,
+   "ctrl": 0.19333333333333333,
+   "byD": [
+    [
+     0,
+     0.8033333333333333,
+     0.8933333333333333,
+     0.25666666666666665
+    ],
+    [
+     128,
+     0.7733333333333333,
+     0.9433333333333334,
+     0.16
+    ],
+    [
+     256,
+     0.81,
+     0.9466666666666667,
+     0.22666666666666666
+    ]
+   ]
+  }
+ ],
+ "loop": [
+  {
+   "dir": "loop_olmo2-7b",
+   "label": "olmo2-7b",
+   "family": "OLMo",
+   "recipe": "modern",
+   "base": 0.6533333333333333,
+   "gated": 0.7677777777777778,
+   "always": 0.7655555555555557,
+   "oracle": 0.8266666666666667
+  },
+  {
+   "dir": "loop_olmo2-instruct",
+   "label": "olmo2-instruct",
+   "family": "OLMo",
+   "recipe": "modern",
+   "base": 0.8955555555555555,
+   "gated": 0.9255555555555555,
+   "always": 0.8977777777777778,
+   "oracle": 0.9477777777777777
+  },
+  {
+   "dir": "loop_olmoe",
+   "label": "olmoe",
+   "family": "OLMo",
+   "recipe": "modern",
+   "base": 0.4566666666666667,
+   "gated": 0.48444444444444446,
+   "always": 0.47555555555555556,
+   "oracle": 0.5788888888888889
+  },
+  {
+   "dir": "loop_pythia-6.9b",
+   "label": "pythia-6.9b",
+   "family": "Pythia",
+   "recipe": "old",
+   "base": 0.4277777777777778,
+   "gated": 0.581111111111111,
+   "always": 0.5644444444444444,
+   "oracle": 0.6377777777777779
+  },
+  {
+   "dir": "loop_qwen1.5b-instruct",
+   "label": "qwen1.5b-instruct",
+   "family": "Qwen",
+   "recipe": "modern",
+   "base": 0.8555555555555556,
+   "gated": 0.8955555555555557,
+   "always": 0.8922222222222222,
+   "oracle": 0.9333333333333332
+  },
+  {
+   "dir": "loop_qwen7b",
+   "label": "qwen7b",
+   "family": "Qwen",
+   "recipe": "modern",
+   "base": 0.5322222222222223,
+   "gated": 0.6333333333333333,
+   "always": 0.6477777777777779,
+   "oracle": 0.6844444444444444
+  },
+  {
+   "dir": "cohb_l_p14",
+   "label": "p14",
+   "family": "Pythia",
+   "recipe": "old",
+   "base": 0.5822222222222223,
+   "gated": 0.6755555555555555,
+   "always": 0.5955555555555556,
+   "oracle": 0.6888888888888888
+  },
+  {
+   "dir": "cohb_l_q05",
+   "label": "q05",
+   "family": "Qwen",
+   "recipe": "old",
+   "base": 0.43333333333333335,
+   "gated": 0.4488888888888889,
+   "always": 0.44,
+   "oracle": 0.5022222222222222
+  },
+  {
+   "dir": "cohb_l_q15",
+   "label": "q15",
+   "family": "Qwen",
+   "recipe": "old",
+   "base": 0.8588888888888889,
+   "gated": 0.9155555555555553,
+   "always": 0.9122222222222223,
+   "oracle": 0.9555555555555554
+  }
+ ],
+ "transfer": [
+  {
+   "dir": "transfer_olmo2-7b",
+   "label": "olmo2-7b",
+   "family": "OLMo",
+   "recipe": "modern",
+   "tags": {
+    "in-domain": {
+     "A_signed": 0.9659244953668457,
+     "A_self": 0.7956583907448329,
+     "delta": 0.17026610462201275
+    },
+    "cond-transfer": {
+     "A_signed": 0.9082750290519378,
+     "A_self": 0.7449189454416532,
+     "delta": 0.16335608361028456
+    },
+    "vocab-transfer": {
+     "A_signed": 0.9360351648351649,
+     "A_self": 0.7617230769230768,
+     "delta": 0.17431208791208808
+    },
+    "vocab+cond": {
+     "A_signed": 0.9084432633196722,
+     "A_self": 0.7318455430327868,
+     "delta": 0.17659772028688536
+    },
+    "load-transfer": {
+     "A_signed": 0.9517487916219121,
+     "A_self": 0.8175349087003223,
+     "delta": 0.13421388292158976
+    },
+    "load+cond": {
+     "A_signed": 0.89179050642043,
+     "A_self": 0.708860353644656,
+     "delta": 0.18293015277577396
+    }
+   },
+   "delta_all": 0.16531422274364155
+  },
+  {
+   "dir": "transfer_olmo2-instruct",
+   "label": "olmo2-instruct",
+   "family": "OLMo",
+   "recipe": "modern",
+   "tags": {
+    "in-domain": {
+     "A_signed": 0.9680747518006618,
+     "A_self": 0.8883914087340211,
+     "delta": 0.07968334306664071
+    },
+    "cond-transfer": {
+     "A_signed": 0.9601206098730121,
+     "A_self": 0.90712249185983,
+     "delta": 0.052998118013182015
+    },
+    "vocab-transfer": {
+     "A_signed": 0.9700812549903716,
+     "A_self": 0.9293128551970317,
+     "delta": 0.040768399793339904
+    },
+    "vocab+cond": {
+     "A_signed": 0.970638024633705,
+     "A_self": 0.8795166656937715,
+     "delta": 0.09112135893993345
+    },
+    "load-transfer": {
+     "A_signed": 0.9559405760778759,
+     "A_self": 0.9162398750499436,
+     "delta": 0.03970070102793222
+    },
+    "load+cond": {
+     "A_signed": 0.9204832725959486,
+     "A_self": 0.8518007813782461,
+     "delta": 0.06868249121770253
+    }
+   },
+   "delta_all": 0.057995000193149175
+  },
+  {
+   "dir": "transfer_olmoe",
+   "label": "olmoe",
+   "family": "OLMo",
+   "recipe": "modern",
+   "tags": {
+    "in-domain": {
+     "A_signed": 0.8069407228285733,
+     "A_self": 0.788477877262924,
+     "delta": 0.018462845565649366
+    },
+    "cond-transfer": {
+     "A_signed": 0.6996924632561341,
+     "A_self": 0.6678851048264366,
+     "delta": 0.03180735842969747
+    },
+    "vocab-transfer": {
+     "A_signed": 0.7641003855957127,
+     "A_self": 0.7252140382981505,
+     "delta": 0.03888634729756224
+    },
+    "vocab+cond": {
+     "A_signed": 0.5961029411764707,
+     "A_self": 0.6775735294117649,
+     "delta": -0.08147058823529418
+    },
+    "load-transfer": {
+     "A_signed": 0.8181937602627259,
+     "A_self": 0.7332183908045978,
+     "delta": 0.08497536945812811
+    },
+    "load+cond": {
+     "A_signed": 0.5317752100840336,
+     "A_self": 0.6807328700711054,
+     "delta": -0.14895765998707178
+    }
+   },
+   "delta_all": 0.009340042243378054
+  },
+  {
+   "dir": "transfer_pythia-6.9b",
+   "label": "pythia-6.9b",
+   "family": "Pythia",
+   "recipe": "old",
+   "tags": {
+    "in-domain": {
+     "A_signed": 0.9164447886914848,
+     "A_self": 0.7103967985025254,
+     "delta": 0.20604799018895947
+    },
+    "cond-transfer": {
+     "A_signed": 0.8707042251684002,
+     "A_self": 0.6871660359109909,
+     "delta": 0.18353818925740928
+    },
+    "vocab-transfer": {
+     "A_signed": 0.9039925180598556,
+     "A_self": 0.7334236326109391,
+     "delta": 0.17056888544891646
+    },
+    "vocab+cond": {
+     "A_signed": 0.8518829532975907,
+     "A_self": 0.7489664750339126,
+     "delta": 0.10291647826367811
+    },
+    "load-transfer": {
+     "A_signed": 0.9026002722242846,
+     "A_self": 0.7941524809531384,
+     "delta": 0.10844779127114623
+    },
+    "load+cond": {
+     "A_signed": 0.8879382980102404,
+     "A_self": 0.7550554151273575,
+     "delta": 0.13288288288288286
+    }
+   },
+   "delta_all": 0.165644833054549
+  },
+  {
+   "dir": "transfer_qwen1.5b-instruct",
+   "label": "qwen1.5b-instruct",
+   "family": "Qwen",
+   "recipe": "modern",
+   "tags": {
+    "in-domain": {
+     "A_signed": 0.9722250243787619,
+     "A_self": 0.8526850263963146,
+     "delta": 0.1195399979824473
+    },
+    "cond-transfer": {
+     "A_signed": 0.8810279170262284,
+     "A_self": 0.776977336203139,
+     "delta": 0.10405058082308931
+    },
+    "vocab-transfer": {
+     "A_signed": 0.9806189213085764,
+     "A_self": 0.875579133510168,
+     "delta": 0.10503978779840839
+    },
+    "vocab+cond": {
+     "A_signed": 0.9015804597701149,
+     "A_self": 0.8062802480338778,
+     "delta": 0.09530021173623715
+    },
+    "load-transfer": {
+     "A_signed": 0.970892857142857,
+     "A_self": 0.9204761904761904,
+     "delta": 0.050416666666666554
+    },
+    "load+cond": {
+     "A_signed": 0.8642622950819672,
+     "A_self": 0.7641445985708281,
+     "delta": 0.10011769651113911
+    }
+   },
+   "delta_all": 0.09951980414849403
+  },
+  {
+   "dir": "transfer_qwen7b",
+   "label": "qwen7b",
+   "family": "Qwen",
+   "recipe": "modern",
+   "tags": {
+    "in-domain": {
+     "A_signed": 0.9424246920908146,
+     "A_self": 0.8142487345633214,
+     "delta": 0.12817595752749322
+    },
+    "cond-transfer": {
+     "A_signed": 0.8676828197034392,
+     "A_self": 0.7791169021769654,
+     "delta": 0.08856591752647368
+    },
+    "vocab-transfer": {
+     "A_signed": 0.9437815395520751,
+     "A_self": 0.8141297193296315,
+     "delta": 0.1296518202224436
+    },
+    "vocab+cond": {
+     "A_signed": 0.8388911620294599,
+     "A_self": 0.7803293780687397,
+     "delta": 0.058561783960720204
+    },
+    "load-transfer": {
+     "A_signed": 0.926925292874976,
+     "A_self": 0.8283720632481915,
+     "delta": 0.09855322962678459
+    },
+    "load+cond": {
+     "A_signed": 0.7780168606985146,
+     "A_self": 0.6740104375752709,
+     "delta": 0.10400642312324371
+    }
+   },
+   "delta_all": 0.09548588360177522
+  }
+ ],
+ "gap": [
+  {
+   "dir": "coh_dsc-6.7b",
+   "label": "dsc-6.7b",
+   "family": "DeepSeek",
+   "recipe": "modern",
+   "pacc_wrong": 0.3208061552696168,
+   "chance": 0.04,
+   "incoh": 0.17731481481481481,
+   "auroc_probeconf": 0.6356646016837327,
+   "auroc_selfconf": 0.6886098193943063
+  },
+  {
+   "dir": "coh_gptoss20b",
+   "label": "gptoss20b",
+   "family": "gpt-oss",
+   "recipe": "modern",
+   "pacc_wrong": 0.7313240566336541,
+   "chance": 0.04,
+   "incoh": 0.06342592592592593,
+   "auroc_probeconf": 0.8404494907112062,
+   "auroc_selfconf": 0.8859434470263546
+  },
+  {
+   "dir": "coh_olmo2-7b",
+   "label": "olmo2-7b",
+   "family": "OLMo",
+   "recipe": "modern",
+   "pacc_wrong": 0.5770454667960588,
+   "chance": 0.04,
+   "incoh": 0.16805555555555554,
+   "auroc_probeconf": 0.775628481459906,
+   "auroc_selfconf": 0.7978160649141054
+  },
+  {
+   "dir": "coh_olmo2-dpo",
+   "label": "olmo2-dpo",
+   "family": "OLMo",
+   "recipe": "modern",
+   "pacc_wrong": 0.5828396614042394,
+   "chance": 0.04,
+   "incoh": 0.05185185185185185,
+   "auroc_probeconf": 0.8444976629486128,
+   "auroc_selfconf": 0.8829797282158549
+  },
+  {
+   "dir": "coh_olmo2-instruct",
+   "label": "olmo2-instruct",
+   "family": "OLMo",
+   "recipe": "modern",
+   "pacc_wrong": 0.5995870899962973,
+   "chance": 0.04,
+   "incoh": 0.05416666666666666,
+   "auroc_probeconf": 0.8710425445686342,
+   "auroc_selfconf": 0.886073905096548
+  },
+  {
+   "dir": "coh_olmo2-sft",
+   "label": "olmo2-sft",
+   "family": "OLMo",
+   "recipe": "modern",
+   "pacc_wrong": 0.7022169190745342,
+   "chance": 0.04,
+   "incoh": 0.12916666666666662,
+   "auroc_probeconf": 0.787031907034328,
+   "auroc_selfconf": 0.8189682876031464
+  },
+  {
+   "dir": "coh_olmo2",
+   "label": "olmo2",
+   "family": "OLMo",
+   "recipe": "modern",
+   "pacc_wrong": 0.4772727272727273,
+   "chance": 0.04,
+   "incoh": 0.175,
+   "auroc_probeconf": 0.7813995215311005,
+   "auroc_selfconf": 0.7933612440191388
+  },
+  {
+   "dir": "coh_olmoe",
+   "label": "olmoe",
+   "family": "OLMo",
+   "recipe": "modern",
+   "pacc_wrong": 0.3252219999775026,
+   "chance": 0.04,
+   "incoh": 0.17175925925925925,
+   "auroc_probeconf": 0.696698630474372,
+   "auroc_selfconf": 0.7122412333066843
+  },
+  {
+   "dir": "coh_pythia-1.4b",
+   "label": "pythia-1.4b",
+   "family": "Pythia",
+   "recipe": "old",
+   "pacc_wrong": 0.7033889909585924,
+   "chance": 0.04,
+   "incoh": 0.312037037037037,
+   "auroc_probeconf": 0.7547548956979115,
+   "auroc_selfconf": 0.7924048301644104
+  },
+  {
+   "dir": "coh_pythia-2.8b",
+   "label": "pythia-2.8b",
+   "family": "Pythia",
+   "recipe": "old",
+   "pacc_wrong": 0.7091288350414601,
+   "chance": 0.04,
+   "incoh": 0.31666666666666665,
+   "auroc_probeconf": 0.7354226960137984,
+   "auroc_selfconf": 0.7733134062519907
+  },
+  {
+   "dir": "coh_pythia-6.9b",
+   "label": "pythia-6.9b",
+   "family": "Pythia",
+   "recipe": "old",
+   "pacc_wrong": 0.5622107259846457,
+   "chance": 0.04,
+   "incoh": 0.3064814814814814,
+   "auroc_probeconf": 0.7060151755019114,
+   "auroc_selfconf": 0.7397294391621188
+  },
+  {
+   "dir": "coh_qwen2.5-0.5b-instruct",
+   "label": "qwen2.5-0.5b-instruct",
+   "family": "Qwen",
+   "recipe": "modern",
+   "pacc_wrong": 0.29936233959595415,
+   "chance": 0.04,
+   "incoh": 0.1685185185185185,
+   "auroc_probeconf": 0.7076023326204784,
+   "auroc_selfconf": 0.6794143570690525
+  },
+  {
+   "dir": "coh_qwen2.5-0.5b",
+   "label": "qwen2.5-0.5b",
+   "family": "Qwen",
+   "recipe": "modern",
+   "pacc_wrong": 0.276373469586718,
+   "chance": 0.04,
+   "incoh": 0.16805555555555554,
+   "auroc_probeconf": 0.7089407115886623,
+   "auroc_selfconf": 0.7311869883695485
+  },
+  {
+   "dir": "coh_qwen2.5-1.5b-instruct",
+   "label": "qwen2.5-1.5b-instruct",
+   "family": "Qwen",
+   "recipe": "modern",
+   "pacc_wrong": 0.5712935658854805,
+   "chance": 0.04,
+   "incoh": 0.07962962962962962,
+   "auroc_probeconf": 0.8302883234521472,
+   "auroc_selfconf": 0.8740308383085166
+  },
+  {
+   "dir": "coh_qwen2.5-14b",
+   "label": "qwen2.5-14b",
+   "family": "Qwen",
+   "recipe": "modern",
+   "pacc_wrong": 0.6224747474747475,
+   "chance": 0.04,
+   "incoh": 0.02037037037037037,
+   "auroc_probeconf": 0.9303121696461304,
+   "auroc_selfconf": 0.9497898980971606
+  },
+  {
+   "dir": "coh_qwen2.5-3b",
+   "label": "qwen2.5-3b",
+   "family": "Qwen",
+   "recipe": "modern",
+   "pacc_wrong": 0.3657899583560742,
+   "chance": 0.04,
+   "incoh": 0.18472222222222223,
+   "auroc_probeconf": 0.7112987808604321,
+   "auroc_selfconf": 0.7719959214107176
+  },
+  {
+   "dir": "coh_qwen2.5-7b",
+   "label": "qwen2.5-7b",
+   "family": "Qwen",
+   "recipe": "modern",
+   "pacc_wrong": 0.3130608114964018,
+   "chance": 0.04,
+   "incoh": 0.13796296296296295,
+   "auroc_probeconf": 0.8381673800737303,
+   "auroc_selfconf": 0.822668418808441
+  }
+ ]
+}

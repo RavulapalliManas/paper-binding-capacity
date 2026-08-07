@@ -1,0 +1,12 @@
+{
+  "d_bind": 77.18927001953125,
+  "d_bind_cov": 40.372039794921875,
+  "interference": 0.00902255614346359,
+  "d_bind_raw": 1.0024560920894146,
+  "interference_raw": 0.9854377280920744,
+  "positional_variance_fraction": 0.998324453830719,
+  "top1_dim_variance_fraction": 0.07960740476846695,
+  "layer": 12,
+  "K": 6,
+  "n_trials": 160
+}

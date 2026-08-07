@@ -1,0 +1,20 @@
+{
+  "model": "allenai/OLMo-2-1124-7B-Instruct",
+  "best_layer": 26,
+  "nL": 32,
+  "pacc_wrong_nested": 0.6666666666666666,
+  "present_baseline": 0.125,
+  "cert_auroc": 0.9601063829787235,
+  "self_auroc": 0.9297429078014185,
+  "rawprobe_auroc": 0.8271276595744681,
+  "entropy_auroc": 0.9179964539007093,
+  "selfcons_auroc": 0.9304078014184398,
+  "cert_minus_self": 0.030363475177304977,
+  "rawprobe_minus_self": -0.10261524822695045,
+  "cert_minus_entropy": 0.04210992907801425,
+  "cert_minus_selfcons": 0.02969858156028371,
+  "counterfactual_acc": 0.9266666666666666,
+  "counterfactual_baseline": 0.125,
+  "model_acc": 0.9383333333333334,
+  "seed": 1
+}

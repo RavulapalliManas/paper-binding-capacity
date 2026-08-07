@@ -1,0 +1,125 @@
+{
+ "_provenance": "Re-derived from data by analysis/qgeom_aggregate.py: per-model results/qgfix/<name>/qgeom.json (corrected instrument: chain-rule frame, train-only mu/sd, train-only Vw, per-trial distractors, 50-draw nulls, probe C tuned per subspace), measured at each model's VALIDATION-SELECTED read layer l* (not architectural mid-depth), joined to results/dynamics/steer_*/steer.json (the Table-1 steering lift). Supersedes the transcribed HTML table formerly in analysis/build_gallery.py.",
+ "_columns": "full = obligation decoded from the whole layer-l* residual (linearly accessible); readout_k = decoded inside the readout's k = PR(d margin/d h) directions (readout-accessible); random_k = matched-dimension random subspace (null); steer_gain = self-contained steering lift",
+ "site": "query position, at each model's validation-selected read layer l* from dynamics/steer_*/per_layer.json; qgeom.py aborts if the obligation is not decodable",
+ "chance": 0.04,
+ "readout_beats_random_on_n_models": 4,
+ "n_models": 5,
+ "readout_beats_random_fails_on": [
+  "DeepSeek-Coder-6.7B"
+ ],
+ "readout_below_classmean_on_n": 3,
+ "gain_vs_visibility": {
+  "spearman_rho": 0.7,
+  "p_exact": 0.23333333333333334,
+  "n": 5,
+  "significant": false
+ },
+ "models": {
+  "Pythia-1.4B": {
+   "full": 0.707,
+   "readout_k": 0.596,
+   "classmean_k": 0.629,
+   "readout_minus_classmean": -0.033,
+   "random_k": 0.272,
+   "random_k_sd": 0.022,
+   "random_k_ci": [
+    0.238,
+    0.31
+   ],
+   "readout_beats_random": true,
+   "steer_gain": 0.43,
+   "k": 21,
+   "pr_state": 16.6,
+   "pr_readout": 20.8,
+   "alignment": 0.137,
+   "layer": 12,
+   "hidden": 2048,
+   "embed_md5": "a8e1f4062b1c71b4"
+  },
+  "Pythia-6.9B": {
+   "full": 0.671,
+   "readout_k": 0.518,
+   "classmean_k": 0.453,
+   "readout_minus_classmean": 0.064,
+   "random_k": 0.181,
+   "random_k_sd": 0.017,
+   "random_k_ci": [
+    0.156,
+    0.216
+   ],
+   "readout_beats_random": true,
+   "steer_gain": 0.37,
+   "k": 32,
+   "pr_state": 16.9,
+   "pr_readout": 32.4,
+   "alignment": 0.084,
+   "layer": 15,
+   "hidden": 4096,
+   "embed_md5": "10a5dbba35d00871"
+  },
+  "OLMo-2-7B": {
+   "full": 0.773,
+   "readout_k": 0.689,
+   "classmean_k": 0.702,
+   "readout_minus_classmean": -0.013,
+   "random_k": 0.32,
+   "random_k_sd": 0.026,
+   "random_k_ci": [
+    0.266,
+    0.369
+   ],
+   "readout_beats_random": true,
+   "steer_gain": 0.273,
+   "k": 26,
+   "pr_state": 15.0,
+   "pr_readout": 26.3,
+   "alignment": 0.177,
+   "layer": 22,
+   "hidden": 4096,
+   "embed_md5": "61f22ef233d72e4f"
+  },
+  "Qwen2.5-7B": {
+   "full": 0.373,
+   "readout_k": 0.133,
+   "classmean_k": 0.093,
+   "readout_minus_classmean": 0.04,
+   "random_k": 0.053,
+   "random_k_sd": 0.01,
+   "random_k_ci": [
+    0.04,
+    0.068
+   ],
+   "readout_beats_random": true,
+   "steer_gain": 0.112,
+   "k": 6,
+   "pr_state": 12.0,
+   "pr_readout": 6.5,
+   "alignment": 0.024,
+   "layer": 22,
+   "hidden": 3584,
+   "embed_md5": "98448736f5fa5891"
+  },
+  "DeepSeek-Coder-6.7B": {
+   "full": 0.247,
+   "readout_k": 0.073,
+   "classmean_k": 0.142,
+   "readout_minus_classmean": -0.069,
+   "random_k": 0.062,
+   "random_k_sd": 0.009,
+   "random_k_ci": [
+    0.044,
+    0.076
+   ],
+   "readout_beats_random": false,
+   "steer_gain": 0.04,
+   "k": 21,
+   "pr_state": 13.8,
+   "pr_readout": 21.3,
+   "alignment": 0.013,
+   "layer": 14,
+   "hidden": 4096,
+   "embed_md5": "b08fa3dca7a14148"
+  }
+ }
+}

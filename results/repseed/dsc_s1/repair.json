@@ -1,0 +1,14 @@
+{
+  "model": "deepseek-ai/deepseek-coder-6.7b-base",
+  "Lread": 29,
+  "baseline": 0.2916666666666667,
+  "repair": 0.695,
+  "random_inject": 0.275,
+  "recovery": 0.40333333333333327,
+  "gated_loop": 0.7166666666666667,
+  "always": 0.695,
+  "gate_minus_base": 0.425,
+  "gate_minus_always": 0.021666666666666723,
+  "n": 600,
+  "seed": 1
+}

@@ -1,0 +1,20 @@
+{
+  "model": "EleutherAI/gpt-neo-1.3B",
+  "best_layer": 17,
+  "nL": 24,
+  "pacc_wrong_nested": 0.2905405405405405,
+  "present_baseline": 0.125,
+  "cert_auroc": 0.8529106029106029,
+  "self_auroc": 0.5823804573804573,
+  "rawprobe_auroc": 0.718425155925156,
+  "entropy_auroc": 0.6830821205821207,
+  "selfcons_auroc": 0.643256237006237,
+  "cert_minus_self": 0.27053014553014565,
+  "rawprobe_minus_self": 0.1360446985446987,
+  "cert_minus_entropy": 0.16982848232848224,
+  "cert_minus_selfcons": 0.20965436590436592,
+  "counterfactual_acc": 0.3566666666666667,
+  "counterfactual_baseline": 0.125,
+  "model_acc": 0.20666666666666667,
+  "seed": 2
+}

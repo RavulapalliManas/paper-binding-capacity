@@ -1,0 +1,20 @@
+{
+  "model": "deepseek-ai/deepseek-coder-6.7b-base",
+  "best_layer": 29,
+  "nL": 32,
+  "pacc_wrong_nested": 0.14093959731543623,
+  "present_baseline": 0.125,
+  "cert_auroc": 0.6277141729174891,
+  "self_auroc": 0.6671272535859981,
+  "rawprobe_auroc": 0.5923147782602974,
+  "entropy_auroc": 0.6920647453612317,
+  "selfcons_auroc": 0.6158047111462034,
+  "cert_minus_self": -0.039413080668509015,
+  "rawprobe_minus_self": -0.07481247532570068,
+  "cert_minus_entropy": -0.06435057244374265,
+  "cert_minus_selfcons": 0.011909461771285712,
+  "counterfactual_acc": 0.20666666666666667,
+  "counterfactual_baseline": 0.125,
+  "model_acc": 0.2733333333333333,
+  "seed": 2
+}
