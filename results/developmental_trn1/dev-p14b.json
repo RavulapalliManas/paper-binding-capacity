@@ -1,0 +1,97 @@
+{
+  "label": "dev-p14b",
+  "model": "EleutherAI/pythia-1.4b",
+  "K": 6,
+  "D": 128,
+  "n_trials": 1536,
+  "chance": 0.05,
+  "n_obligations": 20,
+  "seq": 384,
+  "compile_sec": 64.4,
+  "elapsed_sec": 2403.7,
+  "revisions": [
+    "step1000",
+    "step2000",
+    "step4000",
+    "step8000",
+    "step16000",
+    "step32000",
+    "step64000",
+    "step143000"
+  ],
+  "rows": [
+    {
+      "revision": "step1000",
+      "behaviour_U": 0.1549,
+      "accessibility_R": 0.2609,
+      "selected_layer": 13,
+      "gap_given_wrong_G": 0.2245,
+      "n_wrong_test": 392,
+      "n_test": 460
+    },
+    {
+      "revision": "step2000",
+      "behaviour_U": 0.2285,
+      "accessibility_R": 0.2304,
+      "selected_layer": 13,
+      "gap_given_wrong_G": 0.1922,
+      "n_wrong_test": 359,
+      "n_test": 460
+    },
+    {
+      "revision": "step4000",
+      "behaviour_U": 0.2285,
+      "accessibility_R": 0.3043,
+      "selected_layer": 13,
+      "gap_given_wrong_G": 0.2635,
+      "n_wrong_test": 353,
+      "n_test": 460
+    },
+    {
+      "revision": "step8000",
+      "behaviour_U": 0.3053,
+      "accessibility_R": 0.4543,
+      "selected_layer": 13,
+      "gap_given_wrong_G": 0.3678,
+      "n_wrong_test": 329,
+      "n_test": 460
+    },
+    {
+      "revision": "step16000",
+      "behaviour_U": 0.3236,
+      "accessibility_R": 0.5891,
+      "selected_layer": 13,
+      "gap_given_wrong_G": 0.5177,
+      "n_wrong_test": 311,
+      "n_test": 460
+    },
+    {
+      "revision": "step32000",
+      "behaviour_U": 0.571,
+      "accessibility_R": 0.9261,
+      "selected_layer": 13,
+      "gap_given_wrong_G": 0.8991,
+      "n_wrong_test": 218,
+      "n_test": 460
+    },
+    {
+      "revision": "step64000",
+      "behaviour_U": 0.5716,
+      "accessibility_R": 0.9457,
+      "selected_layer": 13,
+      "gap_given_wrong_G": 0.9151,
+      "n_wrong_test": 212,
+      "n_test": 460
+    },
+    {
+      "revision": "step143000",
+      "behaviour_U": 0.61,
+      "accessibility_R": 0.9717,
+      "selected_layer": 13,
+      "gap_given_wrong_G": 0.9526,
+      "n_wrong_test": 190,
+      "n_test": 460
+    }
+  ],
+  "_provenance": "Measured on trn1.32xlarge by analysis/neuron_developmental.py. ONE compiled graph; checkpoints swapped with torch_neuronx.replace_weights (inline_weights_to_neff=False). A guard aborts the run if two consecutive checkpoints produce identical logits, because replace_weights silently no-ops when weights are inlined. Folds are a hash of the trial index, so the same trials are used at every checkpoint and the trajectory is paired."
+}

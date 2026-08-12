@@ -3,7 +3,7 @@
   "revision": "step8000",
   "embed_md5": "68d954c5464d42b1",
   "code_md5": "85cbb0004460",
-  "argv": "--model EleutherAI/pythia-160m --revision step8000 --grad-frame mul --K 6 --D 256 --n 1500 --n-grad 256 --out ./results/qgfix_p160/step8000",
+  "argv": "--model EleutherAI/pythia-160m --revision step8000 --grad-frame mul --K 6 --D 256 --n 1500 --n-grad 256 --out /home/manas/coh/results/qgfix_p160/step8000",
   "aborted": false,
   "layer": 6,
   "hidden": 768,

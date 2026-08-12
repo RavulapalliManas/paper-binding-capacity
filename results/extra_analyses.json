@@ -1,0 +1,404 @@
+{
+  "A_read_layer_depth": {
+    "n": 35,
+    "median_relative_depth": 0.625,
+    "iqr": [
+      0.5521,
+      0.8021
+    ],
+    "range": [
+      0.1875,
+      0.9375
+    ],
+    "rows": [
+      {
+        "model": "leg-p14b-K4D0",
+        "family": "declarative",
+        "read_layer": 12,
+        "n_layers": 24,
+        "relative_depth": 0.5
+      },
+      {
+        "model": "leg-p14b-K4D0",
+        "family": "mutable",
+        "read_layer": 15,
+        "n_layers": 24,
+        "relative_depth": 0.625
+      },
+      {
+        "model": "leg-p14b-K4D0",
+        "family": "scoped",
+        "read_layer": 11,
+        "n_layers": 24,
+        "relative_depth": 0.4583
+      },
+      {
+        "model": "leg-p14b-fixed",
+        "family": "declarative",
+        "read_layer": 13,
+        "n_layers": 24,
+        "relative_depth": 0.5417
+      },
+      {
+        "model": "leg-p14b-fixed",
+        "family": "mutable",
+        "read_layer": 16,
+        "n_layers": 24,
+        "relative_depth": 0.6667
+      },
+      {
+        "model": "leg-p14b-fixed",
+        "family": "scoped",
+        "read_layer": 16,
+        "n_layers": 24,
+        "relative_depth": 0.6667
+      },
+      {
+        "model": "leg-p14b",
+        "family": "declarative",
+        "read_layer": 13,
+        "n_layers": 24,
+        "relative_depth": 0.5417
+      },
+      {
+        "model": "leg-p14b",
+        "family": "mutable",
+        "read_layer": 15,
+        "n_layers": 24,
+        "relative_depth": 0.625
+      },
+      {
+        "model": "leg-p14b",
+        "family": "scoped",
+        "read_layer": 12,
+        "n_layers": 24,
+        "relative_depth": 0.5
+      },
+      {
+        "model": "leg-olmo1b-K4D0",
+        "family": "declarative",
+        "read_layer": 14,
+        "n_layers": 16,
+        "relative_depth": 0.875
+      },
+      {
+        "model": "leg-olmo1b-K4D0",
+        "family": "mutable",
+        "read_layer": 13,
+        "n_layers": 16,
+        "relative_depth": 0.8125
+      },
+      {
+        "model": "leg-olmo1b-K4D0",
+        "family": "scoped",
+        "read_layer": 15,
+        "n_layers": 16,
+        "relative_depth": 0.9375
+      },
+      {
+        "model": "leg-p14b-K4D0-EXPLICIT",
+        "family": "mutable",
+        "read_layer": 15,
+        "n_layers": 24,
+        "relative_depth": 0.625
+      },
+      {
+        "model": "leg-p14b-K4D0-EXPLICIT",
+        "family": "scoped",
+        "read_layer": 12,
+        "n_layers": 24,
+        "relative_depth": 0.5
+      },
+      {
+        "model": "leg-p1b-K4D0",
+        "family": "declarative",
+        "read_layer": 10,
+        "n_layers": 16,
+        "relative_depth": 0.625
+      },
+      {
+        "model": "leg-p1b-K4D0",
+        "family": "mutable",
+        "read_layer": 10,
+        "n_layers": 16,
+        "relative_depth": 0.625
+      },
+      {
+        "model": "leg-p1b-K4D0",
+        "family": "scoped",
+        "read_layer": 10,
+        "n_layers": 16,
+        "relative_depth": 0.625
+      },
+      {
+        "model": "leg-p28b-K4D0",
+        "family": "declarative",
+        "read_layer": 19,
+        "n_layers": 32,
+        "relative_depth": 0.5938
+      },
+      {
+        "model": "leg-p28b-K4D0",
+        "family": "mutable",
+        "read_layer": 18,
+        "n_layers": 32,
+        "relative_depth": 0.5625
+      },
+      {
+        "model": "leg-p28b-K4D0",
+        "family": "scoped",
+        "read_layer": 6,
+        "n_layers": 32,
+        "relative_depth": 0.1875
+      },
+      {
+        "model": "leg-p410m-K4D0",
+        "family": "declarative",
+        "read_layer": 14,
+        "n_layers": 24,
+        "relative_depth": 0.5833
+      },
+      {
+        "model": "leg-p410m-K4D0",
+        "family": "mutable",
+        "read_layer": 18,
+        "n_layers": 24,
+        "relative_depth": 0.75
+      },
+      {
+        "model": "leg-p410m-K4D0",
+        "family": "scoped",
+        "read_layer": 18,
+        "n_layers": 24,
+        "relative_depth": 0.75
+      },
+      {
+        "model": "leg-q05b-K4D0",
+        "family": "declarative",
+        "read_layer": 17,
+        "n_layers": 24,
+        "relative_depth": 0.7083
+      },
+      {
+        "model": "leg-q05b-K4D0",
+        "family": "mutable",
+        "read_layer": 21,
+        "n_layers": 24,
+        "relative_depth": 0.875
+      },
+      {
+        "model": "leg-q05b-K4D0",
+        "family": "scoped",
+        "read_layer": 21,
+        "n_layers": 24,
+        "relative_depth": 0.875
+      },
+      {
+        "model": "leg-q15b-K4D0",
+        "family": "declarative",
+        "read_layer": 25,
+        "n_layers": 28,
+        "relative_depth": 0.8929
+      },
+      {
+        "model": "leg-q15b-K4D0",
+        "family": "mutable",
+        "read_layer": 24,
+        "n_layers": 28,
+        "relative_depth": 0.8571
+      },
+      {
+        "model": "leg-q15b-K4D0",
+        "family": "scoped",
+        "read_layer": 20,
+        "n_layers": 28,
+        "relative_depth": 0.7143
+      },
+      {
+        "model": "leg-sm17b-K4D0",
+        "family": "declarative",
+        "read_layer": 19,
+        "n_layers": 24,
+        "relative_depth": 0.7917
+      },
+      {
+        "model": "leg-sm17b-K4D0",
+        "family": "mutable",
+        "read_layer": 21,
+        "n_layers": 24,
+        "relative_depth": 0.875
+      },
+      {
+        "model": "leg-sm17b-K4D0",
+        "family": "scoped",
+        "read_layer": 5,
+        "n_layers": 24,
+        "relative_depth": 0.2083
+      },
+      {
+        "model": "qcf-p14b",
+        "family": "declarative",
+        "read_layer": 12,
+        "n_layers": 24,
+        "relative_depth": 0.5
+      },
+      {
+        "model": "qcf-p1b",
+        "family": "declarative",
+        "read_layer": 10,
+        "n_layers": 16,
+        "relative_depth": 0.625
+      },
+      {
+        "model": "qcf-q15b",
+        "family": "declarative",
+        "read_layer": 25,
+        "n_layers": 28,
+        "relative_depth": 0.8929
+      }
+    ]
+  },
+  "B_emergence_time_vs_K": {
+    "exponent": 2.5781,
+    "coef": 765.511,
+    "r2": 0.9475,
+    "cost_per_doubling": 5.972,
+    "cells": {
+      "2": {
+        "n_emerged": 31,
+        "median_step": 4500.0
+      },
+      "3": {
+        "n_emerged": 32,
+        "median_step": 13750.0
+      },
+      "4": {
+        "n_emerged": 41,
+        "median_step": 21500.0
+      },
+      "5": {
+        "n_emerged": 6,
+        "median_step": 73350.0
+      },
+      "6": {
+        "n_emerged": 8,
+        "median_step": 62650.0
+      }
+    },
+    "caveat": "emerged runs only; censoring biases the exponent downward"
+  },
+  "C_noise_floor": {
+    "cells": [
+      {
+        "params_M": 1.31,
+        "K": 4,
+        "emerged": 0,
+        "n": 12,
+        "rate": 0.0,
+        "ci95": [
+          0,
+          0.2425
+        ],
+        "ci_width": 0.2425
+      },
+      {
+        "params_M": 1.31,
+        "K": 6,
+        "emerged": 0,
+        "n": 11,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.2588
+        ],
+        "ci_width": 0.2588
+      },
+      {
+        "params_M": 4.98,
+        "K": 2,
+        "emerged": 31,
+        "n": 32,
+        "rate": 0.9688,
+        "ci95": [
+          0.8426,
+          0.9945
+        ],
+        "ci_width": 0.1519
+      },
+      {
+        "params_M": 4.98,
+        "K": 3,
+        "emerged": 32,
+        "n": 32,
+        "rate": 1.0,
+        "ci95": [
+          0.8928,
+          1
+        ],
+        "ci_width": 0.1072
+      },
+      {
+        "params_M": 4.98,
+        "K": 4,
+        "emerged": 41,
+        "n": 128,
+        "rate": 0.3203,
+        "ci95": [
+          0.2457,
+          0.4054
+        ],
+        "ci_width": 0.1596
+      },
+      {
+        "params_M": 4.98,
+        "K": 5,
+        "emerged": 6,
+        "n": 32,
+        "rate": 0.1875,
+        "ci95": [
+          0.0889,
+          0.3531
+        ],
+        "ci_width": 0.2642
+      },
+      {
+        "params_M": 4.98,
+        "K": 6,
+        "emerged": 8,
+        "n": 160,
+        "rate": 0.05,
+        "ci95": [
+          0.0256,
+          0.0956
+        ],
+        "ci_width": 0.07
+      },
+      {
+        "params_M": 4.98,
+        "K": 8,
+        "emerged": 0,
+        "n": 16,
+        "rate": 0.0,
+        "ci95": [
+          0,
+          0.1936
+        ],
+        "ci_width": 0.1936
+      }
+    ],
+    "mean_ci_width_informative_band": 0.2119
+  },
+  "D_learnability_threshold": {
+    "by_size": {
+      "1.31": {
+        "emerged": 0,
+        "n": 23
+      },
+      "4.98": {
+        "emerged": 118,
+        "n": 400
+      }
+    }
+  },
+  "_provenance": "analysis/extra_analyses.py over results/trilogy_trainium/ and research/emergence-clocks-2026-08/data. Clocks runs filtered to p=1.0 with no supply manipulation; emergence uses each run's own chance + 0.5*(1-chance)."
+}

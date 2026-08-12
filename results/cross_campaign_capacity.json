@@ -1,0 +1,21 @@
+{
+  "_provenance": "analysis/cross_campaign_capacity.py. Clocks runs from research/emergence-clocks-2026-08/data (p=1.0 only, supply-manipulation arms excluded); trilogy law from results/capacity_trn1_summary.json. Emergence criterion is each run's own chance + 0.5*(1-chance).",
+  "clocks_n_clean_runs": 423,
+  "trilogy_law": {
+    "alpha": 0.8204,
+    "c": 0.038351,
+    "n_models": 11,
+    "N_units": "millions of parameters"
+  },
+  "comparison": [
+    {
+      "source": "clocks",
+      "params_M": 4.98,
+      "measured_capacity": 3.7070650796564775,
+      "law_prediction": 0.1431,
+      "ratio": 25.9,
+      "how": "interpolated",
+      "n_runs": 400
+    }
+  ]
+}

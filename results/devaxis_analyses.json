@@ -1,0 +1,259 @@
+{
+  "inventory": {
+    "bench": {
+      "runs": 1,
+      "emerged": 0
+    },
+    "branch": {
+      "runs": 21,
+      "emerged": 7
+    },
+    "continuity": {
+      "runs": 32,
+      "emerged": 1
+    },
+    "dd10": {
+      "runs": 11,
+      "emerged": 3
+    },
+    "early": {
+      "runs": 24,
+      "emerged": 1
+    },
+    "factorial": {
+      "runs": 59,
+      "emerged": 46
+    },
+    "factorial_v1_aborted": {
+      "runs": 32,
+      "emerged": 0
+    },
+    "factorial_v2_NAN": {
+      "runs": 50,
+      "emerged": 0
+    },
+    "k2exp": {
+      "runs": 64,
+      "emerged": 55
+    },
+    "k2maint": {
+      "runs": 24,
+      "emerged": 24
+    },
+    "k2post": {
+      "runs": 16,
+      "emerged": 16
+    },
+    "k3tau": {
+      "runs": 24,
+      "emerged": 15
+    },
+    "kgen": {
+      "runs": 64,
+      "emerged": 50
+    },
+    "kgen_tau": {
+      "runs": 24,
+      "emerged": 24
+    },
+    "maint": {
+      "runs": 28,
+      "emerged": 28
+    },
+    "mech": {
+      "runs": 28,
+      "emerged": 0
+    },
+    "nanbisect": {
+      "runs": 9,
+      "emerged": 0
+    },
+    "postem": {
+      "runs": 14,
+      "emerged": 14
+    },
+    "prestore": {
+      "runs": 72,
+      "emerged": 72
+    },
+    "pulse": {
+      "runs": 96,
+      "emerged": 6
+    },
+    "q0": {
+      "runs": 1,
+      "emerged": 0
+    },
+    "qgates": {
+      "runs": 3,
+      "emerged": 1
+    },
+    "symbreak": {
+      "runs": 128,
+      "emerged": 0
+    },
+    "tau": {
+      "runs": 24,
+      "emerged": 6
+    },
+    "thresh": {
+      "runs": 21,
+      "emerged": 21
+    },
+    "tomo_pulse": {
+      "runs": 264,
+      "emerged": 12
+    },
+    "tomo_traj": {
+      "runs": 16,
+      "emerged": 0
+    },
+    "transplant": {
+      "runs": 81,
+      "emerged": 5
+    },
+    "wd0": {
+      "runs": 24,
+      "emerged": 7
+    },
+    "window": {
+      "runs": 22,
+      "emerged": 1
+    },
+    "zero": {
+      "runs": 24,
+      "emerged": 3
+    }
+  },
+  "n_runs_total": 1301,
+  "emergence_law": {
+    "devaxis": {
+      "coef": 666.88,
+      "exponent": 2.1184,
+      "r2": 0.9741,
+      "n_loads": 4,
+      "cells": {
+        "2": {
+          "n": 40,
+          "median": 3000.0
+        },
+        "3": {
+          "n": 8,
+          "median": 8000.0
+        },
+        "4": {
+          "n": 46,
+          "median": 9375.0
+        },
+        "8": {
+          "n": 2,
+          "median": 60375.0
+        }
+      }
+    },
+    "clocks": {
+      "coef": 765.5,
+      "exponent": 2.578,
+      "r2": 0.9475,
+      "source": "analysis/extra_analyses.py over research/emergence-clocks-2026-08"
+    },
+    "exponent_difference": -0.4596,
+    "caveat": "emerged runs only in both; exponents are lower bounds"
+  },
+  "dose_response": [
+    {
+      "K": 2,
+      "p": 0.0,
+      "held": 37,
+      "n": 96,
+      "rate": 0.3854
+    },
+    {
+      "K": 2,
+      "p": 0.005,
+      "held": 9,
+      "n": 16,
+      "rate": 0.5625
+    },
+    {
+      "K": 2,
+      "p": 0.01,
+      "held": 12,
+      "n": 16,
+      "rate": 0.75
+    },
+    {
+      "K": 2,
+      "p": 0.02,
+      "held": 8,
+      "n": 8,
+      "rate": 1.0
+    },
+    {
+      "K": 2,
+      "p": 0.03,
+      "held": 7,
+      "n": 8,
+      "rate": 0.875
+    },
+    {
+      "K": 4,
+      "p": 0.0,
+      "held": 0,
+      "n": 21,
+      "rate": 0.0
+    },
+    {
+      "K": 4,
+      "p": 0.01,
+      "held": 1,
+      "n": 7,
+      "rate": 0.1429
+    },
+    {
+      "K": 4,
+      "p": 0.02,
+      "held": 4,
+      "n": 7,
+      "rate": 0.5714
+    },
+    {
+      "K": 4,
+      "p": 0.03,
+      "held": 7,
+      "n": 7,
+      "rate": 1.0
+    },
+    {
+      "K": 4,
+      "p": 0.04,
+      "held": 7,
+      "n": 7,
+      "rate": 1.0
+    },
+    {
+      "K": 4,
+      "p": 0.05,
+      "held": 7,
+      "n": 7,
+      "rate": 1.0
+    },
+    {
+      "K": 4,
+      "p": 0.2,
+      "held": 7,
+      "n": 7,
+      "rate": 1.0
+    }
+  ],
+  "seed_heterogeneity": {
+    "n_seeds": 24,
+    "overall_rate": 0.2985,
+    "rate_min": 0.1494,
+    "rate_max": 1.0,
+    "observed_variance": 0.114861,
+    "binomial_variance": 0.01269,
+    "overdispersion_ratio": 9.052
+  },
+  "_provenance": "analysis/devaxis_analyses.py over research/devaxis-trainium/runs_json (synced from s3://.../devaxis/runs/). Emergence uses each run's own chance + 0.5*(1-chance)."
+}

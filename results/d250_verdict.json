@@ -1,0 +1,30 @@
+{
+  "_prereg": "farm/PREREG_d250_replication.md (S3, timestamped before launch); this script committed before the data existed.",
+  "baseline": {
+    "n": 39,
+    "crossed": 38,
+    "cens": 1,
+    "median": 6750.0
+  },
+  "chess": {
+    "n": 20,
+    "crossed": 20,
+    "cens": 0,
+    "median": 6375.0
+  },
+  "shuffle": {
+    "n": 20,
+    "crossed": 17,
+    "cens": 3,
+    "median": 9000.0
+  },
+  "p_chess": 0.7302600191179418,
+  "p_shuffle": 0.002039284813744646,
+  "gates": {
+    "median_lower": true,
+    "p_below_alpha": false,
+    "specificity": true
+  },
+  "incomplete_runs": 0,
+  "verdict": "NOT CONFIRMED"
+}

@@ -1,0 +1,179 @@
+{
+ "_provenance": "analysis/token_costs.py over the devaxis and farm raw run records (bs, ctx per pool; sequence rule T=1+2K+D+1+2K+4 asserted per record) and the committed headline JSONs. Tokens/step = bs * ctx.",
+ "devaxis_combos": [
+  {
+   "K": 2,
+   "D": 32,
+   "bs": 128,
+   "n_runs": 240
+  },
+  {
+   "K": 3,
+   "D": 32,
+   "bs": 128,
+   "n_runs": 32
+  },
+  {
+   "K": 4,
+   "D": 32,
+   "bs": 32,
+   "n_runs": 1
+  },
+  {
+   "K": 4,
+   "D": 32,
+   "bs": 128,
+   "n_runs": 1007
+  },
+  {
+   "K": 6,
+   "D": 32,
+   "bs": 128,
+   "n_runs": 8
+  },
+  {
+   "K": 8,
+   "D": 32,
+   "bs": 128,
+   "n_runs": 8
+  }
+ ],
+ "devaxis_ctx_records_asserted": 1296,
+ "devaxis_smoke_runs_excluded": 5,
+ "maint_combos": [
+  {
+   "K": 2,
+   "D": 128,
+   "bs": 64,
+   "ctx": 142,
+   "n_runs": 126
+  },
+  {
+   "K": 3,
+   "D": 128,
+   "bs": 64,
+   "ctx": 146,
+   "n_runs": 42
+  },
+  {
+   "K": 4,
+   "D": 128,
+   "bs": 64,
+   "ctx": 150,
+   "n_runs": 62
+  }
+ ],
+ "maint_ctx_records_asserted": 230,
+ "dsp_combos": [
+  {
+   "target": "stateupd",
+   "ctx": 37,
+   "bs": 64,
+   "n_runs": 524
+  },
+  {
+   "target": "multihop",
+   "ctx": 29,
+   "bs": 64,
+   "n_runs": 99
+  },
+  {
+   "target": "binding",
+   "ctx": 158,
+   "bs": 64,
+   "n_runs": 28
+  }
+ ],
+ "tokens_per_step": {
+  "devaxis_binding_by_K": {
+   "2": 5888,
+   "3": 6400,
+   "4": 6912,
+   "8": 8960
+  },
+  "h100_binding_by_K": {
+   "2": 9088,
+   "3": 9344,
+   "4": 9600,
+   "5": 9856,
+   "6": 10112
+  },
+  "dsp_primary_target": {
+   "target": "stateupd",
+   "bs": 64,
+   "ctx": 37,
+   "tokens_per_step": 2368,
+   "n_runs": 524,
+   "note": "ctx is the run-level recorded sequence length; the priming phase of each run is recorded at the same ctx"
+  }
+ },
+ "time_law_tokens": {
+  "h100_cells_tokens": {
+   "2": 40896000,
+   "3": 128480000,
+   "4": 206400000,
+   "5": 722937600,
+   "6": 633516800
+  },
+  "devaxis_cells_tokens": {
+   "2": 17664000,
+   "3": 51200000,
+   "4": 64800000,
+   "8": 540960000
+  },
+  "h100_fit": {
+   "exponent": 2.674,
+   "coef_tokens": 6469875,
+   "r2": 0.951
+  },
+  "devaxis_fit": {
+   "exponent": 2.426,
+   "coef_tokens": 3093340,
+   "r2": 0.977
+  },
+  "devaxis_exponent_no_K8": 1.924,
+  "K4_formation_tokens": {
+   "h100": 206400000,
+   "devaxis": 64800000
+  },
+  "caveat": "cross-platform token totals are not directly comparable: the corpora differ in distractor length (D=128 vs 32) and batch size (64 vs 128); medians over emerged runs only, so all totals are lower bounds"
+ },
+ "maintenance_tokens": {
+  "devaxis_K4_window_tokens": 69120000,
+  "trickle_supervised_step_equivalents": 50,
+  "trickle_tokens": 345600,
+  "trickle_fraction_of_window": 0.005,
+  "note": "the paired-fork deciding signal: ~50 supervised step-equivalents (p=0.005 over a 10,000-step window) = ~0.35M tokens of supervised throughput inside a ~69M-token window"
+ },
+ "gap_law_tokens": {
+  "tokens_per_step_K2": 9088,
+  "gap50_steps": 64.0,
+  "gap50_tokens": 581632,
+  "gap_axis_tokens": {
+   "14": 127232,
+   "99": 899712,
+   "990": 8997120,
+   "10395": 94469760
+  },
+  "note": "the maximum unsupervised gap converted to unsupervised token throughput between supervised contacts; X14 runs are K=2, D=128, bs=64 (asserted from farm_raw/maint)"
+ },
+ "priming_tokens": {
+  "dose_tokens": {
+   "250": 592000,
+   "2000": 4736000,
+   "5000": 11840000,
+   "10000": 23680000,
+   "20000": 47360000
+  },
+  "baseline_requirement_tokens": {
+   "warmup_free_rederived": 15984000,
+   "warmup_500": 62160000,
+   "campaign_equalised_5875": 13912000,
+   "replication_pooled": 15984000
+  },
+  "warmup_artifact_extra_tokens": 46176000,
+  "harm_dose20k_tokens": 47360000,
+  "dose2000_fraction_of_baseline": 0.34,
+  "note": "DSP primary target (stateupd): 64 x 37 = 2,368 tokens/step on both phases"
+ }
+}

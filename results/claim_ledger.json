@@ -1,0 +1,187 @@
+{
+  "_provenance": "analysis/claim_ledger.py \u2014 hand-maintained register of every claim, its script, and whether it was pre-declared or post-hoc.",
+  "n_pre_declared": 12,
+  "n_post_hoc": 6,
+  "claims": [
+    {
+      "id": "PT-1",
+      "claim": "All 50 transcribed post-training rows reproduce from the committed raw batteries",
+      "value": "50/50 within half the last published digit",
+      "script": "analysis/agg_posttrain.py",
+      "source": "results/posttrain_rederived.json",
+      "status": "PRE-DECLARED",
+      "p": null,
+      "note": "The retirement condition was written in the file's own _provenance before the run."
+    },
+    {
+      "id": "LF-1",
+      "claim": "Legibility gap exceeds the present-set baseline on declarative state",
+      "value": "0.799 vs baseline 0.250 (Pythia-1.4B, K=4)",
+      "script": "analysis/neuron_legibility.py",
+      "source": "results/legibility_x/leg-p14b-K4D0.json",
+      "status": "PRE-DECLARED",
+      "p": null,
+      "note": "The paper's existing claim; this is a replication at a new condition."
+    },
+    {
+      "id": "LF-2",
+      "claim": "The gap replicates across models and families",
+      "value": "6/6 models, gap 0.486-0.799, AUROC 0.813-0.951",
+      "script": "analysis/neuron_legibility.py",
+      "source": "results/legibility_x/*.json",
+      "status": "PRE-DECLARED",
+      "p": null,
+      "note": "Replication was the declared purpose of the model sweep."
+    },
+    {
+      "id": "LF-3",
+      "claim": "The probe reads the QUERIED BINDING, not an entity code",
+      "value": "follows new query 0.866, stays on old 0.095, floor 0.250",
+      "script": "analysis/neuron_legibility.py",
+      "source": "results/legibility_x/qcf-p14b.json",
+      "status": "PRE-DECLARED",
+      "p": null,
+      "note": "Named in the script specification before implementation."
+    },
+    {
+      "id": "LF-4",
+      "claim": "Repair with the decoded target beats its controls on Pythia",
+      "value": "decoded 0.466-0.593 vs random 0.073-0.128, wrong_target 0.058; noop exactly 0.000",
+      "script": "analysis/neuron_legibility.py",
+      "source": "results/legibility_x/*.json",
+      "status": "PRE-DECLARED",
+      "p": null,
+      "note": "Arms and the noop identity requirement were declared before the run."
+    },
+    {
+      "id": "LF-5",
+      "claim": "Repair does NOT transfer to Qwen2.5 / OLMo-2, and the ORACLE fails there too",
+      "value": "decoded 0.055/0.105 with gold 0.130/0.193",
+      "script": "analysis/neuron_legibility.py",
+      "source": "results/legibility_x/*.json",
+      "status": "POST-HOC",
+      "p": null,
+      "note": "Observed, not predicted. Diagnoses the intervention SITE, not the probe. Claim Pythia only."
+    },
+    {
+      "id": "LF-6",
+      "claim": "The mutable failure is not a convention-inference failure",
+      "value": "explicit prompt 0.221 vs implicit 0.249 accuracy (no rescue)",
+      "script": "analysis/neuron_legibility.py --explicit",
+      "source": "results/legibility_x/leg-p14b-K4D0-EXPLICIT.json",
+      "status": "PRE-DECLARED",
+      "p": null,
+      "note": "Run specifically to falsify the alternative explanation raised against our own result."
+    },
+    {
+      "id": "OR-1",
+      "claim": "Accessibility exceeds behaviour and the gap WIDENS through pretraining",
+      "value": "Pythia-1.4B: gap slope +0.179 per log10 step, CI [0.126, 0.279], frac<=0 = 0.0002. Pythia-410M: +0.058, CI [-0.051, 0.143], NOT significant. R 0.261->0.972 vs U 0.155->0.610",
+      "script": "analysis/neuron_developmental.py",
+      "source": "results/developmental_trn1/dev-p14b.json",
+      "status": "PRE-DECLARED",
+      "p": null,
+      "note": "CONDITIONAL on two things. (1) The read layer is fixed at the FINAL checkpoint, which could manufacture the widening if the binding moves layers early; the per-checkpoint-best-layer control is in the code and the claim is NOT settled until it holds under both readings. (2) The widening is SCALE-DEPENDENT: significant at 1.4B, not at 410M. State it as such."
+    },
+    {
+      "id": "OR-2",
+      "claim": "At the final checkpoint the probe recovers the binding on trials the model fails",
+      "value": "0.953 vs 1/K baseline 0.167",
+      "script": "analysis/neuron_developmental.py",
+      "source": "results/developmental_trn1/dev-p14b.json",
+      "status": "PRE-DECLARED",
+      "p": null,
+      "note": ""
+    },
+    {
+      "id": "OR-3",
+      "claim": "Representation and use have DIFFERENT ONSET TIMES",
+      "value": "NOT SUPPORTED",
+      "script": "analysis/two_clocks.py",
+      "source": "results/two_clocks.json",
+      "status": "PRE-DECLARED",
+      "p": null,
+      "note": "Falsification condition was declared before running: 'lag <= 0, or a CI spanning 0'. Result: lag +0.061, CI [-0.100, +0.212] SPANS ZERO. The developmental result is about ASYMPTOTE, not onset. Onset is additionally LEFT-CENSORED (R already above baseline at the first checkpoint). Do not write 'representation develops before use'."
+    },
+    {
+      "id": "BC-1",
+      "claim": "The recipe effect does not survive controlling for scale",
+      "value": "recipe +0.123, CI [-0.521, +0.363], frac<=0 = 0.338",
+      "script": "analysis/agg_capacity.py",
+      "source": "results/capacity_trn1_summary.json",
+      "status": "PRE-DECLARED",
+      "p": null,
+      "note": "This is the paper's own claim, tested directly. DISAGREES with the paper. Scope limit: all models <=3B, while the paper's claim spans 70M-12B."
+    },
+    {
+      "id": "BC-2",
+      "claim": "Binding capacity follows a power law in parameter count",
+      "value": "K50 = c*N^0.820, R2 0.726, family-clustered CI [0.674, 1.251]",
+      "script": "analysis/agg_capacity.py + inline fit",
+      "source": "results/capacity_trn1_summary.json",
+      "status": "POST-HOC",
+      "p": null,
+      "note": "NOTICED because the scale coefficient's interval contained 1.0. The campaign's most striking result and the one most in need of independent replication. Leave-one-family-out spans 0.759-1.086; Pythia contributes 6 of 11 models."
+    },
+    {
+      "id": "BC-3",
+      "claim": "Capacity does not predict interference robustness (separate axes)",
+      "value": "Spearman rho +0.200, p 0.556 (n=11)",
+      "script": "analysis/interference_axis.py",
+      "source": "results/interference_axis.json",
+      "status": "POST-HOC",
+      "p": 0.556,
+      "note": "AGREES with the paper. Analysis chosen after the D=0 result; the D=256 cells already existed."
+    },
+    {
+      "id": "BC-4",
+      "claim": "Interference roughly halves effective capacity",
+      "value": "median retained fraction 0.535; reduces capacity in 10/11",
+      "script": "analysis/interference_axis.py",
+      "source": "results/interference_axis.json",
+      "status": "POST-HOC",
+      "p": null,
+      "note": "Requires normalising by the D=0 ceiling; own-ceiling normalisation INVERTS the sign."
+    },
+    {
+      "id": "BC-5",
+      "claim": "The entire GPT-2 family cannot hold one binding above the exclusion floor",
+      "value": "gpt2, gpt2-medium, gpt2-large all excluded at chance",
+      "script": "analysis/agg_capacity.py",
+      "source": "results/capacity_trn1_summary.json",
+      "status": "POST-HOC",
+      "p": null,
+      "note": "Observed. The exclusion rule itself is inherited from capacity_stats.py, not invented here."
+    },
+    {
+      "id": "DS-1",
+      "claim": "Chess d250/w1 accelerates target learning (pre-registered replication)",
+      "value": "NOT CONFIRMED: chess 20/20 crossing, median 6375 vs baseline 6750 (n=39), Mann-Whitney censored-ranked-worst p=0.73; phase-B clock p=0.41",
+      "script": "analysis/d250_verdict.py",
+      "source": "results/d250_verdict.json",
+      "status": "PRE-DECLARED",
+      "p": null,
+      "note": "PREREG_d250_replication.md uploaded to S3 before launch; verdict script committed before any run finished. Gates: median-lower PASS, p<0.05 FAIL, specificity PASS -> NOT CONFIRMED. The earlier p=0.025 (declared rule, Holm 0.125) did not survive n=20. The prereg carried its own single-test alpha, so this p does not enter this ledger's Holm set."
+    },
+    {
+      "id": "DS-2",
+      "claim": "Shuffled-chess d250 SLOWS learning relative to baseline",
+      "value": "median 9000 vs 6750, 3/20 never crossed, two-sided p=0.002",
+      "script": "analysis/d250_verdict.py",
+      "source": "results/d250_verdict.json",
+      "status": "POST-HOC",
+      "p": null,
+      "note": "The TEST was pre-specified (the prereg's gate-3 specificity test) but the significant direction (slower) was not the gated hypothesis. Label the direction post-hoc. Extends the unstructured-data harm result down to dose 250 on the time-to-threshold clock."
+    },
+    {
+      "id": "GL-1",
+      "claim": "Re-formation falls with the MAX UNSUPERVISED GAP at identical mean dose",
+      "value": "5/5, 3/11, 2/10, 1/12 at gaps 14/99/990/10395 (100/27/20/8 percent); logistic gap50 ~ 64",
+      "script": "analysis/x14_gap_law.py",
+      "source": "results/x14_gap_law.json",
+      "status": "PRE-DECLARED",
+      "p": null,
+      "note": "Three readings declared in maint/x14_runner.py before any X14 run existed; the one that fired is P3 NEAR-EVERY-STEP (both intermediate arms below 50%). 8 incomplete rescues EXCLUDED and counted, never scored as failures; the platform terminated, so counts are final. The gap50=64 fit is descriptive, not a declared boundary."
+    }
+  ]
+}

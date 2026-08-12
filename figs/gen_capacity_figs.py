@@ -235,7 +235,7 @@ def fig8():
                     ("o", [i for i, x in enumerate(G) if x["recipe"] == "modern"])]:
         sc = ax.scatter(db[sel], ks[sel], c=od[sel], cmap="cividis_r",
                         vmin=od.min(), vmax=od.max(), s=26, marker=mk,
-                        edgecolor="white", linewidths=0.4, zorder=3)
+                        edgecolor="#555555", linewidths=0.5, zorder=3)
     cb = fig.colorbar(sc, ax=ax, fraction=0.05, pad=0.03)
     cb.set_label("interference", fontsize=SMALL)
     cb.ax.tick_params(labelsize=SMALL)

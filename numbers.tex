@@ -423,3 +423,133 @@
 \newcommand{\RlStepDdeclLo}{68.42}          % rlvr_sft_stages.json -- declaration-site subspace dim, min over RL steps
 \newcommand{\RlStepDdeclHi}{68.57}          % rlvr_sft_stages.json -- declaration-site subspace dim, max -- frozen
 \newcommand{\RlStepDdeclPct}{0.1}         % rlvr_sft_stages.json -- half-range of d_decl as % -- geometry frozen (+/-0.1%)
+\newcommand{\DevTrnAccFirst}{0.261}         % developmental_trn1/dev-p14b.json -- accessibility, step1000
+\newcommand{\DevTrnAccLast}{0.972}          % developmental_trn1/dev-p14b.json -- accessibility, step143000
+\newcommand{\DevTrnBehavLast}{0.610}        % developmental_trn1/dev-p14b.json -- behaviour, step143000
+\newcommand{\DevTrnProbeOnFail}{0.953}      % developmental_trn1/dev-p14b.json -- p(probe right | model wrong), final ckpt
+\newcommand{\DevTrnBaseline}{0.167}         % developmental_trn1/dev-p14b.json -- 1/K present-set baseline
+\newcommand{\DevTrnGapSlope}{+0.179}         % two_clocks.json -- gap slope per log10 step, 1.4B
+\newcommand{\DevTrnGapSlopeCILo}{0.126}     % two_clocks.json
+\newcommand{\DevTrnGapSlopeCIHi}{0.279}     % two_clocks.json
+\newcommand{\DevTrnSmallSlope}{+0.058}       % two_clocks.json -- gap slope, 410M -- n.s.
+\newcommand{\DevTrnSmallSlopeCILo}{-0.051}   % two_clocks.json
+\newcommand{\DevTrnSmallSlopeCIHi}{0.143}   % two_clocks.json -- CI spans zero
+\newcommand{\OnsetLag}{+0.061}               % two_clocks.json -- onset lag in decades, 1.4B
+\newcommand{\OnsetLagCILo}{-0.100}           % two_clocks.json
+\newcommand{\OnsetLagCIHi}{0.212}           % two_clocks.json -- CI spans zero -- onset claim NOT supported
+\newcommand{\CapAlpha}{0.820}               % capacity_alpha_fit.json -- K50 = c*N^alpha, D=0, uncensored
+\newcommand{\CapAlphaCILo}{0.674}           % capacity_alpha_fit.json
+\newcommand{\CapAlphaCIHi}{1.251}           % capacity_alpha_fit.json
+\newcommand{\CapRsq}{0.73}                 % capacity_alpha_fit.json
+\newcommand{\CapLofoLo}{0.76}              % capacity_alpha_fit.json -- leave-one-family-out alpha, min
+\newcommand{\CapLofoHi}{1.09}              % capacity_alpha_fit.json -- leave-one-family-out alpha, max
+\newcommand{\CapFitN}{11}                % capacity_alpha_fit.json -- models entering the fit
+\newcommand{\TrnRecipeCoef}{+0.123}          % capacity_trn1_summary.json -- recipe coef controlling scale -- interval spans zero
+\newcommand{\TrnRecipeCILo}{-0.521}          % capacity_trn1_summary.json
+\newcommand{\TrnRecipeCIHi}{0.363}          % capacity_trn1_summary.json
+\newcommand{\TrnScaleCoef}{+0.818}           % capacity_trn1_summary.json -- log-params coef, same regression
+\newcommand{\TrnScaleCILo}{0.697}           % capacity_trn1_summary.json
+\newcommand{\TrnScaleCIHi}{1.206}           % capacity_trn1_summary.json -- excludes zero
+\newcommand{\TrnOptResolved}{38.1}         % capacity_trn1_summary.json -- opt-1.3b resolves past the old K=24 ceiling
+\newcommand{\TrnIntRetained}{0.535}         % interference_axis.json -- median retained capacity fraction under D=256
+\newcommand{\TrnIntReduced}{10}          % interference_axis.json
+\newcommand{\TrnIntN}{11}                % interference_axis.json
+\newcommand{\TrnIntRho}{+0.20}              % interference_axis.json -- capacity does not predict robustness
+\newcommand{\TrnIntP}{0.56}                % interference_axis.json
+\newcommand{\BoundMeasured}{3.7}          % cross_campaign_capacity.json -- 4.98M task-trained capacity
+\newcommand{\BoundPredicted}{0.14}         % cross_campaign_capacity.json -- law prediction at 4.98M
+\newcommand{\BoundFactor}{26}            % cross_campaign_capacity.json -- the regime boundary
+\newcommand{\CapLooMax}{0.11}              % capacity_alpha_fit.json -- max |delta alpha| deleting any single model
+\newcommand{\TimeLawHCoef}{766}           % extra_analyses.json -- t = c*K^a, H100 clocks corpus
+\newcommand{\TimeLawHExp}{2.58}            % extra_analyses.json
+\newcommand{\TimeLawHRsq}{0.95}            % extra_analyses.json
+\newcommand{\TimeLawDCoef}{667}           % devaxis_analyses.json -- same law, Trainium codebase
+\newcommand{\TimeLawDExp}{2.12}            % devaxis_analyses.json
+\newcommand{\TimeLawDRsq}{0.97}            % devaxis_analyses.json
+\newcommand{\TimeLawExpNoKeight}{1.7}     % devaxis_analyses.json -- devaxis exponent w/o the n=2 K=8 cell -- honest low end
+\newcommand{\TimeLawDblLo}{4}           % extra_analyses.json + devaxis_analyses.json -- step-cost factor per doubling of K, low
+\newcommand{\TimeLawDblHi}{6}           % extra_analyses.json + devaxis_analyses.json -- high
+\newcommand{\LearnSmallN}{23}            % extra_analyses.json -- runs at 1.31M params
+\newcommand{\LearnSmallEmerged}{0}      % extra_analyses.json -- none form at 1.31M in measured budgets
+\newcommand{\SeedOverdisp}{9.05}           % devaxis_analyses.json -- seed variance / binomial
+\newcommand{\DevaxisRuns}{1,301}            % devaxis_analyses.json -- Trainium program total
+\newcommand{\GapCellUniform}{5/5}         % x14_gap_law.json -- re-formed/complete at max gap 14
+\newcommand{\GapCellUniformPct}{100}      % x14_gap_law.json
+\newcommand{\GapCellPeriodic}{3/11}        % x14_gap_law.json -- re-formed/complete at max gap 99
+\newcommand{\GapCellPeriodicPct}{27}     % x14_gap_law.json
+\newcommand{\GapCellClustered}{2/10}       % x14_gap_law.json -- re-formed/complete at max gap 990
+\newcommand{\GapCellClusteredPct}{20}    % x14_gap_law.json
+\newcommand{\GapCellBlocks}{1/12}          % x14_gap_law.json -- re-formed/complete at max gap 10395
+\newcommand{\GapCellBlocksPct}{8}       % x14_gap_law.json
+\newcommand{\GapFifty}{64}               % x14_gap_law.json -- logistic 50% point in log gap
+\newcommand{\GapSpanFactor}{742}          % x14_gap_law.json -- max/min gap ratio at matched rate+totals
+\newcommand{\GapIncomplete}{8}          % x14_gap_law.json -- incomplete rescues excluded and counted
+\newcommand{\DzBaseN}{39}                % d250_verdict.json -- pooled baseline
+\newcommand{\DzBaseCross}{38}            % d250_verdict.json
+\newcommand{\DzBaseMed}{6,750}              % d250_verdict.json
+\newcommand{\DzChessN}{20}               % d250_verdict.json
+\newcommand{\DzChessCross}{20}           % d250_verdict.json
+\newcommand{\DzChessMed}{6,375}             % d250_verdict.json
+\newcommand{\DzShufCross}{17}            % d250_verdict.json
+\newcommand{\DzShufCens}{3}             % d250_verdict.json
+\newcommand{\DzShufMed}{9,000}              % d250_verdict.json
+\newcommand{\DzPChess}{0.73}               % d250_verdict.json -- verdict NOT CONFIRMED
+\newcommand{\DzPShuf}{0.002}                % d250_verdict.json -- specificity arm slows learning
+\newcommand{\WuRatio}{3.89}                % h100_reanalysis.json -- re-derived warmup handicap
+\newcommand{\WuP}{2.3\times10^{-7}}                    % h100_reanalysis.json
+\newcommand{\WuSlowMed}{26,250}              % h100_reanalysis.json -- warmup-500 baseline median
+\newcommand{\WuSlowN}{19}                % h100_reanalysis.json
+\newcommand{\WuSlowCross}{19}            % h100_reanalysis.json -- crosses eventually
+\newcommand{\WuFastMed}{6,750}              % h100_reanalysis.json -- warmup-free baseline median
+\newcommand{\WuFastN}{33}                % h100_reanalysis.json
+\newcommand{\WuFastCross}{32}            % h100_reanalysis.json
+\newcommand{\SaveChessLo}{18.1}            % h100_reanalysis.json -- chess savings vs cold baseline, k-steps, min over doses
+\newcommand{\SaveChessHi}{19.5}            % h100_reanalysis.json -- max
+\newcommand{\SaveShufLo}{16.1}             % h100_reanalysis.json -- shuffle_chess savings vs cold baseline, k-steps, min over doses
+\newcommand{\SaveShufHi}{18.9}             % h100_reanalysis.json -- max
+\newcommand{\SaveRandLo}{19.4}             % h100_reanalysis.json -- chess_random savings vs cold baseline, k-steps, min over doses
+\newcommand{\SaveRandHi}{19.9}             % h100_reanalysis.json -- max
+\newcommand{\HarmChessFive}{9/10}          % h100_reanalysis.json -- crossing at dose 5k, warmup-matched
+\newcommand{\HarmShufFive}{1/10}           % h100_reanalysis.json
+\newcommand{\HarmPFive}{0.0011}              % h100_reanalysis.json
+\newcommand{\HarmChessTen}{10/10}           % h100_reanalysis.json
+\newcommand{\HarmShufTen}{2/10}            % h100_reanalysis.json
+\newcommand{\HarmPTen}{0.0007}               % h100_reanalysis.json
+\newcommand{\HarmChessTwenty}{42/45}        % h100_reanalysis.json -- dose 20k: structure survives
+\newcommand{\HarmShufTwenty}{1/18}         % h100_reanalysis.json -- dose 20k: statistics-only collapses
+\newcommand{\HarmPTwenty}{1.9\times10^{-11}}            % h100_reanalysis.json -- exact two-sided Fisher on the dose-20k cells
+\newcommand{\SpeedChessB}{6,500}            % h100_reanalysis.json -- phase-B median after chess d5000
+\newcommand{\SpeedShufB}{21,875}             % h100_reanalysis.json -- after shuffled chess d5000
+\newcommand{\SpeedRatio}{3.4}             % h100_reanalysis.json
+\newcommand{\SpeedShufP}{5.1\times10^{-10}}             % h100_reanalysis.json -- phase-B vs warmup-matched base
+\newcommand{\SpeedChessP}{0.12}            % h100_reanalysis.json -- not significant
+\newcommand{\StratChessR}{101/105}            % h100_reanalysis.json -- re-derived strategy null
+\newcommand{\StratRandR}{73/78}             % h100_reanalysis.json
+\newcommand{\StratP}{0.50}                 % h100_reanalysis.json
+\newcommand{\RevZero}{0/11}                % h100_reanalysis.json -- revival at p=0
+\newcommand{\RevTwoTh}{0/6}               % h100_reanalysis.json
+\newcommand{\RevFiveTh}{3/6}              % h100_reanalysis.json
+\newcommand{\RevOne}{6/6}                 % h100_reanalysis.json -- full revival from p=0.01
+\newcommand{\RetKfZero}{0/21}              % devaxis_analyses.json -- K=4 retention at p=0
+\newcommand{\RetKfLow}{1/7}               % devaxis_analyses.json -- K=4 at p=0.01
+\newcommand{\RetKfTwo}{4/7}               % devaxis_analyses.json -- K=4 at p=0.02
+\newcommand{\RetKfThree}{7/7}             % devaxis_analyses.json -- K=4 at p=0.03
+\newcommand{\RetKtZero}{37/96}              % devaxis_analyses.json -- K=2 at p=0
+\newcommand{\RetKtTwo}{8/8}               % devaxis_analyses.json -- K=2 at p=0.02
+\newcommand{\RetKtThree}{7/8}             % devaxis_analyses.json -- K=2 at p=0.03 -- within its interval
+\newcommand{\TokLawHExp}{2.67}             % token_costs.json -- time law refit in token units, H100
+\newcommand{\TokLawHRsq}{0.95}             % token_costs.json
+\newcommand{\TokLawDExp}{2.43}             % token_costs.json -- devaxis
+\newcommand{\TokLawDRsq}{0.98}             % token_costs.json
+\newcommand{\TokLawDExpNoKeight}{1.9}     % token_costs.json -- without the K=8 cell
+\newcommand{\TokKfourH}{206}              % token_costs.json -- K=4 formation, millions of tokens, H100
+\newcommand{\TokKfourD}{65}              % token_costs.json -- devaxis
+\newcommand{\TokWindow}{69.1}              % token_costs.json -- 10k-step deprivation window, M tokens
+\newcommand{\TokTrickle}{0.35}             % token_costs.json -- deciding supervised trickle, M tokens
+\newcommand{\TokTricklePct}{0.5}          % token_costs.json -- trickle as % of window throughput
+\newcommand{\TokGapFifty}{0.58}            % token_costs.json -- gap50 in M unsupervised tokens
+\newcommand{\TokBaseReqLo}{13.9}           % token_costs.json -- task requirement, M tokens, campaign accounting
+\newcommand{\TokBaseReqHi}{16.0}           % token_costs.json -- raw-record accounting
+\newcommand{\TokWuWaste}{46.2}             % token_costs.json -- warmup-500 extra cost per run, M tokens
+\newcommand{\TokWuWasteMult}{2.9}         % token_costs.json -- warmup waste as a multiple of the task's own requirement
+\newcommand{\TokHarmDose}{47.4}            % token_costs.json -- the dose-20k structure-free corpus, M tokens

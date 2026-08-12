@@ -9,8 +9,24 @@ Check: python analysis/verify.py             (fails if numbers.tex is stale, or 
 """
 from __future__ import annotations
 import json, os, re, sys
+from math import comb
 
 import numpy as np
+
+
+def _sci(p):
+    """LaTeX scientific notation for a p-value, e.g. 2.3\\times10^{-7}."""
+    m, e = f"{p:.1e}".split("e")
+    return f"{m}\\times10^{{{int(e)}}}"
+
+
+def _fisher2(a, b, c, d):
+    """Exact two-sided Fisher p for the 2x2 table [[a, b], [c, d]] (hypergeometric sum)."""
+    n, r1, c1 = a + b + c + d, a + b, a + c
+    def pr(x):
+        return comb(r1, x) * comb(n - r1, c1 - x) / comb(n, c1)
+    p0 = pr(a) * (1 + 1e-12)
+    return sum(pr(x) for x in range(max(0, c1 - (n - r1)), min(r1, c1) + 1) if pr(x) <= p0)
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from exact_stats import sign_test, spearman_exact  # noqa: E402
@@ -831,6 +847,189 @@ def build():
     N["RlStepDdeclLo"] = (f"{min(_dd):.2f}", RSJ, "declaration-site subspace dim, min over RL steps")
     N["RlStepDdeclHi"] = (f"{max(_dd):.2f}", RSJ, "declaration-site subspace dim, max -- frozen")
     N["RlStepDdeclPct"] = (f"{(max(_dd)-min(_dd))/2/(sum(_dd)/len(_dd))*100:.1f}", RSJ, "half-range of d_decl as % -- geometry frozen (+/-0.1%)")
+
+    # ---------------- Trainium developmental replication (neuron_developmental.py + two_clocks.py)
+    # Independent re-implementation of the trajectory on trn1: paired trials at every public
+    # Pythia checkpoint, read layer fixed once on a selection fold. Onset claim gated by the
+    # pre-declared falsification condition in two_clocks.py (claim ledger OR-3: NOT SUPPORTED).
+    dv = load("developmental_trn1/dev-p14b.json"); DVJ = "developmental_trn1/dev-p14b.json"
+    N["DevTrnAccFirst"] = (f"{dv['rows'][0]['accessibility_R']:.3f}", DVJ, "accessibility, step1000")
+    N["DevTrnAccLast"] = (f"{dv['rows'][-1]['accessibility_R']:.3f}", DVJ, "accessibility, step143000")
+    N["DevTrnBehavLast"] = (f"{dv['rows'][-1]['behaviour_U']:.3f}", DVJ, "behaviour, step143000")
+    N["DevTrnProbeOnFail"] = (f"{dv['rows'][-1]['gap_given_wrong_G']:.3f}", DVJ, "p(probe right | model wrong), final ckpt")
+    N["DevTrnBaseline"] = (f"{1.0/dv['K']:.3f}", DVJ, "1/K present-set baseline")
+    tc = load("two_clocks.json")
+    _tj = {x["label"]: x for x in tc["trajectories"]}
+    _b, _s = _tj["dev-p14b"], _tj["dev-p410m"]
+    N["DevTrnGapSlope"] = (f"{_b['gap_slope_per_log10_step']:+.3f}", "two_clocks.json", "gap slope per log10 step, 1.4B")
+    N["DevTrnGapSlopeCILo"] = (f"{_b['gap_slope_ci95'][0]:.3f}", "two_clocks.json", "")
+    N["DevTrnGapSlopeCIHi"] = (f"{_b['gap_slope_ci95'][1]:.3f}", "two_clocks.json", "")
+    N["DevTrnSmallSlope"] = (f"{_s['gap_slope_per_log10_step']:+.3f}", "two_clocks.json", "gap slope, 410M -- n.s.")
+    N["DevTrnSmallSlopeCILo"] = (f"{_s['gap_slope_ci95'][0]:.3f}", "two_clocks.json", "")
+    N["DevTrnSmallSlopeCIHi"] = (f"{_s['gap_slope_ci95'][1]:.3f}", "two_clocks.json", "CI spans zero")
+    N["OnsetLag"] = (f"{_b['lag_log10_steps']:+.3f}", "two_clocks.json", "onset lag in decades, 1.4B")
+    N["OnsetLagCILo"] = (f"{_b['lag_ci95'][0]:.3f}", "two_clocks.json", "")
+    N["OnsetLagCIHi"] = (f"{_b['lag_ci95'][1]:.3f}", "two_clocks.json", "CI spans zero -- onset claim NOT supported")
+
+    # ---------------- Trainium capacity re-measurement (neuron_capacity.py -> agg_capacity.py)
+    # POST-HOC power law per claim ledger BC-2; committed fit in capacity_alpha_fit.py.
+    af = load("capacity_alpha_fit.json"); AFJ = "capacity_alpha_fit.json"
+    N["CapAlpha"] = (f"{af['alpha']:.3f}", AFJ, "K50 = c*N^alpha, D=0, uncensored")
+    N["CapAlphaCILo"] = (f"{af['alpha_ci95_family_clustered'][0]:.3f}", AFJ, "")
+    N["CapAlphaCIHi"] = (f"{af['alpha_ci95_family_clustered'][1]:.3f}", AFJ, "")
+    N["CapRsq"] = (f"{af['r2']:.2f}", AFJ, "")
+    N["CapLofoLo"] = (f"{af['lofo_range'][0]:.2f}", AFJ, "leave-one-family-out alpha, min")
+    N["CapLofoHi"] = (f"{af['lofo_range'][1]:.2f}", AFJ, "leave-one-family-out alpha, max")
+    N["CapFitN"] = (f"{af['n_models']}", AFJ, "models entering the fit")
+    ct = load("capacity_trn1_summary.json"); CTJ = "capacity_trn1_summary.json"
+    _rc = ct["recipe_test_controlling_for_scale"]
+    N["TrnRecipeCoef"] = (f"{_rc['recipe_coef_logK50']:+.3f}", CTJ, "recipe coef controlling scale -- interval spans zero")
+    N["TrnRecipeCILo"] = (f"{_rc['recipe_ci95'][0]:.3f}", CTJ, "")
+    N["TrnRecipeCIHi"] = (f"{_rc['recipe_ci95'][1]:.3f}", CTJ, "")
+    N["TrnScaleCoef"] = (f"{_rc['log_params_coef']:+.3f}", CTJ, "log-params coef, same regression")
+    N["TrnScaleCILo"] = (f"{_rc['log_params_ci95'][0]:.3f}", CTJ, "")
+    N["TrnScaleCIHi"] = (f"{_rc['log_params_ci95'][1]:.3f}", CTJ, "excludes zero")
+    N["TrnOptResolved"] = (f"{[m for m in ct['models'] if m['label']=='opt-1.3b-x'][0]['by_D']['0']['K50']:.1f}", CTJ, "opt-1.3b resolves past the old K=24 ceiling")
+    ia = load("interference_axis.json"); IAJ = "interference_axis.json"
+    N["TrnIntRetained"] = (f"{ia['retained_fraction_median']:.3f}", IAJ, "median retained capacity fraction under D=256")
+    N["TrnIntReduced"] = (f"{ia['n_models_interference_reduces_capacity']}", IAJ, "")
+    N["TrnIntN"] = (f"{ia['n_uncensored']}", IAJ, "")
+    N["TrnIntRho"] = (f"{ia['spearman_capacity_vs_retained']['rho']:+.2f}", IAJ, "capacity does not predict robustness")
+    N["TrnIntP"] = (f"{ia['spearman_capacity_vs_retained']['p']:.2f}", IAJ, "")
+    cc = load("cross_campaign_capacity.json"); CCJ = "cross_campaign_capacity.json"
+    _cb = cc["comparison"][0]
+    N["BoundMeasured"] = (f"{_cb['measured_capacity']:.1f}", CCJ, "4.98M task-trained capacity")
+    N["BoundPredicted"] = (f"{_cb['law_prediction']:.2f}", CCJ, "law prediction at 4.98M")
+    N["BoundFactor"] = (f"{_cb['ratio']:.0f}", CCJ, "the regime boundary")
+    N["CapLooMax"] = (f"{af['loo_max_abs_delta']:.2f}", AFJ, "max |delta alpha| deleting any single model")
+
+    # ---------------- time law: formation cost vs binding load (absorbed from p6_laws)
+    # Emerged runs only in both corpora; exponents are lower bounds (censoring).
+    ea = load("extra_analyses.json"); EAJ = "extra_analyses.json"
+    _tb = ea["B_emergence_time_vs_K"]
+    N["TimeLawHCoef"] = (f"{_tb['coef']:.0f}", EAJ, "t = c*K^a, H100 clocks corpus")
+    N["TimeLawHExp"] = (f"{_tb['exponent']:.2f}", EAJ, "")
+    N["TimeLawHRsq"] = (f"{_tb['r2']:.2f}", EAJ, "")
+    dvx = load("devaxis_analyses.json"); DXJ = "devaxis_analyses.json"
+    _dl = dvx["emergence_law"]["devaxis"]
+    N["TimeLawDCoef"] = (f"{_dl['coef']:.0f}", DXJ, "same law, Trainium codebase")
+    N["TimeLawDExp"] = (f"{_dl['exponent']:.2f}", DXJ, "")
+    N["TimeLawDRsq"] = (f"{_dl['r2']:.2f}", DXJ, "")
+    _nk = [(float(k), v["median"]) for k, v in _dl["cells"].items() if int(k) != 8]
+    _slope = np.polyfit(np.log10([k for k, _ in _nk]), np.log10([m for _, m in _nk]), 1)[0]
+    N["TimeLawExpNoKeight"] = (f"{_slope:.1f}", DXJ, "devaxis exponent w/o the n=2 K=8 cell -- honest low end")
+    _dbl = sorted([2 ** _tb["exponent"], 2 ** _dl["exponent"]])
+    N["TimeLawDblLo"] = (f"{_dbl[0]:.0f}", EAJ + " + " + DXJ, "step-cost factor per doubling of K, low")
+    N["TimeLawDblHi"] = (f"{_dbl[1]:.0f}", EAJ + " + " + DXJ, "high")
+    _lt = ea["D_learnability_threshold"]["by_size"]
+    N["LearnSmallN"] = (f"{_lt['1.31']['n']}", EAJ, "runs at 1.31M params")
+    N["LearnSmallEmerged"] = (f"{_lt['1.31']['emerged']}", EAJ, "none form at 1.31M in measured budgets")
+    N["SeedOverdisp"] = (f"{dvx['seed_heterogeneity']['overdispersion_ratio']:.2f}", DXJ, "seed variance / binomial")
+    N["DevaxisRuns"] = (f"{dvx['n_runs_total']:,}", DXJ, "Trainium program total")
+
+    # ---------------- supervision-supply gap law (X14; training_history.tex)
+    gl = load("x14_gap_law.json"); GLJ = "x14_gap_law.json"
+    _ga = gl["gap_axis"]
+    for _gap, _mac in [("14", "GapCellUniform"), ("99", "GapCellPeriodic"),
+                       ("990", "GapCellClustered"), ("10395", "GapCellBlocks")]:
+        _a, _b = (int(x) for x in _ga[_gap].split("/"))
+        N[_mac] = (_ga[_gap], GLJ, f"re-formed/complete at max gap {_gap}")
+        N[_mac + "Pct"] = (f"{100 * _a / _b:.0f}", GLJ, "")
+    N["GapFifty"] = (f"{gl['fit']['gap50']:.0f}", GLJ, "logistic 50% point in log gap")
+    N["GapSpanFactor"] = (f"{10395 / 14:.0f}", GLJ, "max/min gap ratio at matched rate+totals")
+    N["GapIncomplete"] = (f"{gl['incomplete_total']}", GLJ, "incomplete rescues excluded and counted")
+
+    # ---------------- pre-registered dose-250 replication (training_history.tex)
+    dz = load("d250_verdict.json"); DZJ = "d250_verdict.json"
+    N["DzBaseN"] = (f"{dz['baseline']['n']}", DZJ, "pooled baseline")
+    N["DzBaseCross"] = (f"{dz['baseline']['crossed']}", DZJ, "")
+    N["DzBaseMed"] = (f"{dz['baseline']['median']:,.0f}", DZJ, "")
+    N["DzChessN"] = (f"{dz['chess']['n']}", DZJ, "")
+    N["DzChessCross"] = (f"{dz['chess']['crossed']}", DZJ, "")
+    N["DzChessMed"] = (f"{dz['chess']['median']:,.0f}", DZJ, "")
+    N["DzShufCross"] = (f"{dz['shuffle']['crossed']}", DZJ, "")
+    N["DzShufCens"] = (f"{dz['shuffle']['cens']}", DZJ, "")
+    N["DzShufMed"] = (f"{dz['shuffle']['median']:,.0f}", DZJ, "")
+    N["DzPChess"] = (f"{dz['p_chess']:.2f}", DZJ, "verdict NOT CONFIRMED")
+    N["DzPShuf"] = (f"{dz['p_shuffle']:.3f}", DZJ, "specificity arm slows learning")
+
+    # ---------------- H100 re-derivation headliners (training_history.tex)
+    hr = load("h100_reanalysis.json"); HRJ = "h100_reanalysis.json"
+    _q1 = hr["Q1_warmup"]
+    N["WuRatio"] = (f"{_q1['ratio']:.2f}", HRJ, "re-derived warmup handicap")
+    N["WuP"] = (_sci(_q1["p"]), HRJ, "")
+    N["WuSlowMed"] = (f"{_q1['strata']['500']['median']:,.0f}", HRJ, "warmup-500 baseline median")
+    N["WuSlowN"] = (f"{_q1['strata']['500']['n']}", HRJ, "")
+    N["WuSlowCross"] = (f"{_q1['strata']['500']['crossed']}", HRJ, "crosses eventually")
+    N["WuFastMed"] = (f"{_q1['strata']['1']['median']:,.0f}", HRJ, "warmup-free baseline median")
+    N["WuFastN"] = (f"{_q1['strata']['1']['n']}", HRJ, "")
+    N["WuFastCross"] = (f"{_q1['strata']['1']['crossed']}", HRJ, "")
+    _sv = {}
+    for _r in hr["Q2_low_dose_w500"]:
+        _sv.setdefault(_r["prime"], []).append(_r["saved"] / 1000)
+    for _pr, _mac in [("chess", "SaveChess"), ("shuffle_chess", "SaveShuf"), ("chess_random", "SaveRand")]:
+        N[_mac + "Lo"] = (f"{min(_sv[_pr]):.1f}", HRJ, f"{_pr} savings vs cold baseline, k-steps, min over doses")
+        N[_mac + "Hi"] = (f"{max(_sv[_pr]):.1f}", HRJ, "max")
+    _q5 = {(r["warmup"], r["dose"]): r for r in hr["Q5_harm"]}
+    N["HarmChessFive"] = (_q5[(500, 5000)]["chess"], HRJ, "crossing at dose 5k, warmup-matched")
+    N["HarmShufFive"] = (_q5[(500, 5000)]["shuffle"], HRJ, "")
+    N["HarmPFive"] = (f"{_q5[(500, 5000)]['fisher_p']:.4f}", HRJ, "")
+    N["HarmChessTen"] = (_q5[(500, 10000)]["chess"], HRJ, "")
+    N["HarmShufTen"] = (_q5[(500, 10000)]["shuffle"], HRJ, "")
+    N["HarmPTen"] = (f"{_q5[(500, 10000)]['fisher_p']:.4f}", HRJ, "")
+    N["HarmChessTwenty"] = (_q5[(500, 20000)]["chess"], HRJ, "dose 20k: structure survives")
+    N["HarmShufTwenty"] = (_q5[(500, 20000)]["shuffle"], HRJ, "dose 20k: statistics-only collapses")
+    _ca, _cn = (int(x) for x in _q5[(500, 20000)]["chess"].split("/"))
+    _sa, _sn = (int(x) for x in _q5[(500, 20000)]["shuffle"].split("/"))
+    N["HarmPTwenty"] = (_sci(_fisher2(_ca, _cn - _ca, _sa, _sn - _sa)), HRJ,
+                        "exact two-sided Fisher on the dose-20k cells")
+    _arm = {(r["prime"], r["dose"]): r for r in hr["Q3Q4_w1"]["arms"]}
+    N["SpeedChessB"] = (f"{_arm[('chess', 5000)]['median_phaseB']:,.0f}", HRJ, "phase-B median after chess d5000")
+    N["SpeedShufB"] = (f"{_arm[('shuffle_chess', 5000)]['median_phaseB']:,.0f}", HRJ, "after shuffled chess d5000")
+    N["SpeedRatio"] = (f"{_arm[('shuffle_chess', 5000)]['median_phaseB'] / _arm[('chess', 5000)]['median_phaseB']:.1f}", HRJ, "")
+    N["SpeedShufP"] = (_sci(_arm[("shuffle_chess", 5000)]["p_phaseB_vs_base"]), HRJ, "phase-B vs warmup-matched base")
+    N["SpeedChessP"] = (f"{_arm[('chess', 5000)]['p_phaseB_vs_base']:.2f}", HRJ, "not significant")
+    _q6 = hr["Q6_strategy"]
+    N["StratChessR"] = (_q6["chess"], HRJ, "re-derived strategy null")
+    N["StratRandR"] = (_q6["random"], HRJ, "")
+    N["StratP"] = (f"{_q6['p']:.2f}", HRJ, "")
+    _q7 = hr["Q7_revival"]
+    N["RevZero"] = (_q7["0.0"], HRJ, "revival at p=0")
+    N["RevTwoTh"] = (_q7["0.002"], HRJ, "")
+    N["RevFiveTh"] = (_q7["0.005"], HRJ, "")
+    N["RevOne"] = (_q7["0.01"], HRJ, "full revival from p=0.01")
+    _dr = {(r["K"], r["p"]): r for r in dvx["dose_response"]}
+    N["RetKfZero"] = (f"{_dr[(4, 0.0)]['held']}/{_dr[(4, 0.0)]['n']}", DXJ, "K=4 retention at p=0")
+    N["RetKfLow"] = (f"{_dr[(4, 0.01)]['held']}/{_dr[(4, 0.01)]['n']}", DXJ, "K=4 at p=0.01")
+    N["RetKfTwo"] = (f"{_dr[(4, 0.02)]['held']}/{_dr[(4, 0.02)]['n']}", DXJ, "K=4 at p=0.02")
+    N["RetKfThree"] = (f"{_dr[(4, 0.03)]['held']}/{_dr[(4, 0.03)]['n']}", DXJ, "K=4 at p=0.03")
+    N["RetKtZero"] = (f"{_dr[(2, 0.0)]['held']}/{_dr[(2, 0.0)]['n']}", DXJ, "K=2 at p=0")
+    N["RetKtTwo"] = (f"{_dr[(2, 0.02)]['held']}/{_dr[(2, 0.02)]['n']}", DXJ, "K=2 at p=0.02")
+    N["RetKtThree"] = (f"{_dr[(2, 0.03)]['held']}/{_dr[(2, 0.03)]['n']}", DXJ, "K=2 at p=0.03 -- within its interval")
+
+    # ---------------- token-denominated economics (p3_capacity.tex sec:cost, training_history.tex)
+    tc = load("token_costs.json"); TCJ = "token_costs.json"
+    _tl = tc["time_law_tokens"]
+    N["TokLawHExp"] = (f"{_tl['h100_fit']['exponent']:.2f}", TCJ, "time law refit in token units, H100")
+    N["TokLawHRsq"] = (f"{_tl['h100_fit']['r2']:.2f}", TCJ, "")
+    N["TokLawDExp"] = (f"{_tl['devaxis_fit']['exponent']:.2f}", TCJ, "devaxis")
+    N["TokLawDRsq"] = (f"{_tl['devaxis_fit']['r2']:.2f}", TCJ, "")
+    N["TokLawDExpNoKeight"] = (f"{_tl['devaxis_exponent_no_K8']:.1f}", TCJ, "without the K=8 cell")
+    N["TokKfourH"] = (f"{_tl['K4_formation_tokens']['h100'] / 1e6:.0f}", TCJ, "K=4 formation, millions of tokens, H100")
+    N["TokKfourD"] = (f"{_tl['K4_formation_tokens']['devaxis'] / 1e6:.0f}", TCJ, "devaxis")
+    _mt = tc["maintenance_tokens"]
+    N["TokWindow"] = (f"{_mt['devaxis_K4_window_tokens'] / 1e6:.1f}", TCJ, "10k-step deprivation window, M tokens")
+    N["TokTrickle"] = (f"{_mt['trickle_tokens'] / 1e6:.2f}", TCJ, "deciding supervised trickle, M tokens")
+    N["TokTricklePct"] = (f"{_mt['trickle_fraction_of_window'] * 100:.1f}", TCJ, "trickle as % of window throughput")
+    N["TokGapFifty"] = (f"{tc['gap_law_tokens']['gap50_tokens'] / 1e6:.2f}", TCJ, "gap50 in M unsupervised tokens")
+    _pt = tc["priming_tokens"]
+    _breq = _pt["baseline_requirement_tokens"]
+    N["TokBaseReqLo"] = (f"{_breq['campaign_equalised_5875'] / 1e6:.1f}", TCJ, "task requirement, M tokens, campaign accounting")
+    N["TokBaseReqHi"] = (f"{_breq['warmup_free_rederived'] / 1e6:.1f}", TCJ, "raw-record accounting")
+    N["TokWuWaste"] = (f"{_pt['warmup_artifact_extra_tokens'] / 1e6:.1f}", TCJ, "warmup-500 extra cost per run, M tokens")
+    N["TokWuWasteMult"] = (f"{_pt['warmup_artifact_extra_tokens'] / _breq['warmup_free_rederived']:.1f}", TCJ,
+                           "warmup waste as a multiple of the task's own requirement")
+    N["TokHarmDose"] = (f"{_pt['harm_dose20k_tokens'] / 1e6:.1f}", TCJ, "the dose-20k structure-free corpus, M tokens")
     return N
 
 

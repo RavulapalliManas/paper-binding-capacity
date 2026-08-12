@@ -1,0 +1,48 @@
+{
+  "_provenance": "analysis/x14_gap_law.py over farm_raw/maint x11_*/x14_* raw runs; pre-registered readings from maint/x14_runner.py applied verbatim; incomplete rescues excluded and counted.",
+  "cells": {
+    "front": {
+      "reformed": 1,
+      "complete": 6,
+      "incomplete": 0,
+      "max_gap": 10395
+    },
+    "back": {
+      "reformed": 0,
+      "complete": 6,
+      "incomplete": 0,
+      "max_gap": 10395
+    },
+    "periodic": {
+      "reformed": 3,
+      "complete": 11,
+      "incomplete": 3,
+      "max_gap": 99
+    },
+    "uniform": {
+      "reformed": 5,
+      "complete": 5,
+      "incomplete": 1,
+      "max_gap": 14
+    },
+    "clustered": {
+      "reformed": 2,
+      "complete": 10,
+      "incomplete": 4,
+      "max_gap": 990
+    }
+  },
+  "gap_axis": {
+    "14": "5/5",
+    "99": "3/11",
+    "990": "2/10",
+    "10395": "1/12"
+  },
+  "monotone": true,
+  "fit": {
+    "gap50": 64.0,
+    "slope": 5.049
+  },
+  "verdict": "P3 NEAR-EVERY-STEP \u2014 both new arms fail",
+  "incomplete_total": 8
+}

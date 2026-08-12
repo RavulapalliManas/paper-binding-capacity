@@ -1,0 +1,267 @@
+{
+  "Q1_warmup": {
+    "strata": {
+      "1": {
+        "n": 33,
+        "crossed": 32,
+        "cens": 1,
+        "median": 6750.0
+      },
+      "500": {
+        "n": 19,
+        "crossed": 19,
+        "cens": 0,
+        "median": 26250.0
+      }
+    },
+    "ratio": 3.889,
+    "p": 2.3300077266604708e-07
+  },
+  "Q2_low_dose_w500": [
+    {
+      "prime": "chess",
+      "dose": 250,
+      "crossed": 10,
+      "n": 10,
+      "median": 8125.0,
+      "saved": 18125.0,
+      "p": 1.956811157238089e-05
+    },
+    {
+      "prime": "chess",
+      "dose": 500,
+      "crossed": 10,
+      "n": 10,
+      "median": 7875.0,
+      "saved": 18375.0,
+      "p": 2.407184499410654e-05
+    },
+    {
+      "prime": "chess",
+      "dose": 1000,
+      "crossed": 10,
+      "n": 10,
+      "median": 6750.0,
+      "saved": 19500.0,
+      "p": 8.709953760819737e-05
+    },
+    {
+      "prime": "shuffle_chess",
+      "dose": 250,
+      "crossed": 10,
+      "n": 10,
+      "median": 10125.0,
+      "saved": 16125.0,
+      "p": 7.161703345351213e-05
+    },
+    {
+      "prime": "shuffle_chess",
+      "dose": 500,
+      "crossed": 10,
+      "n": 10,
+      "median": 7375.0,
+      "saved": 18875.0,
+      "p": 1.5988479311972382e-05
+    },
+    {
+      "prime": "shuffle_chess",
+      "dose": 1000,
+      "crossed": 10,
+      "n": 10,
+      "median": 7500.0,
+      "saved": 18750.0,
+      "p": 0.000126036728229249
+    },
+    {
+      "prime": "chess_random",
+      "dose": 250,
+      "crossed": 10,
+      "n": 10,
+      "median": 6875.0,
+      "saved": 19375.0,
+      "p": 0.0005293288828377392
+    },
+    {
+      "prime": "chess_random",
+      "dose": 500,
+      "crossed": 10,
+      "n": 10,
+      "median": 6375.0,
+      "saved": 19875.0,
+      "p": 2.1785372579678886e-05
+    },
+    {
+      "prime": "chess_random",
+      "dose": 1000,
+      "crossed": 10,
+      "n": 10,
+      "median": 6500.0,
+      "saved": 19750.0,
+      "p": 0.00011521774709832097
+    }
+  ],
+  "Q3Q4_w1": {
+    "baseline": {
+      "n": 33,
+      "crossed": 32,
+      "cens": 1,
+      "median": 6750.0
+    },
+    "arms": [
+      {
+        "prime": "chess",
+        "dose": 250,
+        "n": 9,
+        "crossed": 9,
+        "median_total": 5500.0,
+        "median_phaseB": 5250.0,
+        "p_total_vs_base": 0.06320196774385439,
+        "p_phaseB_vs_base": 0.025004642462223135
+      },
+      {
+        "prime": "chess",
+        "dose": 500,
+        "n": 9,
+        "crossed": 9,
+        "median_total": 8250.0,
+        "median_phaseB": 7750.0,
+        "p_total_vs_base": 0.8060263737175177,
+        "p_phaseB_vs_base": 0.7472020849452214
+      },
+      {
+        "prime": "chess",
+        "dose": 1000,
+        "n": 9,
+        "crossed": 8,
+        "median_total": 5750.0,
+        "median_phaseB": 4750.0,
+        "p_total_vs_base": 0.8538945030064552,
+        "p_phaseB_vs_base": 0.26274044758137605
+      },
+      {
+        "prime": "chess",
+        "dose": 2000,
+        "n": 6,
+        "crossed": 3,
+        "median_total": 5000.0,
+        "median_phaseB": 3000.0,
+        "p_total_vs_base": 0.5327522443848405,
+        "p_phaseB_vs_base": 1.0
+      },
+      {
+        "prime": "chess",
+        "dose": 5000,
+        "n": 55,
+        "crossed": 40,
+        "median_total": 11500.0,
+        "median_phaseB": 6500.0,
+        "p_total_vs_base": 6.945873009469737e-07,
+        "p_phaseB_vs_base": 0.11856840308094423
+      },
+      {
+        "prime": "shuffle_chess",
+        "dose": 2000,
+        "n": 6,
+        "crossed": 6,
+        "median_total": 8500.0,
+        "median_phaseB": 6500.0,
+        "p_total_vs_base": 0.7257486084293621,
+        "p_phaseB_vs_base": 0.37013166622534266
+      },
+      {
+        "prime": "shuffle_chess",
+        "dose": 5000,
+        "n": 54,
+        "crossed": 30,
+        "median_total": 26875.0,
+        "median_phaseB": 21875.0,
+        "p_total_vs_base": 8.435711349674685e-12,
+        "p_phaseB_vs_base": 5.090766483298453e-10
+      }
+    ]
+  },
+  "Q5_harm": [
+    {
+      "warmup": 500,
+      "dose": 250,
+      "chess": "10/10",
+      "shuffle": "10/10",
+      "fisher_p": 1.0
+    },
+    {
+      "warmup": 500,
+      "dose": 500,
+      "chess": "10/10",
+      "shuffle": "10/10",
+      "fisher_p": 1.0
+    },
+    {
+      "warmup": 500,
+      "dose": 1000,
+      "chess": "10/10",
+      "shuffle": "10/10",
+      "fisher_p": 1.0
+    },
+    {
+      "warmup": 500,
+      "dose": 2000,
+      "chess": "10/10",
+      "shuffle": "7/10",
+      "fisher_p": 0.21053
+    },
+    {
+      "warmup": 500,
+      "dose": 5000,
+      "chess": "9/10",
+      "shuffle": "1/10",
+      "fisher_p": 0.00109
+    },
+    {
+      "warmup": 500,
+      "dose": 10000,
+      "chess": "10/10",
+      "shuffle": "2/10",
+      "fisher_p": 0.00071
+    },
+    {
+      "warmup": 500,
+      "dose": 20000,
+      "chess": "42/45",
+      "shuffle": "1/18",
+      "fisher_p": 0.0
+    },
+    {
+      "warmup": 1,
+      "dose": 2000,
+      "chess": "3/6",
+      "shuffle": "6/6",
+      "fisher_p": 0.18182
+    },
+    {
+      "warmup": 1,
+      "dose": 5000,
+      "chess": "40/55",
+      "shuffle": "30/54",
+      "fisher_p": 0.07382
+    }
+  ],
+  "Q6_strategy": {
+    "chess": "101/105",
+    "random": "73/78",
+    "p": 0.4991
+  },
+  "Q7_revival": {
+    "0.0": "0/11",
+    "0.002": "0/6",
+    "0.005": "3/6",
+    "0.01": "6/6",
+    "0.02": "6/6",
+    "0.04": "6/6"
+  },
+  "Q7_geometry": {
+    "front": "1/6",
+    "back": "0/6",
+    "uniform": "5/5"
+  },
+  "_provenance": "analysis/h100_reanalysis.py over research/emergence-clocks-2026-08/farm_raw (synced from s3://.../farm/results). Definitions and decision rules declared in the docstring before computation."
+}

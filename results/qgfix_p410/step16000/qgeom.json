@@ -3,7 +3,7 @@
   "revision": "step16000",
   "embed_md5": "2801ef69b540b3e2",
   "code_md5": "85cbb0004460",
-  "argv": "--model EleutherAI/pythia-410m --revision step16000 --grad-frame mul --K 6 --D 256 --n 1500 --n-grad 256 --out ./results/qgfix_p410/step16000",
+  "argv": "--model EleutherAI/pythia-410m --revision step16000 --grad-frame mul --K 6 --D 256 --n 1500 --n-grad 256 --out /home/manas/coh/results/qgfix_p410/step16000",
   "aborted": false,
   "layer": 12,
   "hidden": 1024,

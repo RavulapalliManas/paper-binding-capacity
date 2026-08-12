@@ -1,0 +1,169 @@
+{
+  "_provenance": "Computed by analysis/interference_axis.py from the D=0 and D=256 cells already produced by analysis/neuron_capacity.py. No new compute. The D=256 curve is normalised by the D=0 ceiling; own-ceiling normalisation inverts the sign of the interference effect and is not used.",
+  "n_models": 12,
+  "n_uncensored": 11,
+  "n_excluded": 0,
+  "excluded": [],
+  "retained_fraction_median": 0.5354,
+  "retained_fraction_range": [
+    0.2201,
+    1.1747
+  ],
+  "n_models_interference_reduces_capacity": 10,
+  "spearman_capacity_vs_retained": {
+    "rho": 0.2,
+    "p": 0.5554,
+    "n": 11
+  },
+  "spearman_capacity_vs_ceiling_drop": {
+    "rho": -0.4727,
+    "p": 0.142,
+    "n": 11
+  },
+  "models": [
+    {
+      "label": "olmo2-1b-x",
+      "ceiling_D0": 0.9809,
+      "ceiling_D256": 0.7726,
+      "ceiling_drop": 0.2083,
+      "K50_D0": 64.0,
+      "K50_D0_censored": true,
+      "K50_D256_vs_D0_ceiling": 30.714,
+      "K50_D256_censored": false,
+      "retained_fraction": 0.4799,
+      "censored_either": true
+    },
+    {
+      "label": "opt-1.3b-x",
+      "ceiling_D0": 0.9792,
+      "ceiling_D256": 0.8889,
+      "ceiling_drop": 0.0903,
+      "K50_D0": 38.076,
+      "K50_D0_censored": false,
+      "K50_D256_vs_D0_ceiling": 44.727,
+      "K50_D256_censored": false,
+      "retained_fraction": 1.1747,
+      "censored_either": false
+    },
+    {
+      "label": "opt-125m-x",
+      "ceiling_D0": 0.9618,
+      "ceiling_D256": 0.908,
+      "ceiling_drop": 0.0538,
+      "K50_D0": 2.996,
+      "K50_D0_censored": false,
+      "K50_D256_vs_D0_ceiling": 2.705,
+      "K50_D256_censored": false,
+      "retained_fraction": 0.9027,
+      "censored_either": false
+    },
+    {
+      "label": "opt-350m-x",
+      "ceiling_D0": 0.9722,
+      "ceiling_D256": 0.6649,
+      "ceiling_drop": 0.3073,
+      "K50_D0": 3.002,
+      "K50_D0_censored": false,
+      "K50_D256_vs_D0_ceiling": 1.607,
+      "K50_D256_censored": false,
+      "retained_fraction": 0.5354,
+      "censored_either": false
+    },
+    {
+      "label": "pythia-1.4b-x",
+      "ceiling_D0": 0.974,
+      "ceiling_D256": 0.8351,
+      "ceiling_drop": 0.1389,
+      "K50_D0": 15.956,
+      "K50_D0_censored": false,
+      "K50_D256_vs_D0_ceiling": 6.063,
+      "K50_D256_censored": false,
+      "retained_fraction": 0.38,
+      "censored_either": false
+    },
+    {
+      "label": "pythia-160m-x",
+      "ceiling_D0": 0.5885,
+      "ceiling_D256": 0.2257,
+      "ceiling_drop": 0.3628,
+      "K50_D0": 2.435,
+      "K50_D0_censored": false,
+      "K50_D256_vs_D0_ceiling": 1.0,
+      "K50_D256_censored": false,
+      "retained_fraction": 0.4106,
+      "censored_either": false
+    },
+    {
+      "label": "pythia-1b-x",
+      "ceiling_D0": 0.9826,
+      "ceiling_D256": 0.8663,
+      "ceiling_drop": 0.1163,
+      "K50_D0": 5.517,
+      "K50_D0_censored": false,
+      "K50_D256_vs_D0_ceiling": 5.401,
+      "K50_D256_censored": false,
+      "retained_fraction": 0.979,
+      "censored_either": false
+    },
+    {
+      "label": "pythia-2.8b-x",
+      "ceiling_D0": 0.9566,
+      "ceiling_D256": 0.8212,
+      "ceiling_drop": 0.1354,
+      "K50_D0": 16.368,
+      "K50_D0_censored": false,
+      "K50_D256_vs_D0_ceiling": 7.051,
+      "K50_D256_censored": false,
+      "retained_fraction": 0.4308,
+      "censored_either": false
+    },
+    {
+      "label": "pythia-410m-x",
+      "ceiling_D0": 0.9184,
+      "ceiling_D256": 0.3802,
+      "ceiling_drop": 0.5382,
+      "K50_D0": 4.543,
+      "K50_D0_censored": false,
+      "K50_D256_vs_D0_ceiling": 1.0,
+      "K50_D256_censored": false,
+      "retained_fraction": 0.2201,
+      "censored_either": false
+    },
+    {
+      "label": "qwen2.5-0.5b-x",
+      "ceiling_D0": 0.9774,
+      "ceiling_D256": 0.9375,
+      "ceiling_drop": 0.0399,
+      "K50_D0": 4.692,
+      "K50_D0_censored": false,
+      "K50_D256_vs_D0_ceiling": 4.054,
+      "K50_D256_censored": false,
+      "retained_fraction": 0.864,
+      "censored_either": false
+    },
+    {
+      "label": "qwen2.5-1.5b-x",
+      "ceiling_D0": 0.9896,
+      "ceiling_D256": 0.974,
+      "ceiling_drop": 0.0156,
+      "K50_D0": 25.856,
+      "K50_D0_censored": false,
+      "K50_D256_vs_D0_ceiling": 13.256,
+      "K50_D256_censored": false,
+      "retained_fraction": 0.5127,
+      "censored_either": false
+    },
+    {
+      "label": "smollm2-360m-x",
+      "ceiling_D0": 0.9323,
+      "ceiling_D256": 0.7431,
+      "ceiling_drop": 0.1892,
+      "K50_D0": 5.016,
+      "K50_D0_censored": false,
+      "K50_D256_vs_D0_ceiling": 3.012,
+      "K50_D256_censored": false,
+      "retained_fraction": 0.6005,
+      "censored_either": false
+    }
+  ]
+}

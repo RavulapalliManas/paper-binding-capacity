@@ -1,3 +1,25 @@
+% p3_capacity.tex -- the merged capacity paper (former P2 "Binding Capacity Tracks the
+% Pretraining Recipe" + former P6 "Two laws and a boundary"; p6_laws.tex is retired).
+%
+% GATE 0 (paper-craft), updated at the merge:
+%   Readers: scaling-law, capacity-benchmark, and interpretability researchers who treat
+%            "how much can a model hold" as one quantity that grows with scale.
+%   Denial:  it is three separable quantities with different laws -- zero-shot use, robustness
+%            of use, and learnability under task training -- and the instrument scope decides
+%            which law you see.
+%   Ping:    in-context binding capacity decomposes: a recipe split on the k* instrument to
+%            12B, a scaling law K50 = c N^0.82 on continuous curves to 3B, a 26x regime
+%            boundary fixing what the law prices, and a cost-of-load law for acquiring the
+%            capability from scratch.
+%   Nugget:  the same task measured in two training regimes differs by a factor of 26, which
+%            converts an apparent scaling law into a statement about pretraining, not about
+%            transformers.
+%   ABT:     Capacity looks like one number per model, AND both scaling work and benchmark
+%            work report it that way. BUT the Pythia ladder is flat to 12B while continuous
+%            curves at <=3B fit a scaling law, a task-trained 5M model holds 26x the law, and
+%            robustness is uncorrelated with capacity. THEREFORE capacity decomposes into use,
+%            robustness, and learnability, and every capacity number needs its instrument and
+%            regime attached.
 \documentclass{article}
 \usepackage[preprint]{neurips_2024}
 \usepackage[utf8]{inputenc}
@@ -13,12 +35,16 @@
 \usepackage{graphicx}
 \usepackage{xcolor}
 \usepackage{enumitem}
-\graphicspath{{figs/}}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\graphicspath{{figs/}{figs_p456/}}
 \newcommand{\kstar}{k^{\ast}}
 \newcommand{\ddecl}{d_{\mathrm{decl}}}
 \input{numbers}
+\definecolor{housetea}{HTML}{1F6F78}
+\definecolor{houseclay}{HTML}{C0442E}
 
-\title{Binding Capacity Tracks the Pretraining Recipe, Not Scale Alone}
+\title{The Capacity of In-Context Binding:\\ a Recipe Split, a Scaling Law, and the Price of Memory}
 
 \author{%
   Manas Venkata Sai Ravulapalli\\
@@ -34,25 +60,32 @@
 \maketitle
 
 \begin{abstract}
-How many entity--attribute bindings can a language model hold in context before recall collapses? We measure
-this capacity, $\kstar$, on a single controlled binding task across \NModelsRaw{} open models, and find it is not a
-scaling law. After excluding one model whose single-binding accuracy is already at chance (its inclusion would inflate the reported range), $\kstar$ spans $\KstarMin$ to $\KstarMax$, an $\KstarRangeFactor\times$ range, and tracks the
-pretraining \emph{recipe}: the median is $\KstarOldMed$ for pre-2023 recipes and $\KstarModMed$ for modern ones. Because \NModelsRaw{} models
-are only \emph{ten families}, we report every comparison twice: at the model level, as a reader would compute
-it from the released table, and then under a bootstrap clustered on families. The capacity difference
-survives (family-clustered $95\%$ CI of the median difference $\KstarFamCI$, family-level $p=\KstarFamP$).
-Scale alone does not buy capacity (the Pythia ladder holds $\kstar\in[\PythiaKstarLo,\PythiaKstarHi]$ from 410M to 12B) while scale
-\emph{within} a modern recipe does, so capacity is a recipe$\,\times\,$scale interaction. Alignment leaves it
-untouched. We then ask what the recipe controls geometrically, and report a negative result:
-of the two non-tautological geometric predictors (the effective dimension of the declaration-site entity
-subspace, and the pairwise interference among its directions), \emph{neither survives family clustering}
-(clustered CIs $\DdimFamCI$ and $\OffdiagFamCITab$, both touching zero). The one quantity that does
-survive, packing efficiency $\kstar/d_{\mathrm{decl}}$, contains $\kstar$ in its numerator and is descriptive
-by construction. We therefore report the capacity law as the result and decline to claim a geometric
-mechanism. Two further constraints: the cross-model geometry does not predict which trial fails within a
-model (a positional account beats it head-to-head on $\HtHN/\HtHN$ models), and capacity is dissociable from
-interference-robustness. Finally we document three measurement artifacts in the geometry, each strong enough to invert the qualitative answer; the most consequential is that the declaration-site vector sits at the
-\emph{entity} token, which causally precedes its obligation and therefore cannot encode the binding at all.
+How many entity--attribute bindings can a language model hold in context before recall collapses? We
+measure this capacity two ways on one controlled binding task, and the two instruments return
+different answers, with a scope tension between them. On the original instrument, spanning
+\NModelsRaw{} open models to 12B parameters, scale alone does not buy capacity: after excluding one model
+whose single-binding accuracy is already at chance, $\kstar$ spans $\KstarMin$ to $\KstarMax$, an
+$\KstarRangeFactor\times$ range that tracks the pretraining \emph{recipe}, while the Pythia ladder is
+flat from 410M to 12B. The recipe difference (median $\KstarOldMed$ for pre-2023 recipes vs
+$\KstarModMed$ for modern ones) survives a bootstrap clustered on families ($95\%$ CI $\KstarFamCI$,
+$p=\KstarFamP$). On an independent re-measurement with committed code and full recall-versus-$K$ curves
+(twelve models, $\le$3B), capacity follows a scaling law: $K_{50} = c\,N^{\alpha}$ with
+$\alpha=\CapAlpha$ ($R^2=\CapRsq$; family-clustered CI $[\CapAlphaCILo, \CapAlphaCIHi]$, containing
+proportionality and excluding zero; deleting any single model moves $\alpha$ by at most $\CapLooMax$).
+On those curves the recipe coefficient spans zero once scale is controlled, an unresolved scope tension
+that larger-model curves must settle. A boundary fixes what the scaling law is a law of: a
+4.98M-parameter transformer trained directly on the task holds $\BoundMeasured$ bindings where the law
+predicts $\BoundPredicted$, a factor of $\BoundFactor$, so the law prices what pretraining delivers for
+zero-shot use, far below what the architecture supports. Acquiring the capability from scratch has its
+own law: formation time grows as a power of load, with exponent roughly
+\TimeLawExpNoKeight--\TimeLawHExp, replicated across two independent codebases. Robustness is a third
+axis that capacity does not predict. On mechanism we report a negative result together with its
+diagnosis: neither non-tautological geometric predictor of $\kstar$ survives family clustering, and
+three measurement artifacts, each strong enough to invert the answer, show why the declaration-site
+geometry misleads (its vector sits at the entity token, which causally precedes its obligation and
+cannot encode the binding). The picture that emerges replaces ``how much can a model hold'' with three
+separately measured, separately budgetable quantities: what pretraining delivers for zero-shot use, how
+robust that use is under interference, and what the architecture supports when trained for the task.
 \end{abstract}
 
 \section{Introduction}
@@ -61,31 +94,51 @@ A language model reading code must keep \texttt{lock}$\rightarrow$\texttt{balanc
 in-context \emph{binding}, and like human working memory it is capacity-limited: past some number of
 simultaneous bindings, recall collapses.
 
-The obvious hypothesis is that capacity is bought with parameters. It is not. The Pythia ladder holds
-$\kstar\in[\PythiaKstarLo,\PythiaKstarHi]$ from 410M to 12B (a $29\times$ increase in parameters buys essentially nothing), while a
-3B Qwen2.5 reaches the measurement ceiling. What varies is the recipe.
+The obvious hypothesis is that capacity is bought with parameters alone. On the instrument that spans the
+largest models, it is not: the Pythia ladder holds $\kstar\in[\PythiaKstarLo,\PythiaKstarHi]$ from 410M
+to 12B (a $29\times$ increase in parameters buys essentially nothing), while a 3B Qwen2.5 reaches the
+measurement ceiling. What varies is the recipe. Yet on continuous recall-versus-$K$ curves at $\le$3B,
+parameters do buy capacity, lawfully: $K_{50} = c\,N^{\alpha}$ with $\alpha=\CapAlpha$. Both
+instruments are in this paper (each statistic is defined in Section~\ref{sec:setup} and
+Figure~\ref{fig:task}), and Section~\ref{sec:trn1} states the tension between their answers.
 
-Section~\ref{sec:capacity} reports the capacity law and
+The question ``how much can a model hold'' in fact decomposes into three separately measurable
+quantities: what pretraining delivers for zero-shot use, how robust that use is to interference, and what
+the architecture can learn when trained on the task directly. Conflating them produces wrong conclusions
+on both sides: capacity read through a scaling-law lens \citep{kaplan2020, hoffmann2022} risks being
+taken for an architectural limit, and training work over-reads learnability as something pretraining
+should have delivered. The regime boundary of Section~\ref{sec:trn1}, a factor of $\BoundFactor$ between
+the two, is the quantitative form of that distinction.
+
+Section~\ref{sec:capacity} reports the recipe split and
 the two exclusions it depends on. Section~\ref{sec:geometry} asks what the recipe controls geometrically and
 reports the answer twice: once at the model level and then again under clustering on families, at which
 point \emph{neither} non-tautological
 geometric predictor survives. Section~\ref{sec:notmech} reports a head-to-head against a competing mechanism; our geometry \emph{loses}
 it. Section~\ref{sec:robust} separates capacity from interference-robustness.
 Section~\ref{sec:confounds} documents three measurement artifacts in the declaration-site geometry.
+Section~\ref{sec:trn1} reports the independent re-measurement: the continuous curves, the $K_{50}$
+scaling law with its regime boundary, and the $\le$3B scope tension. Section~\ref{sec:cost} prices
+acquisition: formation time from scratch follows its own power law in load.
 
 \paragraph{What this paper claims, and what it does not.} It claims an observational regularity over real
-models: \emph{binding capacity is a recipe$\,\times\,$scale interaction: scale alone does not buy capacity, while
-scale within a modern recipe does}. It does
-\emph{not} claim a geometric mechanism: we looked for one, and the correlates that would support it do not
-survive clustering on families. It does \emph{not} claim a per-trial mechanism; a positional account beats
-ours head-to-head. And it does \emph{not} claim a geometry of the entity--obligation binding: the quantity we
-measure at the declaration site is a property of the \emph{entity code}, not of the binding.
+models, on the $\kstar$ instrument spanning models to 12B: \emph{binding capacity is a
+recipe$\,\times\,$scale interaction: scale alone does not buy capacity, while
+scale within a modern recipe does}. It claims the quantitative laws of the re-measurement: the zero-shot
+scaling law $K_{50} = c\,N^{\alpha}$ on the $\le$3B curves (a post-hoc fit, flagged as such in the
+research program's claim ledger), the $\BoundFactor\times$ regime boundary,
+and the cost-of-load law for acquisition, replicated across two codebases. It does \emph{not} claim a
+mechanism: not a geometric one (the supporting correlates do not survive clustering on families,
+Section~\ref{sec:geometry}), not a per-trial one (a positional account beats ours head-to-head,
+Section~\ref{sec:notmech}), and not a geometry of the entity--obligation binding itself (the quantity
+we measure at the declaration site is a property of the \emph{entity code},
+Section~\ref{sec:confounds}).
 
 \paragraph{Two exclusions.} \emph{(i)} $\kstar$ is defined as a threshold crossing
 relative to a model's own $K=1$ ceiling. If that ceiling is itself at chance, the threshold is noise. One
 model, Pythia-70M, has a $K=1$ accuracy of $\PythiaSeventyCeiling$ against a chance of $\Chance$: it cannot hold a
 \emph{single} binding, so its $\kstar=\PythiaSeventyKstar$ is not a measurement. We exclude it, leaving $n=\NModels$. This matters,
-% 12x is the RETRACTED range (CLAIM_LEDGER sec. 9). Deliberately a literal: no macro should ever hold it.
+% 12x is the retracted range. Deliberately a literal: no macro should ever hold it.
 because that one model is the sole source of the $12\times$ range one obtains from the raw table; excluding it,
 the range is $\KstarMin$ to $\KstarMax$, i.e.\ $\KstarRangeFactor\times$. \emph{(ii)} Three models sit at $\kstar=\KstarMax$, the ceiling imposed by
 the entity pool, and are \emph{right-censored}: OLMo-1-7B, Qwen2.5-3B, and, informatively, the old-recipe
@@ -97,14 +150,57 @@ obligation $o_i$, from disjoint pools), then an interference block of $D$ distra
 query ``\texttt{The task for $e_j$ is:}'' for a random $j$. The model is correct iff its highest-logit obligation token is $o_j$. Varying $K$ probes \emph{capacity}; varying $D$ probes \emph{interference-robustness}. Chance
 is $1/|\mathcal{O}|=\Chance$.
 
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, line width=0.5pt, font=\scriptsize]
+% token strip
+\foreach \i/\xa in {1/0, 2/1.4} {
+  \draw[draw=housetea, fill=housetea!10] (\xa, 1.1) rectangle (\xa+1.3, 1.75);
+  \node at (\xa+0.65, 1.425) {$e_{\i}{:}\,o_{\i}$};
+}
+\node at (3.0, 1.425) {$\cdots$};
+\draw[draw=housetea, fill=housetea!10] (3.3, 1.1) rectangle (4.6, 1.75);
+\node at (3.95, 1.425) {$e_K{:}\,o_K$};
+\draw[draw=black!45, fill=black!7] (4.8, 1.1) rectangle (7.4, 1.75);
+\node at (6.1, 1.425) {$D$ distractor tokens};
+\draw[draw=houseclay, fill=houseclay!10] (7.6, 1.1) rectangle (9.7, 1.75);
+\node at (8.65, 1.425) {``task for $e_j$ is:''};
+% axis spans
+\draw[housetea, |-|] (0, 0.72) -- (4.6, 0.72);
+\node[housetea, anchor=north] at (2.3, 0.62) {capacity axis: vary $K$};
+\draw[black!60, |-|] (4.8, 0.72) -- (7.4, 0.72);
+\node[black!60, anchor=north] at (6.1, 0.62) {robustness axis: vary $D$};
+\node[houseclay, anchor=north, align=center] at (8.65, 0.62) {correct iff the top\\ logit is $o_j$};
+% stylised recall curve with the capacity statistic
+\begin{scope}[shift={(10.6, 0)}]
+\draw[->] (0, 0) -- (3.35, 0) node[anchor=north east, inner sep=2pt] {$K$};
+\draw[->] (0, 0) -- (0, 1.95);
+\node[rotate=90, anchor=south] at (-0.15, 0.95) {recall};
+\draw[housetea, line width=0.8pt] plot[smooth] coordinates
+  {(0.15, 1.7) (0.8, 1.65) (1.3, 1.5) (1.8, 1.05) (2.3, 0.55) (2.9, 0.35)};
+\draw[black!50, dashed] (0, 1.02) -- (3.2, 1.02);
+\node[black!50, anchor=east, inner sep=1pt] at (3.2, 1.22) {midpoint};
+\draw[black!50, dashed] (1.82, 0) -- (1.82, 1.05);
+\node[anchor=north] at (1.82, -0.02) {$\kstar,\,K_{50}$};
+\end{scope}
+\end{tikzpicture}
+\caption{\textbf{The task and its two axes.} Each trial presents $K$ entity--obligation bindings, a
+$D$-token distractor block, and a recall query; the model is correct iff its highest-logit obligation
+token matches the queried binding. Varying $K$ probes capacity, varying $D$ probes
+interference-robustness. Right: both capacity statistics are midpoint crossings of the recall curve
+between the model's own $K{=}1$ ceiling and chance: $\kstar$ on the measurement grid
+(Section~\ref{sec:setup}), $K_{50}$ under a logistic fit to the continuous curves
+(Section~\ref{sec:trn1}).}
+\label{fig:task}
+\end{figure}
+
 \paragraph{The capacity statistic, and its pitfall.} $\kstar$ is the smallest $K$ at which recall falls below the midpoint between the $K=1$ ceiling and chance. It is a threshold crossing of a smooth curve, and thresholded
 metrics can manufacture apparent discontinuities where the underlying quantity varies continuously
 \citep{mirage2304}. We therefore treat $\kstar$ as a \emph{summary statistic} and not as evidence of a sharp
 transition. The released table contains $\kstar$ and the geometry but not the full recall-versus-$K$ curves,
 so we cannot rule out the thresholding artifact from it directly. We mitigate the artifact in three ways instead: by
 excluding any model whose $K=1$ ceiling is near chance (its threshold is noise), by reporting the
-\emph{median} difference rather than the range, and by clustering on families. Releasing the curves is the
-remaining gap; the re-measurement runner ships with the paper's code (\texttt{analysis/ksweep.py}, with \texttt{analysis/compare\_ksweep.py} as the agreement check).
+\emph{median} difference rather than the range, and by clustering on families. The re-measurement runner ships with the paper's code (\texttt{analysis/ksweep.py}, with \texttt{analysis/compare\_ksweep.py} as the agreement check), and Section~\ref{sec:trn1} releases the curves for twelve of the models.
 
 \paragraph{The geometric quantities, and what they measure.} At the declaration site we take one residual
 vector per declared entity and compute $\ddecl$, the participation ratio of those vectors (their effective
@@ -113,9 +209,8 @@ dimension), and the mean off-diagonal squared cosine among them (pairwise \emph{
 The natural name for these quantities, a binding geometry, overstates them. Each declaration reads
 \texttt{entity: obligation.}, so the entity token \emph{precedes} its obligation, and attention is causal. The
 hidden state at an entity token therefore \emph{cannot} encode which obligation was bound to it. Probing
-% TODO-MISMATCH: 1.000 and 0.017--0.054 are the DECLARATION-site probe. No committed file in results/ holds
-% them (the d_decl measurement script was not preserved -- CLAIM_LEDGER sec. 8.4). They cannot become macros
-% until a TRANSCRIBED JSON lands. Kept as literals.
+% Provenance note: 1.000 and 0.017--0.054 are the declaration-site probe. The measurement script was not
+% preserved (disclosed in Section 7), so these stay literals until a committed file holds them.
 confirms it: from the entity-token residual with the per-slot mean removed, the entity decodes at $1.000$ and
 its bound obligation at $0.017$--$0.054$ against a chance of $\Chance$ (Pythia-1.4B/6.9B, Qwen2.5-7B, OLMo-2-7B).
 $\ddecl$ and the interference term are thus properties of the \emph{declaration-site entity code}: how many
@@ -123,8 +218,8 @@ directions a model spends on the entities it must keep distinct, and how much th
 a sensible thing for capacity to depend on. It is not a measurement of the binding.
 
 \paragraph{Models.} The released capacity table covers \NModelsRaw{} open models from ten families. \emph{Old} (pre-2023)
-\emph{recipe} ($n=\NOldRaw$): GPT-2 (M/L/XL), GPT-Neo (125M, 1.3B), OPT (350M, 1.3B, 2.7B, 6.7B), BLOOM (560M, 1.7B), Cerebras-1.3B,
-and the Pythia ladder (70M--12B). \emph{Modern} ($n=\NModernRaw$): OLMo-1-7B, OLMo-2-7B with its SFT/DPO/Instruct ladder,
+\emph{recipe} ($n=\NOldRaw$): GPT-2 (M/L/XL) \citep{radford2019}, GPT-Neo (125M, 1.3B), OPT (350M, 1.3B, 2.7B, 6.7B), BLOOM (560M, 1.7B), Cerebras-1.3B,
+and the Pythia ladder (70M--12B) \citep{biderman2023}. \emph{Modern} ($n=\NModernRaw$): OLMo-1-7B, OLMo-2-7B with its SFT/DPO/Instruct ladder,
 OLMoE, Qwen2.5 (0.5B--7B), Mistral-7B, DeepSeek-Coder-6.7B. All measurements are on frozen models. The
 interference sweep of Section~\ref{sec:robust} covers the eight of these models with committed $D$-sweep
 curves.
@@ -134,15 +229,15 @@ Figure~\ref{fig:capacity} shows $\kstar$ across the \NModels{} measurable models
 $\mathbf{\KstarOldMed}$ for old recipes ($n=\NOldModels$) and $\mathbf{\KstarModMed}$ for modern ones ($n=\NModernModels$); the model-level
 Mann--Whitney gives $p=\KstarModelP$, and, because \NModelsRaw{} models are ten families, a bootstrap clustered on
 families puts the $95\%$ CI of the median difference at $\KstarFamCI$, with a family-level test at $p=\KstarFamP$.
-\textbf{The capacity law survives clustering.}
+\textbf{The recipe split survives clustering.}
 
 \paragraph{Scale \emph{alone} does not buy capacity; the recipe does.} The Pythia ladder holds $\kstar=\PythiaLadder$ at 410M,
 1.4B, 2.8B, 6.9B and 12B: flat across a $29\times$ range of parameters. Within a \emph{modern} recipe, scale
 does help: Qwen2.5 goes $\QwenLadder$ at 0.5B, 1.5B, 3B and 7B. So capacity is a
 recipe$\,\times\,$scale interaction. The Qwen ladder is \emph{not monotone}: the 3B
 model reaches the censored ceiling and the 7B model sits below it.
-Alignment leaves capacity untouched: the OLMo-2 base/SFT/DPO/Instruct ladder holds $\kstar=\KstarOlmoLadder$ at every stage, which quantifies, on a capacity threshold, the absence of a consistent alignment benefit
-that \citet{kim2405} established for entity tracking.
+Alignment leaves capacity untouched: the OLMo-2 base/SFT/DPO/Instruct ladder holds $\kstar=\KstarOlmoLadder$ at every stage. \citet{kim2405} established the absence of a consistent alignment benefit for entity
+tracking; this ladder puts that absence on a capacity threshold.
 
 \paragraph{The classes overlap.} Modern recipes do not uniformly
 dominate. OLMoE, a modern model, sits at $\kstar=\KstarOlmoE$; OPT-1.3B, an old one, reaches $\KstarOptOneThree$; and OPT-6.7B, also
@@ -164,7 +259,7 @@ interval reflects that.
 \end{figure}
 
 \section{No geometric predictor survives family clustering}\label{sec:geometry}
-Capacity has two geometric correlates at the model level. Across the \NModels{} models, $\kstar$ rises with $\ddecl$
+Capacity has two geometric correlates at the model level (Figure~\ref{fig:recipe}). Across the \NModels{} models, $\kstar$ rises with $\ddecl$
 (Pearson $r=\DdeclPearson$, Spearman $\rho=\DdeclSpearman$; partial $\DdeclPartial$ controlling for interference) and falls with
 pairwise interference (Pearson $r=\OffdiagPearson$; partial $\OffdiagPartial$). Modern recipes show a higher packing efficiency
 $\kstar/\ddecl$ (median $\PackModMed$ vs.\ $\PackOldMed$) at lower interference ($\OffdiagModMed$ vs.\ $\OffdiagOldMed$), and every one of these
@@ -175,9 +270,14 @@ alongside \citet{largercap2605}, who attribute larger models' advantage to reduc
 on rare tasks.
 
 \paragraph{Thirty models are not thirty independent samples.} They are \emph{ten families}, and Pythia and
-OLMo contribute six apiece. A model-level test treats siblings as independent draws. Under a bootstrap clustered on families, and under a family-level test, the picture does not hold.
+OLMo contribute six apiece. A model-level test treats siblings as independent draws. Under a bootstrap clustered on families, and under a family-level test, the picture does not hold (Table~\ref{tab:famclust}).
 
-\begin{center}
+\begin{table}[h]
+\centering
+\caption{Family-clustered comparisons. Medians by recipe with the family-clustered bootstrap
+interval and the family-level $p$-value for each quantity; bold marks the two that survive
+clustering.}
+\label{tab:famclust}
 \small
 \begin{tabular}{@{}lrrcc@{}}
 \toprule
@@ -189,30 +289,33 @@ subspace dimension $\ddecl$         & $\DdimOldMed$ & $\DdimModMed$ & $\DdimFamC
 interference                        & $\OffdiagOldMed$ & $\OffdiagModMed$ & $\OffdiagFamCITab$ & $\OffdiagFamP$ \\
 \bottomrule
 \end{tabular}
-\end{center}
+\end{table}
 
 \textbf{Of the two \emph{non-tautological} geometric predictors, neither survives.} The clustered interval for
 $\ddecl$ touches zero and its family-level test is not significant; the interval for interference touches zero
 as well. The only geometric quantity that survives is packing efficiency, and packing efficiency contains
 $\kstar$ in its numerator. It is descriptive by construction and cannot be used to \emph{predict} $\kstar$.
 
-We therefore report the capacity law as the result of this paper and \emph{decline to claim a geometric
-mechanism}. The model-level $p$-values are the ones a reader will compute from the released table; we report them alongside the family-clustered results. With ten families (six old, four modern), this is a study with less power than
+We therefore report the recipe split as Section~\ref{sec:capacity}'s result and \emph{decline to claim a
+geometric mechanism}. The model-level $p$-values are the ones a reader will compute from the released table; we report them alongside the family-clustered results. With ten families (six old, four modern), this is a study with less power than
 thirty points suggests; the geometric comparisons do not survive it.
 
 \begin{figure}[t]
   \centering
   \includegraphics[width=\linewidth]{fig8_recipe.pdf}
-  \caption{\textbf{The geometric correlates, at the model level.} \textbf{(a)} Packing efficiency
+  \caption{\textbf{How a model spends directions on the entities it must keep distinct, at the model
+  level.} \textbf{(a)} Packing efficiency
   $\kstar/\ddecl$ of the declaration-site \emph{entity} subspace and \textbf{(b)} pairwise interference
   separate the recipes at the model level (each point is a model; black dash: median). \textbf{(c)} $\kstar$
-  against $\ddecl$ over the \NModels{} measurable models, coloured by interference. Both group comparisons are
+  against $\ddecl$ over the \NModels{} measurable models, colored by interference. Both group comparisons are
   significant at the model level, and \emph{neither non-tautological predictor survives clustering on
   families} (Section~\ref{sec:geometry}); the panels show the model-level pattern in the released table.}
   \label{fig:recipe}
 \end{figure}
 
-\section{What this geometry does not explain}\label{sec:notmech}
+\section{Cross-model capacity and within-model retrieval separate}\label{sec:notmech}
+Capacity across models and retrieval within a model sit at different explanatory levels, and the
+geometry above speaks only to the first.
 The packing story could be read as a competitor to the positional-mechanism account of
 \citet{mixing2510}, who attribute multi-binding retrieval failure to a positional circuit that grows noisy as
 bindings accumulate. We ran the comparison on our own trials, regressing per-trial error on serial position
@@ -233,11 +336,11 @@ One caveat on the comparison itself: our error curve is a primacy curve rather t
 distractor block sits between the declarations and the query and destroys recency. The two settings are not
 directly comparable.
 
-\section{Capacity is not robustness}\label{sec:robust}
+\section{Capacity and robustness are distinct axes}\label{sec:robust}
 Raw capacity $\kstar$ (how many bindings fit under mild load) and interference-\emph{robustness} (how recall
 degrades as the distractor block $D$ grows at fixed $K$) are distinct axes. We sweep $D$ at $K=\RobustK$ for the
 eight models with committed curves (Figure~\ref{fig:robust}). Recall at $D=0$ already spans $\RobustDzeroLo$ to
-$\RobustDzeroHi$ (median $\RobustDzeroMed$), and the split in \emph{starting level} is exactly the capacity split: the \RobustLowKN{}
+$\RobustDzeroHi$ (median $\RobustDzeroMed$), and the split in \emph{starting level} tracks the capacity split, with one disclosed exception: the \RobustLowKN{}
 models whose $\kstar$ is below $K=\RobustK$ start at $\RobustDzeroLo$--$\RobustLowKDzeroHi$, while the four with
 $\kstar\geq16$ start at $\RobustHighKDzeroLo$--$\RobustDzeroHi$ (the 0.5B entry is the Instruct variant of a
 base model with $\kstar=3$). By $D=\RobustDmax$ every model sits at $\RobustDendLo$--$\RobustDendHi$ (median
@@ -296,27 +399,145 @@ committed table, but the \emph{measurement} script that produced the $\ddecl$ va
 cannot independently verify the token position at which those particular numbers were taken. Re-deriving them at
 a position that \emph{can} carry a binding is the correct next measurement: the query site, where the retrieved obligation decodes at $\QueryDecodeLo$--$\QueryDecodeHi$ against a chance of $\Chance$.
 
+\section{The scaling law and its boundary: an independent re-measurement}\label{sec:trn1}
+A re-measurement with committed code releases the full recall-versus-$K$ curves: twelve of the models re-run
+on one instrument with a $K$ grid to 64 and six seeds per cell
+(\texttt{results/capacity\_trn1\_summary.json}). The statistic on these curves is $K_{50}$, the load at
+which retained performance $r(K)$ (recall normalised between the model's own $K{=}1$ ceiling and chance)
+crosses one half under a logistic fit in $\log K$. It is the continuous analogue of the grid crossing
+behind $\kstar$, with right-censoring reported rather than clipped, computed by an estimator validated
+on synthetic curves with known answers before touching data. A first-wave sweep on this instrument found
+the GPT-2 family and Pythia-70M below the $K{=}1$ exclusion floor; the extension wave then ran the
+twelve models of the committed summary above that floor with the full grid (one of them, OLMo-2-1B,
+enters only this re-measurement). The GPT-2 result disagrees with the original
+instrument, where those models hold a measurable $\kstar$; we report the disagreement as an instrument
+difference rather than resolving it here. Models the first wave's $K{=}24$ grid had censored resolve to
+real values on the full grid (OPT-1.3B to $\TrnOptResolved$).
+
+Two findings revise this paper's scope. First, at $\le$3B parameters the recipe effect does not survive
+controlling for scale: in a regression of $\log K_{50}$ on recipe and $\log$ parameters over the
+re-measured curves, the recipe coefficient is $\TrnRecipeCoef$ (family-clustered CI
+$[\TrnRecipeCILo, \TrnRecipeCIHi]$, spanning zero) while the scale coefficient is $\TrnScaleCoef$ (CI
+$[\TrnScaleCILo, \TrnScaleCIHi]$, excluding it). Because the headline claim rests on models up to 12B and
+this re-measurement stops at 3B, this is an unresolved scope tension requiring larger models, not a
+refutation. Below 3B, capacity is bought with parameters, and whether the recipe span reasserts itself
+above 3B is an empirical question the present range cannot answer. Second, over the same curves capacity
+fits a power law, $K_{50} = c\,N^{\alpha}$ with $\alpha=\CapAlpha$ ($R^2=\CapRsq$), family-clustered CI
+$[\CapAlphaCILo, \CapAlphaCIHi]$, leave-one-family-out range $[\CapLofoLo, \CapLofoHi]$
+(Figure~\ref{fig:capacitylaw}). The interval contains proportionality and excludes zero, and the estimate
+is robust to deletion: removing any single model moves $\alpha$ by at most $\CapLooMax$. The fit uses the
+$\CapFitN$ of twelve models with an uncensored $K_{50}$ (OLMo-2-1B is right-censored at the grid maximum).
+That analysis is post hoc and is labelled as such in the program's claim ledger
+(\texttt{results/claim\_ledger.json}).
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.8\linewidth]{p6_capacitylaw.pdf}
+\caption{\textbf{The $K_{50}$ scaling law, and the regime boundary that fixes what it prices.}
+Circles: $K_{50}$ for the $\CapFitN$ uncensored re-measured models; the line is the fitted
+$K_{50} = c\,N^{\CapAlpha}$. Star: a 4.98M-parameter transformer trained directly on the task, at
+$\BoundFactor\times$ the law's prediction for its size (dotted riser). The two estimands differ (largest
+learnable $K$ versus zero-shot $K_{50}$), so the boundary is an order-of-magnitude comparison by
+construction. Generated by \texttt{analysis/make\_p456\_figs.py} from
+\texttt{results/capacity\_trn1\_summary.json}, \texttt{results/capacity\_alpha\_fit.json}, and
+\texttt{results/cross\_campaign\_capacity.json}.}
+\label{fig:capacitylaw}
+\end{figure}
+
+The boundary fixes what the power law is a law of. A 4.98M-parameter transformer trained directly on the
+task holds $\BoundMeasured$ bindings where the law predicts $\BoundPredicted$, a factor of $\BoundFactor$
+(400 from-scratch runs stand behind the measurement). The gap survives the difference in estimands
+(largest learnable $K$ versus zero-shot $K_{50}$), which is an order-of-magnitude comparison by
+construction. The boundary converts the law from a statement about transformers into a statement about
+pretraining: $c\,N^{\alpha}$ measures how much binding capacity general text pretraining delivers at the
+query interface, a quantity distinct from and far below what the same architecture supports when trained
+for the task. Scaling analyses that read zero-shot capacity as an architectural ceiling inherit exactly
+this conflation.
+
+One supporting result transfers cleanly. Distractor interference roughly halves effective capacity (median retained
+fraction $\TrnIntRetained$; capacity reduced in $\TrnIntReduced$ of $\TrnIntN$ models) and capacity does not
+predict the loss (Spearman $\rho=\TrnIntRho$, $p=\TrnIntP$), which supports the separate-axes claim of
+Section~\ref{sec:robust}; the interfered curve must be normalized by the uninterfered ceiling, since
+own-ceiling normalization reverses the sign of the effect.
+
+\section{The cost of load}\label{sec:cost}
+Acquisition has its own law. In the from-scratch regime, median time to formation grows as a power of the
+binding load: $t \approx \TimeLawHCoef\,K^{\TimeLawHExp}$ ($R^2=\TimeLawHRsq$) in one codebase and
+$t \approx \TimeLawDCoef\,K^{\TimeLawDExp}$ ($R^2=\TimeLawDRsq$) in the other, on different accelerator
+hardware, with the second corpus analysed after the first fit was fixed (Figure~\ref{fig:timelaw}; 423
+and 96 emergence-measured runs enter the two fits). Doubling the load costs a factor of
+\TimeLawDblLo{}--\TimeLawDblHi{} in training steps. Both exponents are lower bounds, since runs that
+never form are censored, and the smaller corpus's $K{=}8$ cell holds two runs: removing it moves that
+exponent to \TimeLawExpNoKeight. The supportable statement is a power law in load with exponent between
+roughly \TimeLawExpNoKeight{} and \TimeLawHExp; the replicated finding is the form. Formation is the
+first evaluation at which use-side accuracy clears the run's own capability criterion,
+$\mathrm{chance} + 0.5\,(1-\mathrm{chance})$; the runs are transformers of 1.3M--5M parameters trained
+from scratch on the task, at loads between $K{=}2$ and $K{=}8$, with per-cell configurations in the two
+committed result files. A threshold bounds the regime from below: at 1.3M parameters the task does not
+form at all in the budgets measured (\LearnSmallEmerged{} of \LearnSmallN{} runs). The retention and
+supply behaviour of the same from-scratch models is the subject of a companion manuscript.
+
+The law can also be stated in tokens rather than optimizer steps. Tokens per step is batch size
+times sequence length, both recorded in every raw run record, and sequences lengthen with $K$, so
+the token-denominated exponent is steeper than the step-denominated one: refitting the same
+committed cell medians gives \TokLawHExp{} ($R^2=\TokLawHRsq$) on the larger corpus and
+\TokLawDExp{} ($R^2=\TokLawDRsq$; \TokLawDExpNoKeight{} without the two-run $K{=}8$ cell) on the
+smaller. In absolute terms, forming the $K{=}4$ capability costs \TokKfourD{}M tokens in one corpus
+and \TokKfourH{}M in the other. The two totals are not directly comparable, because the corpora
+differ in distractor length and batch size, and both inherit the censoring of the step law, so
+they are lower bounds (\texttt{analysis/token\_costs.py}, \texttt{results/token\_costs.json}).
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.7\linewidth]{p6_timelaw.pdf}
+\caption{\textbf{The cost-of-load law, in two codebases.} Median steps to formation against binding
+load, both axes logarithmic, for the two independent codebases on different accelerator hardware; faint
+lines are the committed power-law fits ($t \approx \TimeLawHCoef\,K^{\TimeLawHExp}$ and
+$t \approx \TimeLawDCoef\,K^{\TimeLawDExp}$). The second corpus was analysed after the first fit was
+fixed. Runs that never formed are censored out of the medians, so both curves are lower bounds.
+Generated by \texttt{analysis/make\_p456\_figs.py} from \texttt{results/extra\_analyses.json} and
+\texttt{results/devaxis\_analyses.json}.}
+\label{fig:timelaw}
+\end{figure}
+
 \section{Related work}\label{sec:related}
 \citet{kim2405} established, on entity tracking with matched base/code-trained pairs, that code pretraining
 drives the capability and that alignment tuning adds no consistent benefit; our contribution is the
 \emph{quantity}: a named capacity threshold $\kstar$, swept on one instrument across $\NModelsRaw$ models,
 with the flat Pythia ladder against an $\KstarRangeFactor\times$ recipe span as the result their
-paired-model design could not see. \citet{largercap2605} report per-model entity-capacity breakdowns on two
-models; \citet{binding2310} identify the binding-ID mechanism whose fidelity \emph{improves} with scale, an apparent tension with our flat ladder that we leave open: a mechanism's fidelity and a capacity
+paired-model design could not see. \citet{binding2310} identify the binding-ID mechanism whose fidelity \emph{improves} with scale, an apparent tension with our flat ladder that we leave open: a mechanism's fidelity and a capacity
 ceiling can move independently, and a dissociation experiment is the natural next measurement. Two recent
 results sharpen the recipe construct. Entity-tracking capacity moves with \emph{architecture} at fixed scale
 and data \citep{archentity2606}, so architecture sits inside what we call the recipe; and across a zoo the
 same composed-task capability is implemented by different circuits in different models
 \citep{mechhet2606}: convergent, from the mechanistic side, with our own finding that no geometric
-correlate of $\kstar$ survives family clustering (Section~\ref{sec:geometry}).
+correlate of $\kstar$ survives family clustering (Section~\ref{sec:geometry}). On the scaling side,
+\citet{kaplan2020} and \citet{hoffmann2022} fit loss against scale; the $K_{50}$ law prices a specific
+in-context capacity instead, and its regime boundary shows what such zero-shot laws are laws of.
+\citet{muennighoff2023} extend the loss accounting to data-constrained training, pricing the decaying
+value of a repeated token; the cost-of-load law of Section~\ref{sec:cost} spends the same currency,
+tokens, on a named capability rather than on loss.
+\citet{allenzhu2024} price parametric knowledge in bits per parameter; in-context binding state is the
+complementary quantity, held in activations rather than weights. The mechanisms that implement it are
+identified in \citet{olsson2022} and \citet{bietti2023}.
 
-\section{Limitations}\label{sec:limits}
-\textbf{The law is observational.} The recipe$\to$capacity result is a regularity across \NModelsRaw{} real models, which
-differ in data, tokenizer, optimizer, and era simultaneously. The ideal confirmation is a from-scratch causal
-ablation: train matched models varying \emph{one} recipe knob and flip $\kstar$. Our attempts were inconclusive
-because the from-scratch models were undertrained. We report the observational law; the causal knob remains untested.
+\section{Operating regime and next measurements}\label{sec:limits}
+\textbf{The recipe split is observational.} It is a regularity across the \NModels{} measurable models, which
+differ in data, tokenizer, optimizer, and era simultaneously. That simultaneity is what makes a recipe effect
+visible at this range, and what stops it from isolating a single knob. The natural confirmation, a
+from-scratch causal ablation that varies \emph{one} recipe knob in matched models and flips $\kstar$,
+is staged future work; the causal knob remains untested here.
 
 \textbf{$\kstar$ is right-censored} at $\KstarMax$ by the entity pool, so the trustworthy signal is the low end.
+
+\textbf{The recipe claim is scale-scoped by the re-measurement.} At $\le$3B on the continuous curves the
+recipe adds no detectable effect once scale is controlled (Section~\ref{sec:trn1}); the recipe-split
+claim is carried by the full range to 12B. Reconciling the two requires capacity curves above 3B.
+
+\textbf{The scaling law is post hoc.} The $\alpha$ fit was noticed, not predicted; it is flagged POST-HOC
+in the program's claim ledger, and its pre-registered replication is the first item of future work. The
+cost-of-load law rests on few loads, and its exponent is not pinned down
+(Section~\ref{sec:cost}).
 
 \textbf{The task is synthetic and single-token}, chosen for control. It is a model of working memory, not a
 naturalistic benchmark.
@@ -325,37 +546,88 @@ naturalistic benchmark.
 it loses. It describes what differs across recipes; it does not predict which trial fails.
 
 \section{Conclusion}
-The number of in-context bindings a language model can hold is set by how it was trained, not by how big it
-is: a $29\times$ increase in Pythia's parameters moves $\kstar$ from $\PythiaKstarFirst$ to $\PythiaKstarLast$, while the recipe moves the
-median from $\KstarOldMed$ to $\KstarModMed$, and that difference survives clustering on families.
+Model size alone does not set how many in-context bindings a language model can hold: a $29\times$ increase in Pythia's parameters moves $\kstar$ from $\PythiaKstarFirst$ to $\PythiaKstarLast$, while the recipe moves the
+median from $\KstarOldMed$ to $\KstarModMed$, and that difference survives clustering on families. On
+continuous curves at or below 3B, the recipe adds no detectable effect once scale is controlled;
+reconciling the two ranges needs capacity curves above 3B, and until then both findings carry their
+stated scopes.
 
-The geometry behind the law is not settled by our measurements. Two of its three natural readings are
+The geometry behind the split is not settled by our measurements. Two of its three natural readings are
 estimator artifacts (position dominates the raw vectors; massive activations dominate the
 covariance), and the third is an artifact of the site: the entity token precedes its obligation, so the
-declaration-site vector cannot carry the binding at all. After those corrections, with the ten families clustered, the capacity law survives, the subspace encodes
+declaration-site vector cannot carry the binding at all. After those corrections, with the ten families clustered, the recipe split survives, the subspace encodes
 entities rather than their bindings, and the two geometric correlates have confidence intervals that touch
 zero.
+
+The quantitative laws change how capacity numbers should be read and produced. The scaling law is an
+operating budget for in-context state: $c\,N^{\alpha}$ is the load at which a pretrained model's
+zero-shot retained recall halves, a size-indexed bound on how many independent bindings to hand a
+model of a given size before task training. The $\BoundFactor\times$
+boundary quantifies the headroom that task-directed training can claim over what pretraining delivers
+zero-shot. The cost law makes in-context memory load a budgetable quantity: doubling the binding load
+carried in context prices at \TimeLawDblLo{}--\TimeLawDblHi$\times$ the training effort in this
+regime. And because capacity does not predict robustness, systems that select models by capacity
+alone will not get robustness with it; the two must be measured separately, with the ceiling-fixed
+protocol given here.
+
+Every capacity number in circulation implicitly chooses an instrument and a training regime. This
+paper measures all three quantities on one task, prices the difference between the regimes, and
+supplies the protocols, the released curves, and the macro-backed pipeline needed to run the same
+measurement on the next model.
 
 \section*{Reproducibility Statement}
 Code, data, and the paper source are public at
 \url{https://github.com/RavulapalliManas/paper-binding-capacity}: the released capacity table and robustness
 curves every figure reads (\texttt{results/figdata.json}), the statistics pipeline
 (\texttt{analysis/capacity\_stats.py}), the figure generators (\texttt{figs/gen\_capacity\_figs.py}), and the
-macro pipeline that emits every number in this paper's prose from a committed file
+macro pipeline that emits every macro-backed number in this paper's prose from a committed file
 (\texttt{analysis/make\_numbers.py} regenerates \texttt{numbers.tex} byte-for-byte). All models are frozen
-public checkpoints; the task and the capacity statistic are specified in Section~\ref{sec:setup}. The two open
-provenance items are stated where they arise: the full recall-versus-$K$ curves
-(Section~\ref{sec:setup}; the re-measurement runner ships in the repository) and the unpreserved $\ddecl$
-measurement script (Section~\ref{sec:confounds}).
+public checkpoints; the task and the capacity statistic are specified in Section~\ref{sec:setup}. Section~\ref{sec:trn1} releases the
+full recall-versus-$K$ curves for twelve models
+(\texttt{results/capacity\_trn1\_summary.json}). The re-measurement artifacts are committed alongside:
+\texttt{results/capacity\_alpha\_fit.json} (the $\alpha$ fit with its family-clustered and deletion
+diagnostics, produced by \texttt{analysis/capacity\_alpha\_fit.py}),
+\texttt{results/cross\_campaign\_capacity.json} (the boundary),
+\texttt{results/extra\_analyses.json} and \texttt{results/devaxis\_analyses.json} (the cost-law fits),
+with Figures~\ref{fig:capacitylaw} and~\ref{fig:timelaw} generated by
+\texttt{analysis/make\_p456\_figs.py}. The remaining open item is the unpreserved declaration-site
+measurement script, which leaves both the $\ddecl$ values and the probe literals of
+Section~\ref{sec:setup} outside the macro pipeline (disclosed in Section~\ref{sec:confounds}).
 
 \bibliographystyle{plainnat}
 \begin{thebibliography}{99}
 
-\bibitem[Gu et al.(2025)]{sink2410}
-X.~Gu et al. When attention sink emerges in language models: an empirical view. \emph{ICLR}, 2025. arXiv:2410.10781.
+\bibitem[Allen-Zhu and Li(2024)]{allenzhu2024}
+Z.~Allen-Zhu and Y.~Li. Physics of language models: part 3.3, knowledge capacity scaling laws.
+2024. arXiv:2404.05405.
+
+\bibitem[Biderman et al.(2023)]{biderman2023}
+S.~Biderman, H.~Schoelkopf, Q.~Anthony, et al. Pythia: a suite for analyzing large language
+models across training and scaling. \emph{ICML}, 2023. arXiv:2304.01373.
+
+\bibitem[Bietti et al.(2023)]{bietti2023}
+A.~Bietti, V.~Cabannes, D.~Bouchacourt, H.~Jegou, and L.~Bottou. Birth of a transformer: a
+memory viewpoint. \emph{NeurIPS}, 2023. arXiv:2306.00802.
 
 \bibitem[Feng and Steinhardt(2024)]{binding2310}
 J.~Feng and J.~Steinhardt. How do language models bind entities in context? \emph{ICLR}, 2024. arXiv:2310.17191.
+
+\bibitem[Gu et al.(2025)]{sink2410}
+X.~Gu, T.~Pang, C.~Du, Q.~Liu, F.~Zhang, C.~Du, Y.~Wang, and M.~Lin. When attention sink emerges in language models: an empirical view. \emph{ICLR}, 2025. arXiv:2410.10781.
+
+\bibitem[Gur-Arieh et al.(2026)]{mixing2510}
+Y.~Gur-Arieh, M.~Geva, and A.~Geiger. Mixing mechanisms: how language models retrieve bound entities in-context. \emph{ICLR}, 2026. arXiv:2510.06182.
+
+\bibitem[Hoffmann et al.(2022)]{hoffmann2022}
+J.~Hoffmann, S.~Borgeaud, A.~Mensch, et al. Training compute-optimal large language models.
+2022. arXiv:2203.15556.
+
+\bibitem[Huang et al.(2026)]{largercap2605}
+J.~Huang, D.~Wurgaft, R.~Bansal, L.~Ruis, N.~Saphra, D.~Alvarez-Melis, A.~K.~Lampinen, C.~Potts, and E.~S.~Lubana. Why larger models learn more: effects of capacity, interference, and rare-task retention. 2026. arXiv:2605.29548.
+
+\bibitem[Kaplan et al.(2020)]{kaplan2020}
+J.~Kaplan, S.~McCandlish, T.~Henighan, et al. Scaling laws for neural language models. 2020.
+arXiv:2001.08361.
 
 \bibitem[Kim et al.(2024)]{kim2405}
 N.~Kim, S.~Schuster, and S.~Toshniwal. Code pretraining improves entity tracking abilities of language
@@ -364,24 +636,30 @@ models. 2024. arXiv:2405.21068.
 \bibitem[Li and Merrill(2026)]{archentity2606}
 Y.~Li and W.~Merrill. Comparing transformers and hybrid models at the token level. 2026. arXiv:2606.20936.
 
-\bibitem[Xu(2026)]{mechhet2606}
-Y.~Xu. Pattern selectivity is not task-causal structure: a cross-architecture mechanistic study of
-composed-task circuits in 1B-class language models. 2026. arXiv:2606.05378.
-
-\bibitem[Gur-Arieh et al.(2026)]{mixing2510}
-Y.~Gur-Arieh, M.~Geva, and A.~Geiger. Mixing mechanisms: how language models retrieve bound entities in-context. \emph{ICLR}, 2026. arXiv:2510.06182.
-
-\bibitem[Huang et al.(2026)]{largercap2605}
-J.~Huang, S.~Wurgaft, H.~Bansal, L.~Ruis, N.~Saphra, D.~Alvarez-Melis, A.~Lampinen, C.~Potts, and E.~Lubana. Why larger models learn more: effects of capacity, interference, and rare-task retention. 2026. arXiv:2605.29548.
-
 \bibitem[Liu et al.(2025)]{superposition2505}
 Y.~Liu, Z.~Liu, and J.~Gore. Superposition yields robust neural scaling. \emph{NeurIPS}, 2025. arXiv:2505.10465.
+
+\bibitem[Muennighoff et al.(2023)]{muennighoff2023}
+N.~Muennighoff, A.~M.~Rush, B.~Barak, et al. Scaling data-constrained language models. 2023.
+arXiv:2305.16264.
+
+\bibitem[Olsson et al.(2022)]{olsson2022}
+C.~Olsson, N.~Elhage, N.~Nanda, et al. In-context learning and induction heads. 2022.
+arXiv:2209.11895.
+
+\bibitem[Radford et al.(2019)]{radford2019}
+A.~Radford, J.~Wu, R.~Child, D.~Luan, D.~Amodei, and I.~Sutskever. Language models are
+unsupervised multitask learners. OpenAI technical report, 2019.
 
 \bibitem[Schaeffer et al.(2023)]{mirage2304}
 R.~Schaeffer, B.~Miranda, and S.~Koyejo. Are emergent abilities of large language models a mirage? \emph{NeurIPS}, 2023. arXiv:2304.15004.
 
 \bibitem[Wang and Sun(2025)]{pillm2506}
 C.~Wang and J.~V.~Sun. Unable to forget: proactive interference reveals working memory limits in LLMs beyond context length. 2025. arXiv:2506.08184.
+
+\bibitem[Xu(2026)]{mechhet2606}
+Y.~Xu. Pattern selectivity is not task-causal structure: a cross-architecture mechanistic study of
+composed-task circuits in 1B-class language models. 2026. arXiv:2606.05378.
 
 \end{thebibliography}
 \end{document}

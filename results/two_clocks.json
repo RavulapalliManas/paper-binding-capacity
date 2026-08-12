@@ -1,0 +1,63 @@
+{
+  "_provenance": "analysis/two_clocks.py over the developmental trajectories produced by analysis/neuron_developmental.py.",
+  "trajectories": [
+    {
+      "label": "dev-p14b",
+      "model": "EleutherAI/pythia-1.4b",
+      "K": 6,
+      "n_trials": 1536,
+      "gap_slope_per_log10_step": 0.1792,
+      "gap_slope_ci95": [
+        0.1258,
+        0.2793
+      ],
+      "gap_slope_frac_boot_le_zero": 0.0002,
+      "n_checkpoints": 8,
+      "criterion_q": 0.5,
+      "tau_R": 16398.1,
+      "tau_U": 18868.1,
+      "lag_log10_steps": 0.0609,
+      "lag_ci95": [
+        -0.1,
+        0.212
+      ],
+      "lag_frac_boot_le_zero": 0.2697,
+      "R_first_crossing_of_baseline": 1000.0,
+      "U_first_crossing_of_baseline": 1117.1889338555704,
+      "baseline_1_over_K": 0.1667,
+      "R_final": 0.9717,
+      "U_final": 0.61,
+      "gap_final": 0.3617,
+      "gap_first": 0.106
+    },
+    {
+      "label": "dev-p410m",
+      "model": "EleutherAI/pythia-410m",
+      "K": 6,
+      "n_trials": 1536,
+      "gap_slope_per_log10_step": 0.0581,
+      "gap_slope_ci95": [
+        -0.0507,
+        0.1426
+      ],
+      "gap_slope_frac_boot_le_zero": 0.121,
+      "n_checkpoints": 8,
+      "criterion_q": 0.5,
+      "tau_R": 34250.2,
+      "tau_U": 1982.0,
+      "lag_log10_steps": -1.2376,
+      "lag_ci95": [
+        -1.279,
+        -0.016
+      ],
+      "lag_frac_boot_le_zero": 0.9882,
+      "R_first_crossing_of_baseline": 1000.0,
+      "U_first_crossing_of_baseline": 1719.276905134241,
+      "baseline_1_over_K": 0.1667,
+      "R_final": 0.5587,
+      "U_final": 0.3145,
+      "gap_final": 0.2442,
+      "gap_first": 0.1564
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "_provenance": "analysis/capacity_alpha_fit.py over capacity_trn1_summary.json (D=0, censored excluded, params from agg_capacity.PARAMS_M). POST-HOC per claim ledger BC-2.",
+  "n_models": 11,
+  "families": [
+    "opt",
+    "pythia",
+    "qwen2.5",
+    "smollm2"
+  ],
+  "alpha": 0.82,
+  "c": 0.0384,
+  "r2": 0.726,
+  "alpha_ci95_family_clustered": [
+    0.674,
+    1.251
+  ],
+  "n_boot_valid": 19677,
+  "leave_one_family_out_alpha": {
+    "opt": 0.782,
+    "pythia": 1.086,
+    "qwen2.5": 0.759,
+    "smollm2": 0.823
+  },
+  "lofo_range": [
+    0.759,
+    1.086
+  ],
+  "leave_one_model_out_alpha": {
+    "opt-1.3b": 0.726,
+    "opt-125m": 0.919,
+    "opt-350m": 0.792,
+    "pythia-1.4b": 0.811,
+    "pythia-160m": 0.818,
+    "pythia-1b": 0.861,
+    "pythia-2.8b": 0.928,
+    "pythia-410m": 0.813,
+    "qwen2.5-0.5b": 0.814,
+    "qwen2.5-1.5b": 0.762,
+    "smollm2-360m": 0.823
+  },
+  "loo_max_abs_delta": 0.108
+}
