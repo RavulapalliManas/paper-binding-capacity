@@ -1,0 +1,208 @@
+{
+ "_provenance": "analysis/p3_model_intervals.py from results/capacity_x/*_w0.json",
+ "models": {
+  "olmo2-1b-x": {
+   "K50": 64.0,
+   "censored": true,
+   "censored_share": 1.0,
+   "ci95": [
+    null,
+    null
+   ],
+   "family": "OLMo-2",
+   "k1_recall": 0.9809,
+   "model": "OLMo-2-1B",
+   "n_seeds": 6,
+   "n_unc_refits": 0,
+   "params_nonembedding_m": 1069.0,
+   "params_total_m": 1480
+  },
+  "opt-1.3b-x": {
+   "K50": 38.076,
+   "censored": false,
+   "censored_share": 0.0,
+   "ci95": [
+    34.141,
+    43.436
+   ],
+   "family": "OPT",
+   "k1_recall": 0.9792,
+   "model": "OPT-1.3B",
+   "n_seeds": 6,
+   "n_unc_refits": 2000,
+   "params_nonembedding_m": 1208.8,
+   "params_total_m": 1316
+  },
+  "opt-125m-x": {
+   "K50": 2.996,
+   "censored": false,
+   "censored_share": 0.0,
+   "ci95": [
+    2.887,
+    3.11
+   ],
+   "family": "OPT",
+   "k1_recall": 0.9618,
+   "model": "OPT-125M",
+   "n_seeds": 6,
+   "n_unc_refits": 2000,
+   "params_nonembedding_m": 84.8,
+   "params_total_m": 125
+  },
+  "opt-350m-x": {
+   "K50": 3.002,
+   "censored": false,
+   "censored_share": 0.0,
+   "ci95": [
+    2.843,
+    3.145
+   ],
+   "family": "OPT",
+   "k1_recall": 0.9722,
+   "model": "OPT-350M",
+   "n_seeds": 6,
+   "n_unc_refits": 2000,
+   "params_nonembedding_m": 303.2,
+   "params_total_m": 331
+  },
+  "pythia-1.4b-x": {
+   "K50": 15.956,
+   "censored": false,
+   "censored_share": 0.0,
+   "ci95": [
+    14.935,
+    17.33
+   ],
+   "family": "Pythia",
+   "k1_recall": 0.974,
+   "model": "Pythia-1.4B",
+   "n_seeds": 6,
+   "n_unc_refits": 2000,
+   "params_nonembedding_m": 1209.0,
+   "params_total_m": 1415
+  },
+  "pythia-160m-x": {
+   "K50": 2.435,
+   "censored": false,
+   "censored_share": 0.0,
+   "ci95": [
+    2.263,
+    2.642
+   ],
+   "family": "Pythia",
+   "k1_recall": 0.5885,
+   "model": "Pythia-160M",
+   "n_seeds": 6,
+   "n_unc_refits": 2000,
+   "params_nonembedding_m": 84.7,
+   "params_total_m": 162
+  },
+  "pythia-1b-x": {
+   "K50": 5.517,
+   "censored": false,
+   "censored_share": 0.0,
+   "ci95": [
+    5.228,
+    5.796
+   ],
+   "family": "Pythia",
+   "k1_recall": 0.9826,
+   "model": "Pythia-1B",
+   "n_seeds": 6,
+   "n_unc_refits": 2000,
+   "params_nonembedding_m": 806.0,
+   "params_total_m": 1012
+  },
+  "pythia-2.8b-x": {
+   "K50": 16.368,
+   "censored": false,
+   "censored_share": 0.0,
+   "ci95": [
+    15.094,
+    17.876
+   ],
+   "family": "Pythia",
+   "k1_recall": 0.9566,
+   "model": "Pythia-2.8B",
+   "n_seeds": 6,
+   "n_unc_refits": 2000,
+   "params_nonembedding_m": 2517.4,
+   "params_total_m": 2775
+  },
+  "pythia-410m-x": {
+   "K50": 4.543,
+   "censored": false,
+   "censored_share": 0.0,
+   "ci95": [
+    4.313,
+    4.877
+   ],
+   "family": "Pythia",
+   "k1_recall": 0.9184,
+   "model": "Pythia-410M",
+   "n_seeds": 6,
+   "n_unc_refits": 2000,
+   "params_nonembedding_m": 302.0,
+   "params_total_m": 405
+  },
+  "qwen2.5-0.5b-x": {
+   "K50": 4.692,
+   "censored": false,
+   "censored_share": 0.0,
+   "ci95": [
+    4.464,
+    4.928
+   ],
+   "family": "Qwen2.5",
+   "k1_recall": 0.9774,
+   "model": "Qwen2.5-0.5B",
+   "n_seeds": 6,
+   "n_unc_refits": 2000,
+   "params_nonembedding_m": 357.9,
+   "params_total_m": 494
+  },
+  "qwen2.5-1.5b-x": {
+   "K50": 25.856,
+   "censored": false,
+   "censored_share": 0.0,
+   "ci95": [
+    25.134,
+    26.755
+   ],
+   "family": "Qwen2.5",
+   "k1_recall": 0.9896,
+   "model": "Qwen2.5-1.5B",
+   "n_seeds": 6,
+   "n_unc_refits": 2000,
+   "params_nonembedding_m": 1310.6,
+   "params_total_m": 1544
+  },
+  "smollm2-360m-x": {
+   "K50": 5.016,
+   "censored": false,
+   "censored_share": 0.0,
+   "ci95": [
+    4.611,
+    5.456
+   ],
+   "family": "SmolLM2",
+   "k1_recall": 0.9323,
+   "model": "SmolLM2-360M",
+   "n_seeds": 6,
+   "n_unc_refits": 2000,
+   "params_nonembedding_m": 314.8,
+   "params_total_m": 362
+  }
+ },
+ "n_seed_boot": 2000,
+ "seed": 0,
+ "size_fit": {
+  "alpha_point": 0.8209,
+  "ci95_family_and_seed": [
+   0.672,
+   1.243
+  ],
+  "n_draws": 10000,
+  "n_draws_valid": 9800
+ }
+}

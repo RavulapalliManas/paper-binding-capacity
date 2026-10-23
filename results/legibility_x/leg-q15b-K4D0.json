@@ -1,0 +1,125 @@
+{
+  "label": "leg-q15b-K4D0",
+  "model": "Qwen/Qwen2.5-1.5B",
+  "K": 4,
+  "D": 0,
+  "seq": 256,
+  "explicit_semantics": false,
+  "chance": 0.05556,
+  "n_values": 18,
+  "patch_layer": 20,
+  "n_layers": 28,
+  "compile_sec": 43.2,
+  "families": {
+    "declarative": {
+      "n": 1536,
+      "accuracy": 0.7917,
+      "n_test": 464,
+      "n_wrong_test": 90,
+      "read_layer": 25,
+      "probe_selection_acc": 0.806,
+      "p_acc_given_wrong": 0.5667,
+      "present_set_baseline": 0.25,
+      "disagreement_auroc": 0.8737,
+      "repair": {
+        "noop": {
+          "recovery_on_wrong": 0.0,
+          "correct_preserved": 1.0,
+          "max_logit_drift": 0.0
+        },
+        "decoded": {
+          "recovery_on_wrong": 0.1889,
+          "correct_preserved": 0.8342
+        },
+        "wrong_target": {
+          "recovery_on_wrong": 0.0444,
+          "correct_preserved": 0.5294
+        },
+        "random_matched": {
+          "recovery_on_wrong": 0.1222,
+          "correct_preserved": 0.9626
+        },
+        "gold": {
+          "recovery_on_wrong": 0.3778,
+          "correct_preserved": 0.8743
+        }
+      },
+      "repair_probe_layer": 21,
+      "repair_probe_selection_acc": 0.7889
+    },
+    "mutable": {
+      "n": 1536,
+      "accuracy": 0.3073,
+      "n_test": 512,
+      "n_wrong_test": 345,
+      "read_layer": 24,
+      "probe_selection_acc": 0.4332,
+      "p_acc_given_wrong": 0.4348,
+      "present_set_baseline": 0.25,
+      "disagreement_auroc": 0.7163,
+      "repair": {
+        "noop": {
+          "recovery_on_wrong": 0.0,
+          "correct_preserved": 1.0,
+          "max_logit_drift": 0.0
+        },
+        "decoded": {
+          "recovery_on_wrong": 0.1449,
+          "correct_preserved": 0.5269
+        },
+        "wrong_target": {
+          "recovery_on_wrong": 0.1014,
+          "correct_preserved": 0.4012
+        },
+        "random_matched": {
+          "recovery_on_wrong": 0.0435,
+          "correct_preserved": 0.8802
+        },
+        "gold": {
+          "recovery_on_wrong": 0.2232,
+          "correct_preserved": 0.6287
+        }
+      },
+      "repair_probe_layer": 21,
+      "repair_probe_selection_acc": 0.3664
+    },
+    "scoped": {
+      "n": 1536,
+      "accuracy": 0.1999,
+      "n_test": 453,
+      "n_wrong_test": 350,
+      "read_layer": 20,
+      "probe_selection_acc": 0.2597,
+      "p_acc_given_wrong": 0.2029,
+      "present_set_baseline": 0.25,
+      "disagreement_auroc": 0.5978,
+      "repair": {
+        "noop": {
+          "recovery_on_wrong": 0.0,
+          "correct_preserved": 1.0,
+          "max_logit_drift": 0.0
+        },
+        "decoded": {
+          "recovery_on_wrong": 0.0857,
+          "correct_preserved": 0.534
+        },
+        "wrong_target": {
+          "recovery_on_wrong": 0.0743,
+          "correct_preserved": 0.466
+        },
+        "random_matched": {
+          "recovery_on_wrong": 0.0114,
+          "correct_preserved": 0.9223
+        },
+        "gold": {
+          "recovery_on_wrong": 0.1657,
+          "correct_preserved": 0.6505
+        }
+      },
+      "repair_probe_layer": 21,
+      "repair_probe_selection_acc": 0.2489
+    }
+  },
+  "elapsed_sec": 4704.4,
+  "_provenance": "Measured on trn1.32xlarge by analysis/neuron_legibility.py. Task generators and folds from analysis/trilogy_tasks.py (folds are a hash of the trial, so probe/selection/test membership is fixed). Read layer chosen on the SELECTION fold, reported on TEST. Patch verified by the noop arm, which must reproduce the unpatched logits."
+}

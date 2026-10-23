@@ -1,0 +1,26 @@
+{
+  "label": "pythia-160m",
+  "model": "EleutherAI/pythia-160m",
+  "worker_id": 26,
+  "n_workers": 32,
+  "chance": 0.04,
+  "n_obligations": 25,
+  "max_k": 25,
+  "seq": 512,
+  "batch": 8,
+  "dtype": "bfloat16",
+  "n_trials": 128,
+  "compile_sec": 0.0,
+  "neff_load_sec": 13.0,
+  "elapsed_sec": 22.5,
+  "cells": [
+    {
+      "K": 10,
+      "D": 256,
+      "seed": 0,
+      "recall": 0.109375,
+      "n": 128
+    }
+  ],
+  "_provenance": "Measured on trn1.32xlarge by analysis/neuron_capacity.py. bfloat16: the readout is an argmax over obligation-token logits, a behavioural measurement, not a probe input. Same K grid as the committed analysis/ksweep.py; this is a NEW measurement of the same quantity, not a byte-level replication of the frozen 30-model table."
+}
