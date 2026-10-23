@@ -1,0 +1,417 @@
+{
+ "_provenance": "analysis/paper_addenda.py. Inputs, all already committed: capacity_trn1_summary.json, interference_axis.json, figdata.json, capacity_control.json, qgeom_dev.json, qgfix_p1b/, qgfix_p160/, dynamics/em_step1000/steer.json, readout_visibility.json. No new compute; no model was run.",
+ "_status": "EXPLORATORY. Every finding here was generated from the existing corpus after the fact. None was predicted in advance. Label the section exploratory in the paper.",
+ "A_collapse_shape": {
+  "n": 11,
+  "n_families": 4,
+  "slope_min": 0.499,
+  "slope_max": 1.801,
+  "slope_range_factor": 3.61,
+  "slope_median": 1.069,
+  "corr_logslope_logK50": -0.837,
+  "corr_logslope_logN": -0.766,
+  "fit_slope_on_N": {
+   "coef": -0.293,
+   "r2": 0.586
+  },
+  "fit_slope_on_K50": {
+   "coef": -0.335,
+   "r2": 0.701
+  },
+  "fit_slope_on_N_and_K50": {
+   "coef_N": -0.069,
+   "coef_K50": -0.273,
+   "r2": 0.71
+  },
+  "partial_corr_slope_N_given_K50": -0.169,
+  "partial_corr_slope_K50_given_N": -0.547,
+  "family_boot_slope_on_N": {
+   "ci95": [
+    -0.4115,
+    -0.1805
+   ],
+   "frac_ge_zero": 0.0,
+   "n_boot_valid": 19677
+  },
+  "VERDICT": "REJECTED: not independent of K50",
+  "reportable_claim": "The collapse is gradual, not a step: logistic slopes in log K span 0.50 to 1.80 (n=11). The slope is strongly coupled to K50 (r=-0.84 in logs) and carries no information about scale once K50 is known (partial r=-0.17). Report the range; do NOT report a slope scaling law."
+ },
+ "B_threshold_free_law": {
+  "all12": {
+   "n": 12,
+   "exponent": 0.329,
+   "r2": 0.799,
+   "ci95": [
+    0.2863,
+    0.4801
+   ],
+   "frac_ge_zero": 1.0,
+   "n_boot_valid": 19954
+  },
+  "uncensored11": {
+   "n": 11,
+   "exponent": 0.304,
+   "r2": 0.821,
+   "ci95": [
+    0.2792,
+    0.3879
+   ],
+   "frac_ge_zero": 1.0,
+   "n_boot_valid": 19677
+  },
+  "note": "AUC is bounded in [0,1] and K50 is not, so the exponents are NOT comparable in magnitude to alpha=0.820. What replicates is the sign, the exclusion of zero, and the fit quality, with no threshold and no model dropped for censoring.",
+  "k50_law_for_reference": {
+   "alpha": 0.82,
+   "r2": 0.726,
+   "n": 11
+  }
+ },
+ "C_ceiling_uniformity": {
+  "n": 12,
+  "ceiling_min": 0.589,
+  "ceiling_max": 0.99,
+  "ceiling_median": 0.973,
+  "n_above_0p9": 11,
+  "lowest_model": "pythia-160m-x",
+  "fit_ceiling_on_logN": {
+   "coef": 0.0576,
+   "r2": 0.259
+  },
+  "reportable_claim": "11 of 12 models hold a K=1 ceiling between 0.918 and 0.990; the exception is pythia-160m-x at 0.589. The ceiling is only weakly related to scale (R2=0.26), so K50 differences are not ceiling differences."
+ },
+ "D_interference_three_terms": {
+  "term1_ceiling_loss": {
+   "n": 12,
+   "median": 0.137,
+   "min": 0.016,
+   "max": 0.538,
+   "worst_model": "pythia-410m-x",
+   "best_model": "qwen2.5-1.5b-x",
+   "spearman_vs_capacity": {
+    "rho": -0.4727,
+    "p": 0.142,
+    "n": 11
+   }
+  },
+  "term2_midpoint_shift": {
+   "d0_ceiling_normalised": {
+    "median": 0.5354,
+    "n": 11,
+    "n_reduced": 10
+   },
+   "own_ceiling_normalised": {
+    "median": 0.963,
+    "n": 9,
+    "n_reduced": 5
+   },
+   "note": "The two normalisations disagree because interference lowers the K=1 ceiling itself (term 1). Own-ceiling normalisation divides out the very damage being measured. Report both."
+  },
+  "term3_slope_change": {
+   "n": 9,
+   "median_ratio": 1.008,
+   "min": 0.85,
+   "max": 1.38,
+   "n_steeper": 5,
+   "corr_with_ceiling_drop": -0.118,
+   "VERDICT": "NULL: interference does not systematically change the curve shape."
+  }
+ },
+ "E_gpt2_sensitivity": {
+  "n": 29,
+  "n_old": 17,
+  "n_modern": 12,
+  "old_median": 3.0,
+  "modern_median": 16.0,
+  "median_diff": 13.0,
+  "n_gpt2_dropped": 3,
+  "old_median_without_gpt2": 4.0,
+  "median_diff_without_gpt2": 12.0,
+  "reportable_claim": "The continuous instrument places the GPT-2 family below the K=1 floor. Dropping all 3 GPT-2 models moves the old-recipe median from 3 to 4 and the median difference from 13 to 12, so the recipe split does not rest on them."
+ },
+ "F_developmental_legibility": {
+  "pythia_1.4b_controlled": {
+   "model": "EleutherAI/pythia-1.4b",
+   "n_checkpoints": 7,
+   "K": 6,
+   "D": 256,
+   "chance": 0.04,
+   "leak_free_layer_selection": true,
+   "midstack_first": 0.142,
+   "midstack_last": 0.701,
+   "midstack_gain": 4.94,
+   "final_layer_first": 0.194,
+   "final_layer_last": 0.384,
+   "final_layer_gain": 1.97,
+   "behaviour_first": 0.19,
+   "behaviour_last": 0.323,
+   "behaviour_gain": 1.7,
+   "separation_first": -0.052,
+   "separation_last": 0.317,
+   "best_layer_first": 1,
+   "best_layer_last": 12,
+   "spearman_sep_vs_step": 1.0,
+   "exact_p": 0.0003968253968253968,
+   "selection_not_forcing_positive": true
+  },
+  "pythia_1.4b_decodability": {
+   "model": "EleutherAI/pythia-1.4b",
+   "layer": 12,
+   "chance": 0.04,
+   "n_checkpoints": 7,
+   "aborts": 0,
+   "distinct_weight_hashes": 7,
+   "first": 0.144,
+   "last": 0.707,
+   "spearman": 1.0,
+   "exact_p": 0.0003968253968253968,
+   "steps": [
+    1000,
+    8000,
+    16000,
+    32000,
+    64000,
+    96000,
+    143000
+   ]
+  },
+  "pythia_1b": {
+   "n_checkpoints": 14,
+   "n_aborted": 0,
+   "aborted_steps": [],
+   "values": [
+    [
+     1000,
+     0.333,
+     1.0
+    ],
+    [
+     2000,
+     0.182,
+     1.0
+    ],
+    [
+     4000,
+     0.213,
+     1.0
+    ],
+    [
+     8000,
+     0.424,
+     1.0
+    ],
+    [
+     12000,
+     0.398,
+     1.0
+    ],
+    [
+     16000,
+     0.513,
+     1.0
+    ],
+    [
+     24000,
+     0.42,
+     1.0
+    ],
+    [
+     32000,
+     0.484,
+     1.0
+    ],
+    [
+     48000,
+     0.529,
+     1.0
+    ],
+    [
+     64000,
+     0.469,
+     1.0
+    ],
+    [
+     80000,
+     0.762,
+     1.0
+    ],
+    [
+     96000,
+     0.6,
+     1.0
+    ],
+    [
+     120000,
+     0.549,
+     1.0
+    ],
+    [
+     143000,
+     0.651,
+     1.0
+    ]
+   ],
+   "obl_min": 0.182,
+   "obl_max": 0.762,
+   "ent_min": 1.0,
+   "ent_max": 1.0,
+   "abort_meaning": "aborted = binding not decodable at that checkpoint (see analysis/qgeom_ladder_agg.py:47). Informative, not missing-at-random."
+  },
+  "pythia_160m": {
+   "n_checkpoints": 14,
+   "n_aborted": 5,
+   "aborted_steps": [
+    1000,
+    2000,
+    16000,
+    48000,
+    80000
+   ],
+   "values": [
+    [
+     4000,
+     0.158,
+     0.984
+    ],
+    [
+     8000,
+     0.124,
+     0.991
+    ],
+    [
+     12000,
+     0.136,
+     0.998
+    ],
+    [
+     24000,
+     0.191,
+     0.98
+    ],
+    [
+     32000,
+     0.153,
+     0.996
+    ],
+    [
+     64000,
+     0.14,
+     0.993
+    ],
+    [
+     96000,
+     0.12,
+     0.971
+    ],
+    [
+     120000,
+     0.136,
+     0.962
+    ],
+    [
+     143000,
+     0.144,
+     0.956
+    ]
+   ],
+   "obl_min": 0.12,
+   "obl_max": 0.191,
+   "ent_min": 0.956,
+   "ent_max": 0.998,
+   "abort_meaning": "aborted = binding not decodable at that checkpoint (see analysis/qgeom_ladder_agg.py:47). Informative, not missing-at-random."
+  },
+  "scope": "One model with full controls (Pythia-1.4B, 7 checkpoints, leak-free layer selection, 7 distinct weight hashes, 0 aborts), one consistent second model with a hand-set layer (Pythia-1B), and one negative case (Pythia-160M, flat, 5 of 14 checkpoints not decodable)."
+ },
+ "G_nulls": {
+  "released_models": {
+   "source": "results/repair_6models.json",
+   "leak_free": true,
+   "n_seeds": 3,
+   "n_per_model": 600,
+   "n_models": 6,
+   "n_repair_beats_baseline": 5,
+   "n_repair_beats_random": 6,
+   "recovery_min": -0.053,
+   "recovery_max": 0.407,
+   "uses_oracle": false,
+   "note": "The intervention re-injects the binding the PROBE decoded, not the gold label. It is the companion paper's result; reproduced here only to anchor the developmental trajectory below."
+  },
+  "repairability_develops": {
+   "model": "EleutherAI/pythia-1.4b",
+   "n_checkpoints": 7,
+   "K": 6,
+   "D": 256,
+   "rows": [
+    {
+     "step": 1000,
+     "read_layer": 1,
+     "repair_no_oracle": 0.043,
+     "damage_keep": 0.711,
+     "repair_oracle": 0.083
+    },
+    {
+     "step": 8000,
+     "read_layer": 23,
+     "repair_no_oracle": 0.174,
+     "damage_keep": 0.382,
+     "repair_oracle": 0.946
+    },
+    {
+     "step": 16000,
+     "read_layer": 14,
+     "repair_no_oracle": 0.332,
+     "damage_keep": 0.618,
+     "repair_oracle": 0.919
+    },
+    {
+     "step": 32000,
+     "read_layer": 13,
+     "repair_no_oracle": 0.277,
+     "damage_keep": 0.648,
+     "repair_oracle": 0.824
+    },
+    {
+     "step": 64000,
+     "read_layer": 13,
+     "repair_no_oracle": 0.475,
+     "damage_keep": 0.738,
+     "repair_oracle": 0.929
+    },
+    {
+     "step": 96000,
+     "read_layer": 13,
+     "repair_no_oracle": 0.604,
+     "damage_keep": 0.87,
+     "repair_oracle": 0.968
+    },
+    {
+     "step": 143000,
+     "read_layer": 12,
+     "repair_no_oracle": 0.686,
+     "damage_keep": 0.93,
+     "repair_oracle": 0.963
+    }
+   ],
+   "repair_first": 0.043,
+   "repair_last": 0.686,
+   "repair_gain": 16.0,
+   "damage_keep_first": 0.711,
+   "damage_keep_last": 0.93,
+   "read_layer_first": 1,
+   "read_layer_last": 12,
+   "spearman_vs_legibility": 0.964,
+   "exact_p": 0.00139,
+   "VERDICT": "Repairability is installed by pretraining and tracks legibility. At step 1000 the binding is not yet present (decode 0.144, read layer 1) and repair fails; by step 143000 repair reaches 0.686 with damage_keep 0.930."
+  },
+  "readout_blindness": {
+   "status": "RETRACTED (in the companion paper, which made the claim)",
+   "comparator": "readout_k minus classmean_k, Vw fit on the probe's train fold",
+   "source": "analysis/qgeom_aggregate.py",
+   "detail": "Label-matched comparator is below zero on 3 of 5 models: no systematic readout deficit. P3 never made the claim and should cite, not re-argue.",
+   "per_model": "see results/readout_visibility.json"
+  },
+  "stale_file_warning": {
+   "path": "results/qgeom_ladder.json",
+   "problem": "Still asserts readout_outgrown_significant_on for 160M/410M/1B, which rests on the retracted leaky comparator. Regenerate or delete."
+  }
+ }
+}

@@ -648,6 +648,11 @@ def f2(x):
     return "0.00" if s == "-0.00" else s
 
 
+def up2(x):
+    """Upper bound printed at two decimals: round up, so 'at most' stays true."""
+    return f"{math.ceil(round(x * 100, 9)) / 100:.2f}"
+
+
 def fp(x):
     """A p-value with one significant digit below 0.01."""
     return f"{x:.2f}" if x >= 0.01 else f"{x:.1g}"
@@ -724,14 +729,14 @@ def emit_tex(res_dir, tex_dir):
     for k in MODELS:
         rows0 = [x for x in B[k]["0"] if x["K"] >= 2]
         best = max(rows0, key=lambda x: x["recall"] - x["present_random"])
-        exc[k] = (round(best["recall"] - best["present_random"], 2), best["K"])
+        exc[k] = (best["recall"] - best["present_random"], best["K"])
         p2[k] = next(x["recall"] for x in B[k]["0"] if x["K"] == 2)
     small = [k for k in MODELS if PARAMS_TOTAL_M[k] < 1000]
     big = [k for k in MODELS if PARAMS_TOTAL_M[k] >= 1000]
     hiC = [k for k in MODELS if S[k]["by_D"]["0"]["K1_recall"] >= 0.9]
     U = R["usable_loads"]
     m += [("RevExcessSubLo", f2(min(exc[k][0] for k in small)), "max_K (recall - in-prompt guess), D=0, <1B, min"),
-          ("RevExcessSubHi", f2(max(exc[k][0] for k in small)), "same, <1B, max"),
+          ("RevExcessSubHi", up2(max(exc[k][0] for k in small)), "same, <1B, max, rounded up (an upper bound)"),
           ("RevExcessBigLo", f2(min(exc[k][0] for k in big)), "same, >=1B, min"),
           ("RevExcessBigHi", f2(max(exc[k][0] for k in big)), "same, >=1B, max"),
           ("RevRecallTwoLo", f2(min(p2[k] for k in hiC)), "recall at K=2, D=0, models with C>=0.9, min"),
@@ -772,7 +777,7 @@ def emit_tex(res_dir, tex_dir):
         qwen80 = [K for K in fs["qwen2.5-1.5b-x"]["D0_0.8"] if K > 1]
         nullp95 = G["max_margin_null"]["p95"]
         fr = G["first_round"]["models"]
-        m += [("RevNullMarginP", f2(nullp95), "95th pct of the largest margin for a pure in-prompt guesser"),
+        m += [("RevNullMarginP", up2(nullp95), "95th pct of the largest margin for a pure in-prompt guesser, rounded up"),
               ("RevExcessSubNAbove", str(sum(exc[k][0] > nullp95 for k in small_k)), "<1B models above that"),
               ("RevCeilNReject", str(G["ceiling_null"]["n_reject_05"]), "ceiling-only account rejected, p<0.05"),
               ("RevCeilNRejectBig", str(sum(cn[k]["p_upper"] < 0.05 for k in big_k)), "same, >=1B"),

@@ -42,8 +42,10 @@ import json
 import math
 import os
 import re
+import sys
 
 import numpy as np
+from decimal import Decimal, ROUND_HALF_UP
 from scipy.stats import rankdata, spearmanr
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -255,7 +257,34 @@ def posterior():
     return dict(rows=rows)
 
 
+def k4_prompt_baseline():
+    """Guess among the listed values on the K=4 'declarative' prompts, from the rendered prompts.
+    neuron_legibility.py builds the trials with trilogy_tasks.build_declarative(n, K=4, D=0, seed=0)
+    and renders VALUE_i as vals[i % 18], so a value word can repeat inside a prompt."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("trilogy_tasks", os.path.join(HERE, "trilogy_tasks.py"))
+    tt = importlib.util.module_from_spec(spec)
+    sys.modules["trilogy_tasks"] = tt           # its dataclasses look the module up while it loads
+    spec.loader.exec_module(tt)
+    n, k, nv = 1536, 4, 18
+    trials = tt.build_declarative(n, K=k, D=0, seed=0)
+
+    def vid(s):
+        return int(re.search(r"(\d+)$", s).group(1))
+    guess, rep_v, test = [], [], []
+    for t in trials:
+        vals = [vid(v) % nv for (_, _, v) in t.body]
+        gold = vid(t.gold) % nv
+        guess.append(sum(v == gold for v in vals) / k)
+        rep_v.append(len(set(vals)) < k)
+        test.append(t.fold == "test")
+    g, r, te = np.array(guess), np.array(rep_v), np.array(test)
+    return dict(n=n, n_test=int(te.sum()), guess_all=float(g.mean()), guess_test=float(g[te].mean()),
+                repeat_all=float(r.mean()), repeat_test=float(r[te].mean()))
+
+
 def k4():
+    base = k4_prompt_baseline()
     rows = []
     for rel in K4_FILES:
         d = jl(rel)
@@ -272,7 +301,9 @@ def k4():
                          wrong_target_keep=rep["wrong_target"]["correct_preserved"],
                          gold_keep=rep["gold"]["correct_preserved"],
                          random_keep=rep["random_matched"]["correct_preserved"],
-                         disagree_auroc=f["disagreement_auroc"]))
+                         disagree_auroc=f["disagreement_auroc"],
+                         acc_test=round(1 - f["n_wrong_test"] / f["n_test"], 4)))
+        assert f["n_test"] == base["n_test"], "the regenerated folds must match the saved test fold"
     pw = [r["probe_wrong"] for r in rows]
     moved = [1 - r["wrong_target_keep"] for r in rows]
     summary = dict(n_models=len(rows), probe_wrong_range=[min(pw), max(pw)], baseline=rows[0]["baseline"],
@@ -281,12 +312,27 @@ def k4():
                    wrong_target_moved_range=[round(min(moved), 4), round(max(moved), 4)],
                    gold_range=[min(r["gold"] for r in rows), max(r["gold"] for r in rows)],
                    by_model={r["model"]: r["probe_wrong"] for r in rows},
-                   auroc_range=[min(r["disagree_auroc"] for r in rows), max(r["disagree_auroc"] for r in rows)])
+                   auroc_range=[min(r["disagree_auroc"] for r in rows), max(r["disagree_auroc"] for r in rows)],
+                   prompt_baseline=base)
+    cap = jl("capacity_trn1_summary.json")["models"]
+    cap_ids = {m["model"] for m in (cap.values() if isinstance(cap, dict) else cap)}
+    summary["n_in_capacity_set"] = sum(jl(rel)["model"] in cap_ids for rel in K4_FILES)
     return dict(rows=rows, summary=summary)
 
 
 def f2(x):
-    return f"{x:.2f}"
+    """Two decimals, half rounded up (0.565 prints as 0.57)."""
+    return str(Decimal(repr(round(float(x), 10))).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP))
+
+
+def up2(x):
+    """An upper bound at two decimals, rounded up so that 'at most' stays true."""
+    return f"{math.ceil(round(x * 100, 9)) / 100:.2f}"
+
+
+def down2(x):
+    """A lower bound at two decimals, rounded down so that 'at least' stays true."""
+    return f"{math.floor(round(x * 100, 9)) / 100:.2f}"
 
 
 def fp(p):
@@ -294,6 +340,16 @@ def fp(p):
         e = int(math.floor(math.log10(p)))
         return f"{p / 10 ** e:.1f}\\times10^{{{e}}}"
     return f"{p:.3f}" if p < 0.01 else f"{p:.2f}"
+
+
+def fp_up(p):
+    """A p-value bound ('p at most ...'), rounded up at the printed precision."""
+    if p < 1e-3:
+        e = int(math.floor(math.log10(p)))
+        return f"{math.ceil(round(p / 10 ** e * 10, 9)) / 10:.1f}\\times10^{{{e}}}"
+    if p < 0.01:
+        return f"{math.ceil(round(p * 1000, 9)) / 1000:.3f}"
+    return up2(p)
 
 
 def emit_tex(res, tex_dir):
@@ -308,14 +364,16 @@ def emit_tex(res, tex_dir):
         "DvBaseline": f2(1 / L["1B"]["K"]), "DvPoolChance": f2(L["1B"]["pool_chance"]),
         "DvLadderK": str(L["1B"]["K"]), "DvLadderTest": str(L["1B"]["n_test"]),
         "DvLadderTrials": f"{L['1B']['n_trials']:,}".replace(",", "{,}"),
-        "DvSmallMax": f2(small_max),
+        "DvSmallMax": up2(small_max),
         "DvSmallCkpt": str(L["160M"]["n_checkpoints"]),
-        "DvSmallEntityMin": f2(min(L[m]["entity_acc_min"] for m in SMALL)),
+        "DvSmallEntityMin": down2(min(L[m]["entity_acc_min"] for m in SMALL)),
         "DvSmallEntityN": str(sum(L[m]["n_entity"] for m in SMALL)),
         "DvSmallCkptAll": str(sum(L[m]["n_checkpoints"] for m in SMALL)),
         "DvSmallRhoPOneSixty": fp(L["160M"]["p"]), "DvSmallRhoOneSixty": f2(L["160M"]["rho"]),
         "DvBigFinalLo": f2(min(L[m]["final"] for m in big)), "DvBigFinalHi": f2(max(L[m]["final"] for m in big)),
-        "DvBigRhoMin": f2(min(L[m]["rho"] for m in big)), "DvBigPMax": fp(max(L[m]["p"] for m in big)),
+        "DvBigRhoMin": down2(min(L[m]["rho"] for m in big)), "DvBigPMax": fp_up(max(L[m]["p"] for m in big)),
+        "DvFourTenRho": f2(L["410M"]["rho"]), "DvFourTenP": fp(L["410M"]["p"]),
+        "DvFourTenFirst": f2(L["410M"]["acc"][0]), "DvFourTenFinal": f2(L["410M"]["final"]),
         "DvCkptLo": str(min(L[m]["n_checkpoints"] for m in ("160M", "410M", "1B", "1.4B", "6.9B"))),
         "DvCkptHi": str(max(L[m]["n_checkpoints"] for m in ("160M", "410M", "1B", "1.4B", "6.9B"))),
         "DvOneBFirst": f2(L["1B"]["acc"][0]), "DvOneFourFirst": f2(L["1.4B"]["acc"][0]),
@@ -335,9 +393,9 @@ def emit_tex(res, tex_dir):
         "DvAbortOneSixty": str(L["160M"]["n_aborted"]), "DvAbortFourTen": str(L["410M"]["n_aborted"]),
         "DvTwoEightKept": str(L["2.8B"]["n_checkpoints"]),
         "DvTwoEightAll": str(L["2.8B"]["n_checkpoints"] + L["2.8B"]["dropped_duplicates"]),
-        "DvSixRandomMax": f2(s69["random_max_05"]),
+        "DvSixRandomMax": up2(s69["random_max_05"]),
         "DvKfTrials": f"{K['rows'][0]['n_trials']:,}".replace(",", "{,}"), "DvKfValues": str(K["rows"][0]["n_values"]),
-        "DvStRandomMax": f2(max(s14["random_max_05"], s69["random_max_05"])),
+        "DvStRandomMax": up2(s14["random_max_05"]),
         "DvStProbeFirst": f2(s14["probe_w_first"]), "DvStProbeEight": f2(s14["probe_w_8000"]),
         "DvStProbeFinal": f2(s14["probe_w_final"]),
         "DvStRatioEight": f2(s14["ratio_8000"]), "DvStRatioFinal": f2(s14["ratio_final"]),
@@ -349,7 +407,10 @@ def emit_tex(res, tex_dir):
         "DvSixGoldLo": f2(s69["gold_w_late_range"][0]), "DvSixGoldHi": f2(s69["gold_w_late_range"][1]),
         # final checkpoints, K = 4, no distractors
         "DvKfN": str(K["summary"]["n_models"]), "DvKfLo": f2(K["summary"]["probe_wrong_range"][0]),
-        "DvKfHi": f2(K["summary"]["probe_wrong_range"][1]), "DvKfBase": f2(K["summary"]["baseline"]),
+        "DvKfHi": f2(K["summary"]["probe_wrong_range"][1]), "DvKfBase": f2(K["summary"]["prompt_baseline"]["guess_test"]),
+        "DvKfRepeat": f2(K["summary"]["prompt_baseline"]["repeat_all"]),
+        "DvKfInTableOne": {7: "seven", 8: "all eight", 6: "six"}.get(K["summary"]["n_in_capacity_set"],
+                                                                    str(K["summary"]["n_in_capacity_set"])),
         "DvKfPFourTen": f2(K["summary"]["by_model"]["Pythia-410M"]),
         "DvKfQZeroFive": f2(K["summary"]["by_model"]["Qwen2.5-0.5B"]),
         "DvKfMovedLo": f2(K["summary"]["wrong_target_moved_range"][0]),
@@ -378,12 +439,12 @@ def emit_tex(res, tex_dir):
     # Appendix table: the eight final-checkpoint models at K = 4.
     t = ["% Generated by analysis/p3_development.py. Do not edit.",
          "\\begin{tabular}{@{}lrrrrrrr@{}}", "\\toprule",
-         "model & recall & wrong & probe on wrong & gold & probe & wrong value & flag \\\\",
+         "model & recall & wrong & probe on wrong & gold & probe & wrong value & \\\\",
          " & & answers & (95\\% interval) & repair & repair & keeps correct & AUROC \\\\", "\\midrule"]
     for r in K["rows"]:
         lo, hi = r["probe_wrong_ci"]
-        t.append(f"{r['model']} & {r['acc']:.2f} & {r['n_wrong']} & {r['probe_wrong']:.2f} ({lo:.2f}--{hi:.2f}) & "
-                 f"{r['gold']:.2f} & {r['probe']:.2f} & {r['wrong_target_keep']:.2f} & {r['disagree_auroc']:.2f} \\\\")
+        t.append(f"{r['model']} & {f2(r['acc_test'])} & {r['n_wrong']} & {f2(r['probe_wrong'])} ({f2(lo)}--{f2(hi)}) & "
+                 f"{f2(r['gold'])} & {f2(r['probe'])} & {f2(r['wrong_target_keep'])} & {f2(r['disagree_auroc'])} \\\\")
     t += ["\\bottomrule", "\\end{tabular}"]
     with open(os.path.join(tex_dir, "table_kfour.tex"), "w") as f:
         f.write("\n".join(t) + "\n")
@@ -394,9 +455,9 @@ def emit_tex(res, tex_dir):
          "step & layer & wrong & middle & final & gold & probe & random & model & steered \\\\", "\\midrule"]
     for r in S["1.4B"]["rows"]:
         step = f"{r['step']:,}".replace(",", "{,}")
-        t.append(f"{step} & {r['layer']} & {r['n_wrong']} & {r['probe_wrong']:.2f} & {r['probe_wrong_final']:.2f} & "
-                 f"{r['gold_w_0.5']:.2f} & {r['probe_w_0.5']:.2f} & {r['random_0.5']:.2f} & {r['acc']:.2f} & "
-                 f"{r['gated_acc']:.2f} \\\\")
+        t.append(f"{step} & {r['layer']} & {r['n_wrong']} & {f2(r['probe_wrong'])} & {f2(r['probe_wrong_final'])} & "
+                 f"{f2(r['gold_w_0.5'])} & {f2(r['probe_w_0.5'])} & {f2(r['random_0.5'])} & {f2(r['acc'])} & "
+                 f"{f2(r['gated_acc'])} \\\\")
     t += ["\\bottomrule", "\\end{tabular}"]
     with open(os.path.join(tex_dir, "table_steer.tex"), "w") as f:
         f.write("\n".join(t) + "\n")
