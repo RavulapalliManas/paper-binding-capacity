@@ -1,0 +1,11 @@
+{
+  "model": "EleutherAI/pythia-1.4b",
+  "revision": "step32000",
+  "K": 6,
+  "D": 256,
+  "cond": "code",
+  "layers": 24,
+  "n_ent": 36,
+  "n_obl": 25,
+  "ts": 1783589789.0682273
+}

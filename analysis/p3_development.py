@@ -18,6 +18,12 @@ Re-analyses three sets of saved runs. No model is loaded and no data value is ty
           the second third's wrong answers, and everything is reported on the last third. The
           model's answer is its highest logit among the six listed values. A push adds
           alpha * mean||h|| along a unit direction at the steering layer, at the query position.
+  post    dyn.py posterior batteries at four Pythia-1.4B checkpoints: results/dynamics/
+          dev_step{1000,8000,32000,143000}/posterior.json. K=6, D=256 code-like distractor tokens,
+          1,200 trials split into thirds (probe fit on the first, layer chosen on the second,
+          probe refit on both and reported on the last, 400 trials). Each saved row is one test trial:
+          whether the model's answer is wrong, whether the probe's top value is right, and the
+          model's probability for the right value among the six listed values.
   k4      neuron_legibility.py at the final checkpoints of eight models, K=4, no distractors,
           the 'declarative' task family: results/legibility_x/leg-*-K4D0.json and
           results/legibility_trn1/leg-p14b-K4D0.json. Its interventions replace the state at the
@@ -168,7 +174,12 @@ def steer():
                        layer=st["lstar"], final_layer=pl["final_layer"], K=st["K"], D=st["D"],
                        probe_all=round(pl["per_layer_all"][st["lstar"]], 4),
                        probe_wrong=round(pl["per_layer_fail"][st["lstar"]], 4),
-                       probe_wrong_final=round(pl["per_layer_fail"][pl["final_layer"]], 4))
+                       probe_wrong_final=round(pl["per_layer_fail"][pl["final_layer"]], 4),
+                       probe_all_final=round(pl["per_layer_all"][pl["final_layer"]], 4),
+                       gated_acc=round(R["gated_all"]["0.5"]["acc"], 4),
+                       gated_base=round(R["gated_all"]["0.5"]["base"], 4),
+                       gated_fired=round(R["gated_all"]["0.5"]["fired"], 4))
+            assert abs(row["gated_base"] - row["acc"]) < 1e-9, "gated base must be the test accuracy"
             for a in ("0.5", "1.0"):
                 row[f"gold_w_{a}"] = round(R["linear_w"][a]["repair"], 4)
                 row[f"gold_mu_{a}"] = round(R["manifold_mu"][a]["repair"], 4)
@@ -201,9 +212,43 @@ def steer():
             final_probe_w_ci=[round(v, 4) for v in wilson(fin["probe_w_0.5"], fin["n_wrong"])],
             probe_w_rho=spearman_perm([r["step"] for r in rows], [r["probe_w_0.5"] for r in rows])[:2],
             gold_w_late_rho=spearman_perm([r["step"] for r in late], [r["gold_w_0.5"] for r in late])[:2],
-            ratio_late_rho=spearman_perm([r["step"] for r in late], [r["probe_over_gold_w_0.5"] for r in late])[:2])
+            ratio_late_rho=spearman_perm([r["step"] for r in late], [r["probe_over_gold_w_0.5"] for r in late])[:2],
+            gated_first=rows[0]["gated_acc"], gated_final=fin["gated_acc"], gated_fired_final=fin["gated_fired"],
+            probe_all_final_layer=fin["probe_all_final"],
+            depth_gap_first=round(rows[0]["probe_wrong"] - rows[0]["probe_wrong_final"], 4),
+            depth_gap_final=round(fin["probe_wrong"] - fin["probe_wrong_final"], 4),
+            depth_gap_rho=spearman_perm([r["step"] for r in rows],
+                                        [r["probe_wrong"] - r["probe_wrong_final"] for r in rows])[:2])
         out[lab] = dict(rows=rows, summary=summary)
     return out
+
+
+POST_STEPS = (1000, 8000, 32000, 143000)
+
+
+def posterior():
+    """Wrong answers of Pythia-1.4B split by whether the probe's top value is right and whether the model
+    gives the right value at least 1/K probability among the K listed values (P2's saved batteries)."""
+    rows = []
+    for st in POST_STEPS:
+        d = jl(f"dynamics/dev_step{st}/posterior.json")
+        k = d["K"]
+        wrong = [r for r in d["rows"] if r["model_wrong"]]
+        for r in d["rows"]:
+            assert r["model_wrong"] == (r["correct_ix"] != r["emitted_ix"])
+        g = {"probe_right_output_low": 0, "probe_right_output_high": 0,
+             "probe_wrong_output_low": 0, "probe_wrong_output_high": 0}
+        for r in wrong:
+            pk = "probe_right" if r["probe_top1"] else "probe_wrong"
+            ok = "output_high" if r["model_p_correct"] >= 1 / k else "output_low"
+            g[f"{pk}_{ok}"] += 1
+        n_pr = g["probe_right_output_low"] + g["probe_right_output_high"]
+        rows.append(dict(step=st, K=k, D=d["D"], cond=d["cond"], layer=d["layer"], n=len(d["rows"]),
+                         n_wrong=len(wrong), groups=g,
+                         share_probe_right=round(n_pr / len(wrong), 4),
+                         share_probe_right_output_low=round(g["probe_right_output_low"] / len(wrong), 4),
+                         share_output_high_given_probe_right=round(g["probe_right_output_high"] / n_pr, 4) if n_pr else None))
+    return dict(rows=rows)
 
 
 def k4():
@@ -222,7 +267,8 @@ def k4():
                          random=rep["random_matched"]["recovery_on_wrong"],
                          wrong_target_keep=rep["wrong_target"]["correct_preserved"],
                          gold_keep=rep["gold"]["correct_preserved"],
-                         random_keep=rep["random_matched"]["correct_preserved"]))
+                         random_keep=rep["random_matched"]["correct_preserved"],
+                         disagree_auroc=f["disagreement_auroc"]))
     pw = [r["probe_wrong"] for r in rows]
     moved = [1 - r["wrong_target_keep"] for r in rows]
     summary = dict(n_models=len(rows), probe_wrong_range=[min(pw), max(pw)], baseline=rows[0]["baseline"],
@@ -230,7 +276,8 @@ def k4():
                    ci_lo_min=min(r["probe_wrong_ci"][0] for r in rows),
                    wrong_target_moved_range=[round(min(moved), 4), round(max(moved), 4)],
                    gold_range=[min(r["gold"] for r in rows), max(r["gold"] for r in rows)],
-                   by_model={r["model"]: r["probe_wrong"] for r in rows})
+                   by_model={r["model"]: r["probe_wrong"] for r in rows},
+                   auroc_range=[min(r["disagree_auroc"] for r in rows), max(r["disagree_auroc"] for r in rows)])
     return dict(rows=rows, summary=summary)
 
 
@@ -246,7 +293,7 @@ def fp(p):
 
 
 def emit_tex(res, tex_dir):
-    L, S, K = res["ladder"], res["steer"], res["k4"]
+    L, S, K, P = res["ladder"], res["steer"], res["k4"], res["posterior"]["rows"]
     small_max = max(L[m]["max"] for m in SMALL)
     assert L["160M"]["n_checkpoints"] == L["410M"]["n_checkpoints"], "the text gives one count for both"
     big = [m for m in ("1B", "1.4B", "6.9B")]
@@ -301,6 +348,21 @@ def emit_tex(res, tex_dir):
         "DvKfMovedLo": f2(K["summary"]["wrong_target_moved_range"][0]),
         "DvKfMovedHi": f2(K["summary"]["wrong_target_moved_range"][1]),
         "DvKfWrongLo": str(K["summary"]["n_wrong_range"][0]), "DvKfWrongHi": str(K["summary"]["n_wrong_range"][1]),
+        "DvKfAurocLo": f2(K["summary"]["auroc_range"][0]), "DvKfAurocHi": f2(K["summary"]["auroc_range"][1]),
+        # self-gated steering and depth, Pythia-1.4B
+        "DvGatedFinal": f2(s14["gated_final"]), "DvGatedFired": f2(s14["gated_fired_final"]),
+        "DvGatedFirst": f2(s14["gated_first"]), "DvSixGatedFinal": f2(s69["gated_final"]),
+        "DvSixGatedBase": f2(s69["final"]["acc"]),
+        "DvStProbeAllFinalLayer": f2(s14["probe_all_final_layer"]),
+        "DvDepthGapFirst": f2(s14["depth_gap_first"]), "DvDepthGapFinal": f2(s14["depth_gap_final"]),
+        "DvDepthGapRho": f2(s14["depth_gap_rho"][0]), "DvDepthGapP": fp(s14["depth_gap_rho"][1]),
+        # wrong answers split by probe and output, Pythia-1.4B posterior batteries
+        "DvPostWrongFirst": str(P[0]["n_wrong"]), "DvPostWrongFinal": str(P[-1]["n_wrong"]),
+        "DvPostN": str(P[-1]["n"]),
+        "DvPostProbeRightFirst": f2(P[0]["share_probe_right"]), "DvPostProbeRightFinal": f2(P[-1]["share_probe_right"]),
+        "DvPostLowFinal": f2(P[-1]["share_probe_right_output_low"]),
+        "DvPostHighGivenRightFirst": f2(P[0]["share_output_high_given_probe_right"]),
+        "DvPostHighGivenRightFinal": f2(P[-1]["share_output_high_given_probe_right"]),
     }
     lines = ["% Generated by analysis/p3_development.py from results/p3_development.json. Do not edit."]
     lines += [f"\\newcommand{{\\{k}}}{{{v}}}" for k, v in M.items()]
@@ -308,15 +370,27 @@ def emit_tex(res, tex_dir):
         f.write("\n".join(lines) + "\n")
     # Appendix table: the eight final-checkpoint models at K = 4.
     t = ["% Generated by analysis/p3_development.py. Do not edit.",
-         "\\begin{tabular}{@{}lrrrrrr@{}}", "\\toprule",
-         "model & recall & wrong & probe on wrong & gold & probe & wrong value \\\\",
-         " & & answers & (95\\% interval) & repair & repair & keeps correct \\\\", "\\midrule"]
+         "\\begin{tabular}{@{}lrrrrrrr@{}}", "\\toprule",
+         "model & recall & wrong & probe on wrong & gold & probe & wrong value & flag \\\\",
+         " & & answers & (95\\% interval) & repair & repair & keeps correct & AUROC \\\\", "\\midrule"]
     for r in K["rows"]:
         lo, hi = r["probe_wrong_ci"]
         t.append(f"{r['model']} & {r['acc']:.2f} & {r['n_wrong']} & {r['probe_wrong']:.2f} ({lo:.2f}--{hi:.2f}) & "
-                 f"{r['gold']:.2f} & {r['probe']:.2f} & {r['wrong_target_keep']:.2f} \\\\")
+                 f"{r['gold']:.2f} & {r['probe']:.2f} & {r['wrong_target_keep']:.2f} & {r['disagree_auroc']:.2f} \\\\")
     t += ["\\bottomrule", "\\end{tabular}"]
     with open(os.path.join(tex_dir, "table_kfour.tex"), "w") as f:
+        f.write("\n".join(t) + "\n")
+    t = ["% Generated by analysis/p3_development.py. Do not edit.",
+         "\\begin{tabular}{@{}rrrrrr@{}}", "\\toprule",
+         " & & \\multicolumn{2}{c}{probe right} & \\multicolumn{2}{c}{probe wrong} \\\\",
+         "\\cmidrule(lr){3-4}\\cmidrule(lr){5-6}",
+         "step & wrong answers & output low & output high & output low & output high \\\\", "\\midrule"]
+    for r in P:
+        g = r["groups"]
+        t.append(f"{r['step']:,} & {r['n_wrong']} & {g['probe_right_output_low']} & {g['probe_right_output_high']} & "
+                 f"{g['probe_wrong_output_low']} & {g['probe_wrong_output_high']} \\\\".replace(",", "{,}"))
+    t += ["\\bottomrule", "\\end{tabular}"]
+    with open(os.path.join(tex_dir, "table_errors.tex"), "w") as f:
         f.write("\n".join(t) + "\n")
     return M
 
@@ -333,6 +407,7 @@ def main():
     res["ladder"] = ladder()
     res["steer"] = steer()
     res["k4"] = k4()
+    res["posterior"] = posterior()
     for lab, e in res["ladder"].items():
         print(f"[ladder] {lab}: n={e['n_checkpoints']} dropped={e['dropped_duplicates']} "
               f"final={e.get('final')} max={e.get('max')} rho={e.get('rho')} p={e.get('p')} {e.get('excluded', '')}")

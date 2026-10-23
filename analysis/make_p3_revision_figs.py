@@ -6,7 +6,8 @@
                            normalisations of Section 4: (a) the uninterfered single-binding
                            recall, (b) each curve's own single-binding recall.
   fig_p3_development.pdf   Pythia checkpoints: (a) probe accuracy by model size, (b) Pythia-1.4B
-                           recall and probe accuracy on its wrong answers, (c) wrong answers
+                           accuracy, and probe accuracy on its wrong answers at the chosen middle
+                           layer and at the final layer, (c) wrong answers
                            repaired by pushes toward the gold value, the probe's answer, and a
                            random direction.
 
@@ -236,11 +237,15 @@ def fig_development(out):
 
     steps = [r["step"] for r in S]
     ax = axes[1]
-    ax.plot(steps, [r["probe_wrong"] for r in S], "-", color=TEAL, lw=0.9, marker="D", ms=2.4, mew=0)
-    ax.plot(steps, [r["acc"] for r in S], "-", color=INK, lw=0.9, marker="o", ms=2.4, mew=0)
+    ax.plot(steps, [r["probe_wrong"] for r in S], "-", color=TEAL, lw=0.9, marker="D", ms=2.4, mew=0,
+            label="probe, middle layer")
+    ax.plot(steps, [r["probe_wrong_final"] for r in S], "--", color=TEAL, lw=0.9, marker="D", ms=2.2,
+            mew=0, mfc="white", label="probe, final layer")
+    ax.plot(steps, [r["acc"] for r in S], "-", color=INK, lw=0.9, marker="o", ms=2.4, mew=0,
+            label="model")
     ax.axhline(base, color=GREY, lw=0.8, ls="--")
-    ax.text(1.1e3, 0.80, "probe, on\nwrong answers", color=TEAL, fontsize=SMALL, va="bottom")
-    ax.text(1.2e3, 0.27, "model", color=INK, fontsize=SMALL, va="bottom")
+    ax.legend(loc="upper left", fontsize=SMALL - 1, handlelength=1.6, handletextpad=0.3,
+              borderaxespad=0.2, labelspacing=0.15, frameon=False)
     ax.set_xscale("log")
     ax.set_xlim(8e2, 1.8e5)
     ax.set_ylim(0, 1.0)

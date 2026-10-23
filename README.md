@@ -56,14 +56,14 @@ and its `--emit DIR` option writes the TeX macros and tables that the paper uses
 |---|---|---|
 | `analysis/p3_revision_checks.py` | `results/capacity_trn1_summary.json`, `results/capacity_x/`, `results/capacity_trn1/`, `results/figdata.json` | `results/p3_revision_checks.json`: the guess among the listed values, tokenizer replay, censoring-aware and non-embedding size fits, the held-out test of the single-binding account of distractors, first-round disclosure |
 | `analysis/p3_model_intervals.py` | `results/capacity_x/`, `results/capacity_trn1_summary.json`, `results/p3_revision_checks.json` | `results/p3_model_intervals.json`: per-model K50 intervals from resampling seeds, and the size fit with seed and family resampling |
-| `analysis/p3_development.py` | `results/qgfix*/step*/qgeom.json`, `results/dynamics/em_step*/`, `results/legibility_x/`, `results/legibility_trn1/leg-p14b-K4D0.json` | `results/p3_development.json`: probe accuracy across Pythia pretraining, probes and steering on wrong answers, final-checkpoint probes without distractors |
+| `analysis/p3_development.py` | `results/qgfix*/step*/qgeom.json`, `results/dynamics/em_step*/`, `results/dynamics/dev_step*/posterior.json`, `results/legibility_x/`, `results/legibility_trn1/leg-p14b-K4D0.json` | `results/p3_development.json`: probe accuracy across Pythia pretraining, probes at the middle and final layers and steering on wrong answers, wrong answers split by probe and output, final-checkpoint probes and disagreement flags without distractors |
 | `analysis/make_p3_revision_figs.py` | the files above | `figs_p456/fig_p3_capacity.pdf`, `fig_p3_interference.pdf`, `fig_p3_development.pdf` |
 
 The generators of the saved runs are included for reading: `analysis/neuron_capacity.py`
 (capacity curves), `analysis/qgeom.py` and `analysis/qgeom_8ffd7c06ecee.py` (probe accuracy
 across checkpoints; each run records the hash of the version that produced it, and the two
 versions compute the probe accuracy the same way), `analysis/steer.py` (probes and steering on
-wrong answers), and `analysis/neuron_legibility.py` with `analysis/trilogy_tasks.py`
+wrong answers), `analysis/dyn.py` (the saved posterior batteries in `results/dynamics/dev_step*/`), and `analysis/neuron_legibility.py` with `analysis/trilogy_tasks.py`
 (four-binding runs without distractors).
 
 ```bash
