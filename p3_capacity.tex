@@ -64,10 +64,7 @@ These comparisons connect failures under load to the question and prediction met
 \section{Introduction}\label{sec:intro}
 A language model can be given instructions and examples that specify a task without updating its parameters \citep{brown2020}.
 The same input can supply information particular to the current use: facts from a document, configuration values or possible arguments for a tool.
-These inputs can change without requiring a new set of model weights.
-Their usefulness, however, depends on retrieving the right association when several are present in context.
-A model that accepts a long prompt but returns the wrong value has not made effective use of the information it was given.
-Understanding how much information can be used reliably therefore requires more than knowing the maximum input length.
+A long context window is useful only if the model retrieves the right association when several are present.
 
 This question is particularly relevant for small models, where inference cost or device memory restricts the choice of model.
 Longer pretraining can make smaller models attractive for repeated use \citep{touvron2023}, and on-device models explicitly target size-constrained settings \citep{mobilellm2024}.
@@ -91,33 +88,21 @@ The lower score therefore cannot be a bound on what this model retrieves from th
 A further question concerns the information available when the original question is used.
 Can a classifier predict the assigned value more accurately from the model's hidden state than the model predicts it from its output scores?
 
-We test this by training a classifier, called a probe, to predict the value from a hidden state recorded at the end of the question.
-We also train a classifier to predict the value from the model's scores for all candidate values.
-This second classifier matters because choosing the highest-scoring value is only one way to use those scores.
-Their full pattern may allow a trained classifier to recover answers missed by that choice.
-We ask whether hidden states support more accurate predictions when both classifiers receive labeled training examples.
-Their success does not establish that the unmodified model uses the same information \citep{hewitt2019,belinkov2022}.
+We train a classifier, called a probe, to predict the assigned value from the hidden state, and another to predict it from candidate-value scores.
+Training both matters because their full score pattern may contain answers missed by choosing the highest score.
+Success under this added supervision does not establish that the unmodified model uses the recovered information \citep{hewitt2019,belinkov2022}.
 
 Copying and phone-book experiments show that transformers can retrieve associations from context \citep{jelassi2024}, and probes can recover correct-answer information on trials where models answer incorrectly \citep{orgad2024,karim2026}.
 Our earlier study also compared trained state and candidate-logit decoders \citep{decodable2609}.
 
-The contribution here is to examine what a load-dependent retrieval failure means by bringing these comparisons into the same task.
-Changing the question on matched assignments tests whether the model can retrieve more of the supplied information without changing its weights.
-Keeping the question fixed and training both classifiers tests whether hidden states allow more accurate predictions than the candidate-value scores.
-The first comparison concerns what another question elicits; the second concerns what additional supervision can recover from the states produced by the original question.
-Neither comparison alone answers the other.
-After exploring these effects, we specify the layer, load and criteria for a test on additional models before fitting their probes.
+Our contribution is to examine what a load-dependent retrieval failure means through these complementary tests on the same task.
+Matched questions test what the model can retrieve without changing its weights; the trained classifiers test what supervision can recover under the original question.
+After exploration, we specify the layer, load and criteria before fitting probes on additional models.
 
 Across \NewNModels{} models, the original-query curves show substantial failures as the number of bindings increases (Section~\ref{sec:capacity}).
 Matched wording changes improve recall in five models, while exact-cue and worked-example pilots show that the gains depend on both model and format (Section~\ref{sec:wording}).
 Under the original query, hidden-state probes exceed trained candidate-logit decoders in all three held-out models at the registered layer and load (Section~\ref{sec:hidden}).
 Checkpoint comparisons show that probe recall also depends on the sampled layer (Section~\ref{sec:development}).
-
-These results make the interpretation of capacity the central issue, beyond the score assigned to each model.
-A low score can coexist with better retrieval under another question and with more accurate supervised predictions under the original one.
-For small-model research, the next question is which of these failures persists after the question and prediction method have been chosen.
-For a circuit-level explanation, the challenge is to explain why the same weights produce these different outcomes.
-Our measurements constrain such an explanation, but do not identify the causal operations or establish reliability in an application.
 
 \section{Task and evaluation}\label{sec:setup}
 We use randomly assigned name--value pairs so that the answer is determined by the current list.
@@ -346,46 +331,59 @@ By contrast, no sampled Pythia-160M layer exceeds \NewCkptSmallMax{} across thes
 Pythia-160M nevertheless retrieves more accurately under another question (Section~\ref{sec:wording}).
 Its low probe scores here apply to the tested layers and original query; they cannot establish a lack of binding information under every query.
 
-Depth also complicates comparisons with our earlier study \citep{decodable2609}.
-That study compared trained state and candidate-logit decoders, finding no detected final-state advantage on late-checkpoint model errors.
-The present test instead compares intermediate-state decoding with candidate-logit decoding, using accuracy over all trials under the capacity protocol.
-The layer, scoring population and metric differ between the studies, so the contrasting results cannot be attributed to layer choice alone.
-The earlier error-group and steering experiments use different protocols; their results and qualifications appear in Appendix~\ref{app:probes}.
-
 \section{Discussion}\label{sec:use}
-Changing the question can improve recall without increasing model size.
-Training a classifier on hidden states or output scores can also improve predictions, but requires labeled examples and access to those states or scores.
-Neither result tells us whether the resulting accuracy is sufficient for an application.
+Our load curves do not follow the same association as it ages.
+Each load uses separately sampled prompts, and adding associations changes both the number of competitors and the length of the context.
+The fitted logistic describes a decline across those prompts; it is not a law of temporal memory decay.
+The nonmonotone OLMo curve also shows why monotone decay cannot be assumed.
+Changing the question improves retrieval on identical assignments, while a trained hidden-state classifier can make more accurate predictions under the original question.
+These observations rule out treating low native recall as sufficient evidence that the model has lost the association.
+They do not show that every failed answer is recoverable, or that a better classifier reproduces the model's own computation.
+
+\citet{binding2310} use interventions to identify binding ID vectors shared by corresponding entities and attributes.
+\citet{mixing2510} find that retrieval combines position-based selection, lexical matching and pointers back to a target entity.
+As more entity groups enter their contexts, the positional signal becomes less precise for middle groups, while other routes contribute to retrieval.
+This offers an account of interference in which the model selects the wrong association, rather than simply losing all influence from older text.
+Position effects are also behaviorally nonmonotone: \citet{liu2024middle} find better retrieval near the beginning and end of a context than in its middle.
+These results concern other tasks and models.
+Our listed-value errors and query sensitivity are compatible with retrieval competition, but do not identify which route fails in our models.
+
+Training introduces a different source of change \citep{decodable2609}.
+In our earlier study, probe accuracy and probe-guided repair improve during pretraining at the larger measured Pythia scales.
+The post-training results are observational checkpoint comparisons, not isolated effects of training objectives.
+Output recall and probe accuracy are higher at the OLMo-2-7B supervised-fine-tuning checkpoint than at base.
+On a separate Olmo-3-7B code-reward branch, output recall falls without a detected trend in the refitted probe.
+That absence of a trend does not establish constant information.
+In a separate comparison, a probe kept fixed across checkpoints loses more accuracy than probes refitted at each checkpoint, although both lose accuracy.
+This shows that an old classifier becomes less compatible with later states; it does not separate a change in representation from information loss.
+These observations motivate measuring output and both frozen and refitted probes when following capacity through training.
+Their protocols differ from the present load sweep, so they do not establish how post-training shifts our capacity curves.
+
+The earlier final-state decoder comparison uses a different layer, metric and trial population, so it cannot isolate a layer effect (Appendix~\ref{app:probes}).
+
+The association structure is a separate variable.
+Each query here asks for one direct entity--value link.
+\citet{fatemi2024} show that graph reasoning depends on both graph structure and its text encoding.
+Our data do not determine recall as a function of graph distance or branching.
+Testing those effects requires varying graph topology separately from token distance and wording (Appendix~\ref{app:identity}).
 
 For target recall $\pi$, the relevant measured loads are $\{K:p_D(K)\geq\pi\}$ under its selected protocol.
 A fitted $K_{50}$ cannot supply that set, because it rescales by single-binding performance and smooths a curve that may be nonmonotone.
 Every model here fails a 0.9 criterion at two bindings under the original question, while the wording controls establish that some failures are query-dependent.
 We should choose the question and prediction method first, then test them on new contexts at the loads the application requires.
 
-Retrieving several values correctly is a stricter requirement than retrieving one.
-If their marginal recalls are $p_1,\ldots,p_m$, then
-\begin{equation}
-\max\Big\{0,1-\sum_{j=1}^{m}(1-p_j)\Big\}
-\leq \Pr(\text{all }m\text{ correct})\leq\min_j p_j.
-\label{eq:joint-recall}
-\end{equation}
-The lower bound follows because failure of the whole set requires at least one individual error; the upper bound follows because joint success requires every individual success.
-No independence assumption is needed.
-For example, five marginal recalls of 0.9 permit joint success as low as 0.5.
-Since our trials query one entity per context, they do not measure this joint event.
-Joint retrieval must therefore be tested before using these scores to predict tool-call reliability.
+Multiple-value applications also require joint retrieval, which our single-query trials do not measure (Appendix~\ref{app:identity}).
 
-The same question also motivates a circuit-level account: how does a fixed model retrieve the association relevant to a query while other associations compete in context?
-Such an account would need to explain the observed dependence on query wording, sampled layer and readout, as well as what changes during pretraining.
-We observe different predictions after changing the question or the way an answer is decoded.
-To explain these differences, a circuit study would need interventions that test which operations use information about the queried pair.
+A circuit account must explain why the same weights retrieve differently after a query change and why predictions differ between layers and decoders.
+A next test should vary the number of associations separately from their token distance to the question, while retaining the target pair and matching total length.
+Following \citet{mixing2510}, activation interchange between matched contexts should make positional, lexical and reflexive retrieval predict different answers.
+Selective changes to the predicted association, with unrelated associations preserved, would distinguish candidate retrieval mechanisms more clearly than a general loss of accuracy.
+This is a proposed test, not a mechanism established by the present measurements.
 
 \section{Related work}\label{sec:related}
 \citet{jelassi2024} show that pretrained transformers retrieve phone-book entries using prompts with worked examples.
 Their prompts differ from our zero-shot question.
 Our exact-cue and worked-example comparisons test how such format changes affect recall on the same assignments.
-\citet{binding2310} identify binding IDs through causal interventions, while \citet{mixing2510} show that models combine positional, lexical and reflexive retrieval mechanisms as contexts become more complex.
-Several of these mechanisms could produce our errors and query effects; our experiments do not identify which one is responsible.
 
 \citet{kimschuster2023} evaluate tracking through sequences of state changes, and \citet{kim2405} find gains from code pretraining.
 \citet{drozdz2026} report human-level tracking in naturalistic narratives at 410M parameters.
@@ -435,7 +433,7 @@ When evaluating a small model, we need to specify how we ask for information and
 Testing that procedure on new formats and joint retrieval tasks is necessary before using the resulting scores to predict application performance.
 
 {\raggedright
-Code and data are available at \url{https://github.com/RavulapalliManas/paper-binding-capacity}.\par}
+Code and data: \url{https://github.com/RavulapalliManas/paper-binding-capacity}.\par}
 
 \section*{Acknowledgements}
 We thank Kevin Li for proofreading, for help with the paper's readability, and for the suggestions that led to this paper.
@@ -471,6 +469,10 @@ T.~B.~Brown, B.~Mann, N.~Ryder, et al. Language models are few-shot learners.
 K.~Dro\.{z}d\.{z} and M.~Heilbron. Entity tracking emerges in sub-billion parameter language
 models and exceeds human performance in naturalistic narratives. \emph{EMNLP}, 2026.
 arXiv:2608.18083.
+
+\bibitem[Fatemi et al.(2024)]{fatemi2024}
+B.~Fatemi, J.~Halcrow, and B.~Perozzi. Talk like a graph: encoding graphs for large language models.
+\emph{ICLR}, 2024. arXiv:2310.04560.
 
 \bibitem[Feng and Steinhardt(2024)]{binding2310}
 J.~Feng and J.~Steinhardt. How do language models bind entities in context? \emph{ICLR}, 2024.
@@ -513,9 +515,15 @@ K.~Li, O.~Patel, F.~Vi\'egas, H.~Pfister, and M.~Wattenberg. Inference-time inte
 truthful answers from a language model. In \emph{Advances in Neural Information Processing Systems},
 2023. arXiv:2306.03341.
 
-\bibitem[Liu et al.(2024)]{mobilellm2024}
+\bibitem[Liu et al.(2024a)]{mobilellm2024}
 Z.~Liu, C.~Zhao, F.~Iandola, et al. MobileLLM: optimizing sub-billion parameter language models
 for on-device use cases. \emph{ICML}, 2024. arXiv:2402.14905.
+
+\bibitem[Liu et al.(2024b)]{liu2024middle}
+N.~F.~Liu, K.~Lin, J.~Hewitt, A.~Paranjape, M.~Bevilacqua, F.~Petroni, and P.~Liang.
+Lost in the middle: how language models use long contexts.
+\emph{Transactions of the Association for Computational Linguistics}, 12:157--173, 2024.
+arXiv:2307.03172.
 
 \bibitem[OLMo et al.(2024)]{olmo2024}
 Team OLMo, P.~Walsh, L.~Soldaini, D.~Groeneveld, et al. 2 OLMo 2 Furious. 2024. arXiv:2501.00656.
@@ -547,6 +555,10 @@ language models with activation engineering. 2023. arXiv:2308.10248.
 \bibitem[Villuri et al.(2026)]{villuri2026}
 G.~Villuri, H.~Shaik, and A.~Doboli. When do internal probes beat reading the answer? Miscalibrated
 readouts and behavior-concealed knowledge in language models. 2026. arXiv:2609.04582.
+
+\bibitem[Xiang(2026)]{xiang2026}
+S.~Xiang. A conditional no-hair theorem for transformers: how language models forget their prompt.
+2026. arXiv:2610.24133.
 
 \bibitem[Yen et al.(2025)]{yen2025helmet}
 H.~Yen, T.~Gao, M.~Hou, K.~Ding, D.~Fleischer, P.~Izsak, M.~Wasserblat, and D.~Chen.
@@ -710,6 +722,31 @@ The same recall is therefore compatible with different probabilities of availabi
 This illustration does not establish that a language model has two such stages or that probe accuracy estimates $s$.
 The query and probe experiments add observations, but they do not estimate these latent probabilities.
 
+Retrieving several values correctly is a stricter requirement than retrieving one.
+If their marginal recalls are $p_1,\ldots,p_m$, then
+\begin{equation}
+\max\Big\{0,1-\sum_{j=1}^{m}(1-p_j)\Big\}
+\leq \Pr(\text{all }m\text{ correct})\leq\min_j p_j.
+\label{eq:joint-recall}
+\end{equation}
+The lower bound follows because failure of the whole set requires at least one individual error; the upper bound follows because joint success requires every individual success.
+No independence assumption is needed.
+For example, five marginal recalls of 0.9 permit joint success as low as 0.5.
+Since our trials query one entity per context, they do not measure this joint event.
+Joint retrieval must therefore be tested before using these scores to predict tool-call reliability.
+
+Prompt influence can also decline without being measured as binding recall.
+In a recent preprint, \citet{xiang2026} compare hidden states from different prompts followed by an identical continuation and report approximate power-law decay of the prompt-induced signal.
+Their signal measures differences between runs, not accuracy in retrieving individual associations.
+Its decay law therefore cannot be substituted for our load curves or used to classify each wrong answer as lost information.
+
+The assignments can be described as a graph with directed links from entity nodes to value nodes.
+Each query follows a single link; repeated values let several entities share a value node.
+We neither vary that shared-value degree independently nor query chains of relations.
+Token distance to the question and the number of links needed to answer it are different quantities.
+A future comparison could rewire graphs with fixed node and edge counts to vary path length or branching, while matching text length, edge presentation and query format.
+Such a test would distinguish sensitivity to relational structure from sensitivity to where relations appear in text; our present curves do not make that distinction.
+
 The distractor normalizations also answer different questions.
 Let $C_0=p_0(1)$, $C_D=p_D(1)$ and $g_D=(C_D-b)/(C_0-b)$.
 For $C_D>b$,
@@ -723,6 +760,11 @@ This identity alone does not establish that distractors preserve or change the c
 
 \section{Earlier probe and steering evidence}\label{app:probes}
 We reanalyze saved runs from \citet{legible2609} and \citet{decodable2609}.
+The earlier study also finds no detected advantage for final-state classifiers over candidate-logit classifiers on late-checkpoint model errors.
+Here, intermediate-state classifiers are more accurate across all trials at the registered load.
+The layer, scoring population and metric differ, so the contrast cannot be attributed to layer choice alone.
+The earlier error-group and steering experiments below use different protocols from the current capacity sweep.
+
 These earlier experiments use different prompts and evaluation procedures from the current study, so we report them separately.
 The three checkpoint sets use six distinct values from a pool of 25 and exactly 256 code-like distractor tokens.
 Their listed-value guess is \DvBaseline{}, and pool chance is \DvPoolChance{}.
@@ -815,7 +857,6 @@ AUROC uses one minus the probe's probability for the model's emitted value.}
 \input{table_kfour}
 \end{table}
 
-\newpage
 These earlier runs were produced by \texttt{qgeom.py}, \texttt{dyn.py}, \texttt{steer.py} and \texttt{neuron\_legibility.py}.
 \texttt{analysis/p3\_development.py} recomputes their reported summaries from saved outputs.
 The \texttt{dyn.py} and four-binding outputs record no source-version hash, and the repository's four-binding runner is later than those runs.
