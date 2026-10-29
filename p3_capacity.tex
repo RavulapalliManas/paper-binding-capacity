@@ -47,29 +47,37 @@
 \maketitle
 
 \begin{abstract}
-Language models must retrieve associations specified by their context to answer questions about them.
-We study how recall changes as more name--value pairs are supplied to \NewNModels{} open models from 70M to 2.8B parameters.
-The interpretation of the resulting capacity curves depends on how the model is queried and how its answer is read.
+Supplying task-specific information in a prompt offers a way to adapt a language model without retraining it.
+The usefulness of this approach depends on reliably retrieving the association needed for the current question, especially when model size is constrained.
+Before treating poor recall as evidence that a larger model is needed, we ask how much the failure depends on the question and readout.
+We study this issue as more name--value pairs are supplied to \NewNModels{} open models from 70M to 2.8B parameters.
 At sixteen bindings, deleting \texttt{is} from the question raises Pythia-410M recall from \NewFourTenOriginal{} to \NewFourTenColon{} on the same assignments, without changing the weights or scoring rule.
-We then hold the original question fixed and compare supervised hidden-state probes with trained candidate-logit decoders.
-In a preregistered test, the probes exceed the candidate-logit decoders in all three held-out models; two also meet the registered ten-point advantage over native output.
-These results show that poor recall under one question is insufficient to establish a model's binding limit.
+A preregistered test holds the original question fixed and compares classifiers trained on hidden activations with classifiers trained on candidate-value logits.
+At sixteen bindings, three-quarter depth and no distractors, the hidden-state classifiers achieve higher accuracy over all test trials in all three held-out models.
+Two also meet the registered ten-percentage-point advantage over choosing the highest-scoring candidate value.
+The results show that an apparent retrieval limit can change substantially with the procedure used to query the model and read its states.
 \end{abstract}
 
 \section{Introduction}\label{sec:intro}
-A language model may need to answer a question using associations that are supplied only in the current prompt.
-Consider a list containing \texttt{cache: rotate}, \texttt{token: verify}, and \texttt{socket: flush}.
-To answer a question about \texttt{token}, the model must return \texttt{verify}, even though the other values are equally valid words.
-The assignments can change from one prompt to the next, so knowing the words is not enough to determine the answer.
-The model must distinguish which value belongs to which name in this context.
-We refer to this relation between an entity and its context-supplied attribute as in-context binding \citep{binding2310}.
+A language model can be given instructions and examples that specify a task without updating its parameters \citep{brown2020}.
+The same input can supply information particular to the current use: facts from a document, configuration values or possible arguments for a tool.
+These inputs can change without requiring a new set of model weights.
+Their usefulness, however, depends on retrieving the right association when several are present in context.
+A model that accepts a long prompt but returns the wrong value has not made effective use of the information it was given.
+Understanding how much information can be used reliably therefore requires more than knowing the maximum input length.
 
-How many such associations can a model retrieve reliably?
-The question matters when a context contains several facts, configuration entries or possible tool arguments, and becomes especially relevant when inference cost or device memory restricts model size.
-Longer pretraining can make smaller models attractive for repeated use \citep{touvron2023}, while on-device models explicitly target size-constrained settings \citep{mobilellm2024}.
-A larger context window allows more information to be presented, but does not ensure that the requested association will be retrieved.
-A simple list task lets us vary the number of associations and ask where recall deteriorates, without also requiring natural-language coreference, state updates or the generation of a complete tool call.
-It measures one requirement of those applications, not their overall success.
+This question is particularly relevant for small models, where inference cost or device memory restricts the choice of model.
+Longer pretraining can make smaller models attractive for repeated use \citep{touvron2023}, and on-device models explicitly target size-constrained settings \citep{mobilellm2024}.
+When size is constrained, we need to know both how well a model retrieves supplied information and what a failure tells us about its limitations.
+A low retrieval score could be a reason to reconsider the model, but that decision depends on whether the score reflects a general limit or a failure under the chosen question and readout.
+
+We study this issue with associations whose values are determined by the current prompt.
+Consider a list containing \texttt{cache: rotate}, \texttt{token: verify}, and \texttt{socket: flush}.
+To answer a question about \texttt{token}, the model must return \texttt{verify} while keeping it distinct from values assigned to the other names.
+The assignments change between prompts, so familiarity with the words does not determine the answer.
+This is in-context binding: associating an entity with an attribute supplied by the current context \citep{binding2310}.
+Varying the number of assignments gives a controlled way to measure retrieval under competition, without also requiring coreference, state updates or the generation of a complete tool call.
+The task isolates one requirement of using contextual information; it does not measure success on those applications as a whole.
 
 Interpreting a decline in recall is less straightforward than measuring it.
 An error under one question does not tell us whether a different question would retrieve the same association.
@@ -98,8 +106,7 @@ Checkpoint comparisons show that probe recall also depends on the sampled layer 
 The resulting capacity estimates describe retrieval under a specified query and readout.
 They do not supply a query-independent storage limit or establish how well the model will perform in an application.
 
-\section{Measuring retrieval under a specified protocol}\label{sec:setup}
-\paragraph{Task and scoring.}
+\section{Task and evaluation}\label{sec:setup}
 We use randomly assigned name--value pairs so that the answer is determined by the current list.
 Each trial lists $K$ assignments in the form \texttt{entity: value}, then queries one uniformly selected entity; we call $K$ the load.
 Entities are distinct within a prompt, while values are sampled uniformly with replacement from a tokenizer-specific pool $\mathcal V$ of 67 to 71 single-token words.
@@ -112,7 +119,6 @@ We select the value in $\mathcal V$ with the highest next-token logit, the model
 We call this the native output and measure recall as the fraction of trials where it equals the queried entity's value.
 Tokens outside the pool do not compete, so the score measures restricted retrieval rather than free-form instruction following.
 
-\paragraph{Load and distractors.}
 Varying load tests how recall changes when more associations occur in the same context.
 The main grid uses $K\in\{1,2,3,4,6,8,10,12,16,20,24,32,40,48,64\}$.
 For each load, six random seeds generate 96 trials each, giving 576 trials per condition.
@@ -122,7 +128,6 @@ The block contains 32 assignment lines that mention neither the selected entitie
 It measures \RevFillerLo{} to \RevFillerHi{} tokens depending on the tokenizer, so its nominal name is not a token count.
 This condition measures the combined effect of added text and greater separation from the question.
 
-\paragraph{Models and execution.}
 We evaluate GPT-2 at three sizes; OPT-125M, 350M and 1.3B; Pythia-70M, 160M, 410M, 1B, 1.4B and 2.8B; Qwen2.5-0.5B and 1.5B; SmolLM2-360M; and OLMo-2-1B \citep{zhang2022opt,biderman2023,qwen2024,smollm2025,olmo2024}.
 All are base models.
 Their weights remain frozen throughout evaluation; the separate probes and score decoders described below are trained on labeled examples.
@@ -130,7 +135,6 @@ The current results use float32 execution, TF32 disabled, dynamic left padding a
 This configuration restores single-binding recall in four models excluded from the earlier measurement.
 Precision, padding and position handling change together in this rerun, so we cannot attribute the improvement to any one of them (Appendix~\ref{app:protocol}).
 
-\paragraph{What a guess can achieve.}
 Uniform guessing over the value pool is too weak a reference for a model that can copy a word from the list.
 Pool chance is $b=1/|\mathcal V|$, but a model can do better without linking the queried entity to its value.
 Suppose it chooses a random listed entity and returns that entity's value.
@@ -145,7 +149,6 @@ This baseline accounts for correct answers obtained by choosing a random listed 
 Recall above it does not identify the computation that produced the answer.
 Supervised probes require additional controls for what their labeled training data permit them to learn \citep{hewitt2019}.
 
-\paragraph{What the capacity statistic summarizes.}
 The full curve is needed to determine recall at a given load.
 To compare its decline across models, we also estimate the load at which recall falls halfway from its single-binding level to pool chance.
 Let $p_D(K)$ denote original-query recall and $C=p_0(1)$ the no-distractor single-binding ceiling.
@@ -180,14 +183,13 @@ OLMo-2-1B has a nonmonotone curve: recall at two bindings is lower than at sever
 A high fitted capacity therefore does not guarantee that every smaller load meets a reliability requirement.
 Architecture, tokenizer, data and pretraining duration all vary across families, so these curves cannot isolate the cause of the differences.
 
-\paragraph{Distractor text.}\label{sec:interference}
-The added block lowers fitted capacity in many models, while OPT-1.3B improves under this summary.
+\label{sec:interference}
+Adding the code-like distractor block lowers fitted capacity in many models, while OPT-1.3B improves under this summary.
 Among the \NewRetainedN{} models with uncensored fitted endpoints in both conditions, the median ratio $K_{50}^{D}/K_{50}$ is \NewRetained{}.
 OLMo-2-1B is omitted from that ratio because its no-distractor value is a bound.
 The result combines length, content and distance; it does not estimate the effect of distractors under the improved query.
 The raw recalls in Table~\ref{tab:measured} show how the fitted changes relate to performance at individual loads.
 
-\paragraph{Which wrong values are returned.}
 We classify the wrong answers in the thirteen exploratory models.
 Most are values assigned to another listed entity.
 At sixteen bindings without distractors, this share ranges from \NewListedErrorLo{} to \NewListedErrorHi{}, conditional on each model's errors among 576 prompts.
@@ -248,7 +250,7 @@ They nevertheless provide direct counterexamples to treating the baseline curve 
 Changing the query also changes the hidden states, so the gain does not show that the correct association was already recoverable under the original query.
 We examine that question next, keeping the original query fixed.
 
-\section{Hidden-state probes exceed a trained candidate-logit decoder}\label{sec:hidden}
+\section{Comparing hidden-state and output-score decoders}\label{sec:hidden}
 A query change establishes that the model can perform better on the same assignments, but leaves open what can be predicted from its state under the original query.
 We therefore return to that query and train a supervised classifier to predict the correct value from the hidden state.
 We sample the internal vector after a transformer block, called the residual-stream activation, at the last question token.
@@ -275,8 +277,7 @@ There are 576 trials per model and condition.
 The registration fixes the layer, load and decision rule before probes are fit on these models.}
 \label{fig:heldout}
 \end{figure}
-\paragraph{Testing on additional models.}
-The first thirteen models were exploratory; we then registered the analysis for Pythia-1.4B, Pythia-2.8B and Qwen2.5-1.5B before fitting their probes.
+To test the comparison on additional models, we used the first thirteen models for exploration and registered the analysis for Pythia-1.4B, Pythia-2.8B and Qwen2.5-1.5B before fitting their probes.
 The registration fixes three-quarter depth, sixteen bindings and no distractors, preventing selection of the layer and load from these models' probe results.
 It requires a probe advantage of at least 0.10 over native output, with a positive lower confidence bound, in at least two models.
 A separate criterion requires a positive lower bound over the candidate-logit decoder in at least two models.
@@ -297,7 +298,7 @@ The improved query and the trained probe thus address different comparisons: nat
 This pattern does not hold consistently with worked examples.
 The pilot fits its own classifiers with smaller training folds, so these are within-condition readout comparisons, not matched estimates of how wording changes the representation (Appendix~\ref{app:wording}).
 
-\section{Pretraining evidence depends on the layer tested}\label{sec:development}
+\section{Probes across pretraining}\label{sec:development}
 The hidden-state comparison also requires choosing a layer.
 This matters when following a model through pretraining: a low probe score at one depth need not mean that the answer is equally difficult to decode elsewhere in the network.
 We examine this dependence by sampling four depths in Pythia-160M and Pythia-410M, using the same capacity protocol at ten checkpoints from step 1{,}000 to 96{,}000.
@@ -352,15 +353,18 @@ For example, five marginal recalls of 0.9 permit joint success as low as 0.5.
 Since our trials query one entity per context, they do not measure this joint event.
 Joint retrieval must therefore be tested before using these scores to predict tool-call reliability.
 
+The same question also motivates a circuit-level account: how does a fixed model retrieve the association relevant to a query while other associations compete in context?
+Such an account would need to explain the observed dependence on query wording, sampled layer and readout, as well as what changes during pretraining.
+Our comparisons establish conditions under which the measured predictions differ, but do not identify the causal operations responsible.
+Interventions would be needed to test how those operations use information about the queried pair.
+
 \section{Related work}\label{sec:related}
-\paragraph{From copying to binding mechanisms.}
 \citet{jelassi2024} show that pretrained transformers retrieve phone-book entries using prompts with worked examples.
 Their prompts differ from our zero-shot question.
 Our exact-cue and worked-example comparisons test how such format changes affect recall on the same assignments.
 \citet{binding2310} identify binding IDs through causal interventions, while \citet{mixing2510} show that models combine positional, lexical and reflexive retrieval mechanisms as contexts become more complex.
 Several of these mechanisms could produce our errors and query effects; our experiments do not identify which one is responsible.
 
-\paragraph{Entity tracking and downstream relevance.}
 \citet{kimschuster2023} evaluate tracking through sequences of state changes, and \citet{kim2405} find gains from code pretraining.
 \citet{drozdz2026} report human-level tracking in naturalistic narratives at 410M parameters.
 Tracking state changes requires operations absent from our static lists, so those scores do not measure the same retrieval problem.
@@ -369,7 +373,6 @@ HELMET further shows that synthetic needle scores do not reliably predict downst
 Our synthetic lists let us compare questions and readouts on matched assignments.
 Whether these scores predict application performance remains untested.
 
-\paragraph{Recoverable information and its expression.}
 \citet{orgad2024} and \citet{karim2026} recover correct-answer information on model errors, including synthetic key--value failures in the latter study.
 \citet{lepori2026} extend the distinction to models that encode novel semantics in context but struggle to use them in downstream tasks.
 Our work builds on this evidence that correct-answer information can be recovered despite an incorrect model output.
@@ -377,7 +380,6 @@ Our work builds on this evidence that correct-answer information can be recovere
 We extend our earlier trained-decoder comparison \citep{decodable2609} with matched query changes and a preregistered test on additional models.
 The results concern the supervised decoders tested here, subject to the methodological limits of probing \citep{hewitt2019,belinkov2022}.
 
-\paragraph{Development and intervention.}
 \citet{billa2026} find task-relevant probe information before behavioral improvement in transformers, while our earlier binding study follows probe accuracy and steering across training \citep{decodable2609}.
 We examine the same question under the capacity protocol, comparing probes at several depths.
 Our earlier error-detection and repair study addresses actionable probes at final checkpoints \citep{legible2609}.
@@ -407,8 +409,8 @@ These observations limit the interpretation of low native recall: it need not be
 For small-model evaluation, the relevant question is therefore how reliably the model retrieves under a specified procedure at the required load.
 Testing that procedure on new formats and joint retrieval tasks is necessary before using the resulting scores to predict application performance.
 
-\paragraph{Code and data.}
-Code and data are available at \url{https://github.com/RavulapalliManas/paper-binding-capacity}.
+{\raggedright
+Code and data are available at \url{https://github.com/RavulapalliManas/paper-binding-capacity}.\par}
 
 \section*{Acknowledgements}
 We thank Kevin Li for proofreading, for help with the paper's readability, and for the suggestions that led to this paper.
@@ -435,6 +437,10 @@ models across training and scaling. \emph{ICML}, 2023. arXiv:2304.01373.
 \bibitem[Billa(2026)]{billa2026}
 J.~Billa. The geometric anatomy of capability acquisition in transformers. 2026.
 arXiv:2602.15997v4.
+
+\bibitem[Brown et al.(2020)]{brown2020}
+T.~B.~Brown, B.~Mann, N.~Ryder, et al. Language models are few-shot learners.
+\emph{NeurIPS}, 2020. arXiv:2005.14165.
 
 \bibitem[Dro\.{z}d\.{z} and Heilbron(2026)]{drozdz2026}
 K.~Dro\.{z}d\.{z} and M.~Heilbron. Entity tracking emerges in sub-billion parameter language
@@ -531,7 +537,6 @@ arXiv:2205.01068.
 \clearpage
 \appendix
 \section{Experimental details}\label{app:protocol}
-\paragraph{Word pools and matching.}
 The entity and value pools contain common technical words filtered to single tokens when preceded by a space.
 The lists overlap in three words: \texttt{commit}, \texttt{index} and \texttt{lock}.
 Entities are sampled without replacement and values with replacement.
@@ -539,7 +544,6 @@ The generator selects the queried entity uniformly after drawing the assignments
 It uses the same seed formula in the original-query, wording and checkpoint measurements.
 Wording comparisons retain entity IDs, value IDs and query indices within each matched trial.
 
-\paragraph{Execution and storage.}
 The main capacity grid contains \NewNPrompts{} prompt evaluations across \NewNModels{} models.
 Each model has 180 cells: fifteen loads, two distractor conditions and six seeds.
 The 768-token encoding limit exceeds the longest original-grid prompt; the earlier replay found no truncated questions.
@@ -552,8 +556,7 @@ GPT-2 receives mask-derived position IDs.
 The earlier model exclusions and scaling fits do not apply to these corrected inputs.
 A factorial test that varies precision, padding and position handling separately remains necessary to explain the configuration difference.
 
-\paragraph{Capacity fitting.}
-We fit
+For the capacity estimate, we fit
 $r(K)=1/(1+\exp\{\beta(\log K-\log K_{50})\})$
 to recall normalized by the no-distractor single-binding ceiling.
 The estimator uses the grid endpoint for its censoring rule and log-linear interpolation if nonlinear fitting fails.
@@ -573,21 +576,18 @@ Capacities are descriptive fit outputs, not estimates of an intrinsic storage li
 \input{table_measured}
 \end{table}
 
-\paragraph{Reproducing the experiments.}
 The repository's \texttt{analysis/gpu\_capacity\_dev.py} evaluates models, \texttt{analysis/p3\_probe\_capacity.py} fits probes and candidate-logit decoders, and \texttt{analysis/p3\_paired\_ci.py} computes paired confidence intervals.
 Results are in \texttt{results/measurement/}, with per-trial assignments and predictions in its \texttt{predictions/} subdirectory.
 Running \texttt{make} builds the figures, tables and paper from these results.
 Hidden activations are not distributed; fitting probes requires rerunning model evaluation.
 
 \section{Held-out probe test and controls}\label{app:heldout}
-\paragraph{Selection and chronology.}
 The first thirteen models formed an exploratory set.
 The remaining three were still being processed when the registration was frozen on 24 October 2026 at 17:27 UTC.
 Two pooled native-output summaries were already visible, as the registration states.
 No hidden-state probe had been fit on these three models at that time.
 Thus ``held-out'' describes the model-level analysis test, not previously unseen model families or unseen native-output behavior.
 
-\paragraph{Probe fitting.}
 For each model and condition, a standardized multinomial logistic regression uses inverse regularization strength 0.5 and up to 1{,}000 iterations.
 It trains on all measured loads in the training seeds and holds out seed groups $\{0,1\}$, $\{2,3\}$ and $\{4,5\}$ in turn.
 Scaling uses only training-fold statistics.
@@ -597,7 +597,7 @@ The registered load is sixteen bindings.
 The primary condition is no distractor; the distractor condition is reported as secondary.
 The main comparison scores top predictions over the full pool, not predictions restricted to the listed values.
 
-\paragraph{Registered criteria.}
+The preregistration defines three criteria.
 P1 requires probe recall minus native-output recall of at least 0.10, with a positive lower 95\% bound, in at least two of three models.
 P2 requires a positive lower 95\% bound for probe recall minus candidate-logit-decoder recall in at least two models.
 P3 requires the foil probe's listed-value recall to lie within $[0.03,0.13]$ in all three primary-condition models.
@@ -620,7 +620,6 @@ Distractor text is the secondary condition.}
 \input{table_heldout}
 \end{table}
 
-\paragraph{Additional controls.}
 The probe runner also supports shuffled training labels, prediction of the queried entity, and a pre-question state control.
 A saved-array name collision left token indices rather than pre-question states in some records, so those records cannot support a pre-question probe.
 The reported held-out decision uses the registered foil control.
@@ -716,8 +715,7 @@ These data do not share the current capacity protocol or establish a size thresh
 \label{fig:development}
 \end{figure}
 
-\paragraph{Middle-layer probes.}
-Each checkpoint has \DvLadderTrials{} trials, split into \DvLadderTrain{} training trials and \DvLadderTest{} test trials.
+In the earlier middle-layer probe experiment, each checkpoint has \DvLadderTrials{} trials, split into \DvLadderTrain{} training trials and \DvLadderTest{} test trials.
 A standardized multinomial logistic regression reads layer $\lfloor L/2\rfloor$ at the last question token.
 Its regularization is selected by three-fold cross-validation over $\{0.01,0.03,0.1,0.3,1,3,10\}$.
 The middle-layer probes in Pythia-160M and 410M remain at or below \DvSmallMax{} across \DvSmallCkptAll{} checkpoints.
@@ -726,8 +724,7 @@ The higher recall at a later layer in Figure~\ref{fig:checkpoint} shows why low 
 Repeated embedding hashes identify repeated downloads; the earlier Pythia-2.8B ladder retains only \DvTwoEightKept{} distinct checkpoint records and is excluded from that ladder.
 This exclusion does not apply to the current final-checkpoint Pythia-2.8B measurement.
 
-\paragraph{Layer selection and steering.}
-Pythia-1.4B has \DvStTrials{} trials per checkpoint, divided into thirds for probe training, layer selection and testing.
+For the layer-selection and steering experiment, Pythia-1.4B has \DvStTrials{} trials per checkpoint, divided into thirds for probe training, layer selection and testing.
 At every layer, the probe uses inverse regularization strength 0.5.
 Selection chooses the probe most accurate on wrong outputs in the second third.
 The model's answer and the value used for steering are restricted to the six listed values.
@@ -756,8 +753,7 @@ Model and steered columns give overall test accuracy.}
 \input{table_steer}
 \end{table}
 
-\paragraph{Wrong-output groups.}
-An earlier experiment refit a selected-layer probe on the first two thirds and saved predictions on the final third.
+To examine wrong outputs more closely, an earlier experiment refit a selected-layer probe on the first two thirds and saved predictions on the final third.
 We analyze its \DvPostN{} test trials per checkpoint.
 It classifies each wrong output by whether the probe's top listed value is correct and whether the gold value's normalized probability among the six listed values reaches one sixth.
 The share with a correct probe rises from \DvPostProbeRightFirst{} to \DvPostProbeRightFinal{}.
@@ -774,7 +770,6 @@ Output high means gold-value probability of at least one sixth over those values
 \input{table_errors}
 \end{table}
 
-\paragraph{Four-binding results.}
 The final-checkpoint runs in \citet{legible2609} use \DvKfTrials{} trials per model, four bindings, no distractors and \DvKfValues{} value words.
 Trial hashes assign probe, selection and test folds.
 The probe layer is selected on the selection fold.
@@ -796,7 +791,6 @@ AUROC uses one minus the probe's probability for the model's emitted value.}
 \end{table}
 
 \newpage
-\paragraph{Missing execution details.}
 These earlier runs were produced by \texttt{qgeom.py}, \texttt{dyn.py}, \texttt{steer.py} and \texttt{neuron\_legibility.py}.
 \texttt{analysis/p3\_development.py} recomputes their reported summaries from saved outputs.
 The \texttt{dyn.py} and four-binding outputs record no source-version hash, and the repository's four-binding runner is later than those runs.
