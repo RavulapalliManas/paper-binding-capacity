@@ -452,7 +452,7 @@ def emit_tex(res, tex_dir):
          "\\begin{tabular}{@{}rrrrrrrrrr@{}}", "\\toprule",
          " & & & \\multicolumn{2}{c}{probe on wrong} & \\multicolumn{3}{c}{wrong answers repaired} & & \\\\",
          "\\cmidrule(lr){4-5}\\cmidrule(lr){6-8}",
-         "step & layer & wrong & middle & final & gold & probe & random & model & steered \\\\", "\\midrule"]
+         "step & layer & wrong & selected & final & gold & probe & random & model & steered \\\\", "\\midrule"]
     for r in S["1.4B"]["rows"]:
         step = f"{r['step']:,}".replace(",", "{,}")
         t.append(f"{step} & {r['layer']} & {r['n_wrong']} & {f2(r['probe_wrong'])} & {f2(r['probe_wrong_final'])} & "
@@ -480,7 +480,14 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--emit", default=None, help="write numbers_development.tex and table_kfour.tex here")
     ap.add_argument("--selftest", action="store_true")
+    ap.add_argument("--from-summary", help="emit TeX from a saved summary without recomputing statistics")
     a = ap.parse_args()
+    if a.from_summary:
+        if not a.emit:
+            ap.error("--from-summary requires --emit")
+        emit_tex(json.load(open(a.from_summary)), a.emit)
+        print("emitted saved development summary to", a.emit)
+        return
     res = {"selftest": selftest()}
     print("[selftest]", res["selftest"], flush=True)
     if a.selftest:

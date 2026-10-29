@@ -8,3 +8,10 @@ __pycache__/
 p3_capacity.pdf
 ._*
 .DS_Store
+
+# Local build and inference outputs
+/build/
+/generated_runs/
+/.venv/
+*.fls
+*.fdb_latexmk

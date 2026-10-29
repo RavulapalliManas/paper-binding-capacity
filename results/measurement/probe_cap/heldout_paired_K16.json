@@ -1,0 +1,317 @@
+{
+ "results": {
+  "pythia-1.4b|D0": {
+   "label": "pythia-1.4b",
+   "cond": "D0",
+   "K": 16,
+   "layer": 18,
+   "n": 576,
+   "output": 0.5122,
+   "probe": 0.8281,
+   "logit_decoder": 0.5938,
+   "probe_minus_output": {
+    "mean": 0.316,
+    "lo": 0.2726,
+    "hi": 0.3576
+   },
+   "probe_minus_logit": {
+    "mean": 0.2344,
+    "lo": 0.1962,
+    "hi": 0.2726
+   },
+   "per_seed": {
+    "0": {
+     "output": 0.5,
+     "probe": 0.8646,
+     "logit_decoder": 0.6042
+    },
+    "1": {
+     "output": 0.5729,
+     "probe": 0.8021,
+     "logit_decoder": 0.6562
+    },
+    "2": {
+     "output": 0.4583,
+     "probe": 0.7917,
+     "logit_decoder": 0.6042
+    },
+    "3": {
+     "output": 0.5938,
+     "probe": 0.8438,
+     "logit_decoder": 0.5938
+    },
+    "4": {
+     "output": 0.5417,
+     "probe": 0.8958,
+     "logit_decoder": 0.5625
+    },
+    "5": {
+     "output": 0.4062,
+     "probe": 0.7708,
+     "logit_decoder": 0.5417
+    }
+   }
+  },
+  "pythia-1.4b|D256": {
+   "label": "pythia-1.4b",
+   "cond": "D256",
+   "K": 16,
+   "layer": 18,
+   "n": 576,
+   "output": 0.3681,
+   "probe": 0.8125,
+   "logit_decoder": 0.559,
+   "probe_minus_output": {
+    "mean": 0.4444,
+    "lo": 0.3976,
+    "hi": 0.4896
+   },
+   "probe_minus_logit": {
+    "mean": 0.2535,
+    "lo": 0.2152,
+    "hi": 0.2934
+   },
+   "per_seed": {
+    "0": {
+     "output": 0.4375,
+     "probe": 0.7812,
+     "logit_decoder": 0.5417
+    },
+    "1": {
+     "output": 0.3125,
+     "probe": 0.7917,
+     "logit_decoder": 0.5729
+    },
+    "2": {
+     "output": 0.3542,
+     "probe": 0.8125,
+     "logit_decoder": 0.4792
+    },
+    "3": {
+     "output": 0.3646,
+     "probe": 0.8333,
+     "logit_decoder": 0.5833
+    },
+    "4": {
+     "output": 0.375,
+     "probe": 0.8542,
+     "logit_decoder": 0.5625
+    },
+    "5": {
+     "output": 0.3646,
+     "probe": 0.8021,
+     "logit_decoder": 0.6146
+    }
+   }
+  },
+  "pythia-2.8b|D0": {
+   "label": "pythia-2.8b",
+   "cond": "D0",
+   "K": 16,
+   "layer": 24,
+   "n": 576,
+   "output": 0.5069,
+   "probe": 0.6562,
+   "logit_decoder": 0.526,
+   "probe_minus_output": {
+    "mean": 0.1493,
+    "lo": 0.1024,
+    "hi": 0.1962
+   },
+   "probe_minus_logit": {
+    "mean": 0.1302,
+    "lo": 0.092,
+    "hi": 0.1701
+   },
+   "per_seed": {
+    "0": {
+     "output": 0.4896,
+     "probe": 0.6562,
+     "logit_decoder": 0.5208
+    },
+    "1": {
+     "output": 0.5208,
+     "probe": 0.6458,
+     "logit_decoder": 0.5625
+    },
+    "2": {
+     "output": 0.5729,
+     "probe": 0.7188,
+     "logit_decoder": 0.5938
+    },
+    "3": {
+     "output": 0.5208,
+     "probe": 0.6042,
+     "logit_decoder": 0.4688
+    },
+    "4": {
+     "output": 0.4688,
+     "probe": 0.6667,
+     "logit_decoder": 0.4896
+    },
+    "5": {
+     "output": 0.4688,
+     "probe": 0.6458,
+     "logit_decoder": 0.5208
+    }
+   }
+  },
+  "pythia-2.8b|D256": {
+   "label": "pythia-2.8b",
+   "cond": "D256",
+   "K": 16,
+   "layer": 24,
+   "n": 576,
+   "output": 0.3767,
+   "probe": 0.5885,
+   "logit_decoder": 0.4132,
+   "probe_minus_output": {
+    "mean": 0.2118,
+    "lo": 0.1632,
+    "hi": 0.2604
+   },
+   "probe_minus_logit": {
+    "mean": 0.1753,
+    "lo": 0.1337,
+    "hi": 0.217
+   },
+   "per_seed": {
+    "0": {
+     "output": 0.4167,
+     "probe": 0.5833,
+     "logit_decoder": 0.3542
+    },
+    "1": {
+     "output": 0.3646,
+     "probe": 0.5625,
+     "logit_decoder": 0.4062
+    },
+    "2": {
+     "output": 0.4271,
+     "probe": 0.5312,
+     "logit_decoder": 0.3854
+    },
+    "3": {
+     "output": 0.3438,
+     "probe": 0.5729,
+     "logit_decoder": 0.4479
+    },
+    "4": {
+     "output": 0.4062,
+     "probe": 0.6458,
+     "logit_decoder": 0.4479
+    },
+    "5": {
+     "output": 0.3021,
+     "probe": 0.6354,
+     "logit_decoder": 0.4375
+    }
+   }
+  },
+  "qwen2.5-1.5b|D0": {
+   "label": "qwen2.5-1.5b",
+   "cond": "D0",
+   "K": 16,
+   "layer": 21,
+   "n": 576,
+   "output": 0.6389,
+   "probe": 0.7326,
+   "logit_decoder": 0.6198,
+   "probe_minus_output": {
+    "mean": 0.0938,
+    "lo": 0.0556,
+    "hi": 0.1319
+   },
+   "probe_minus_logit": {
+    "mean": 0.1128,
+    "lo": 0.0694,
+    "hi": 0.1562
+   },
+   "per_seed": {
+    "0": {
+     "output": 0.6042,
+     "probe": 0.7292,
+     "logit_decoder": 0.6146
+    },
+    "1": {
+     "output": 0.6667,
+     "probe": 0.7708,
+     "logit_decoder": 0.6562
+    },
+    "2": {
+     "output": 0.7083,
+     "probe": 0.7917,
+     "logit_decoder": 0.6354
+    },
+    "3": {
+     "output": 0.625,
+     "probe": 0.7083,
+     "logit_decoder": 0.6042
+    },
+    "4": {
+     "output": 0.6354,
+     "probe": 0.75,
+     "logit_decoder": 0.6562
+    },
+    "5": {
+     "output": 0.5938,
+     "probe": 0.6458,
+     "logit_decoder": 0.5521
+    }
+   }
+  },
+  "qwen2.5-1.5b|D256": {
+   "label": "qwen2.5-1.5b",
+   "cond": "D256",
+   "K": 16,
+   "layer": 21,
+   "n": 576,
+   "output": 0.4965,
+   "probe": 0.6562,
+   "logit_decoder": 0.4983,
+   "probe_minus_output": {
+    "mean": 0.1597,
+    "lo": 0.1181,
+    "hi": 0.1997
+   },
+   "probe_minus_logit": {
+    "mean": 0.158,
+    "lo": 0.1128,
+    "hi": 0.2031
+   },
+   "per_seed": {
+    "0": {
+     "output": 0.5625,
+     "probe": 0.6875,
+     "logit_decoder": 0.5729
+    },
+    "1": {
+     "output": 0.4688,
+     "probe": 0.6354,
+     "logit_decoder": 0.5417
+    },
+    "2": {
+     "output": 0.4062,
+     "probe": 0.6562,
+     "logit_decoder": 0.4167
+    },
+    "3": {
+     "output": 0.4583,
+     "probe": 0.6146,
+     "logit_decoder": 0.4375
+    },
+    "4": {
+     "output": 0.5208,
+     "probe": 0.6146,
+     "logit_decoder": 0.5104
+    },
+    "5": {
+     "output": 0.5625,
+     "probe": 0.7292,
+     "logit_decoder": 0.5104
+    }
+   }
+  }
+ },
+ "_provenance": "analysis/p3_paired_ci.py"
+}

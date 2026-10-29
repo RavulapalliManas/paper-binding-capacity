@@ -1,0 +1,1357 @@
+{
+ "results": {
+  "gpt2|D0": {
+   "label": "gpt2",
+   "cond": "D0",
+   "K": 16,
+   "layer": 9,
+   "n": 576,
+   "output": 0.1007,
+   "probe": 0.1076,
+   "logit_decoder": 0.1233,
+   "probe_minus_output": {
+    "mean": 0.0069,
+    "lo": -0.0243,
+    "hi": 0.0382
+   },
+   "probe_minus_logit": {
+    "mean": -0.0156,
+    "lo": -0.0451,
+    "hi": 0.0139
+   },
+   "per_seed": {
+    "0": {
+     "output": 0.0938,
+     "probe": 0.0938,
+     "logit_decoder": 0.1042
+    },
+    "1": {
+     "output": 0.0521,
+     "probe": 0.1042,
+     "logit_decoder": 0.1146
+    },
+    "2": {
+     "output": 0.0729,
+     "probe": 0.0833,
+     "logit_decoder": 0.125
+    },
+    "3": {
+     "output": 0.1875,
+     "probe": 0.1562,
+     "logit_decoder": 0.1458
+    },
+    "4": {
+     "output": 0.1146,
+     "probe": 0.0938,
+     "logit_decoder": 0.1042
+    },
+    "5": {
+     "output": 0.0833,
+     "probe": 0.1146,
+     "logit_decoder": 0.1458
+    }
+   }
+  },
+  "gpt2|D256": {
+   "label": "gpt2",
+   "cond": "D256",
+   "K": 16,
+   "layer": 9,
+   "n": 576,
+   "output": 0.0677,
+   "probe": 0.1545,
+   "logit_decoder": 0.1424,
+   "probe_minus_output": {
+    "mean": 0.0868,
+    "lo": 0.0538,
+    "hi": 0.1198
+   },
+   "probe_minus_logit": {
+    "mean": 0.0122,
+    "lo": -0.0226,
+    "hi": 0.0452
+   },
+   "per_seed": {
+    "0": {
+     "output": 0.0521,
+     "probe": 0.1042,
+     "logit_decoder": 0.1146
+    },
+    "1": {
+     "output": 0.0938,
+     "probe": 0.1667,
+     "logit_decoder": 0.1771
+    },
+    "2": {
+     "output": 0.0521,
+     "probe": 0.1667,
+     "logit_decoder": 0.1667
+    },
+    "3": {
+     "output": 0.0417,
+     "probe": 0.1354,
+     "logit_decoder": 0.1354
+    },
+    "4": {
+     "output": 0.0417,
+     "probe": 0.1458,
+     "logit_decoder": 0.1146
+    },
+    "5": {
+     "output": 0.125,
+     "probe": 0.2083,
+     "logit_decoder": 0.1458
+    }
+   }
+  },
+  "gpt2-large|D0": {
+   "label": "gpt2-large",
+   "cond": "D0",
+   "K": 16,
+   "layer": 27,
+   "n": 576,
+   "output": 0.2622,
+   "probe": 0.5885,
+   "logit_decoder": 0.3681,
+   "probe_minus_output": {
+    "mean": 0.3264,
+    "lo": 0.2795,
+    "hi": 0.3733
+   },
+   "probe_minus_logit": {
+    "mean": 0.2205,
+    "lo": 0.1806,
+    "hi": 0.2622
+   },
+   "per_seed": {
+    "0": {
+     "output": 0.25,
+     "probe": 0.5938,
+     "logit_decoder": 0.3854
+    },
+    "1": {
+     "output": 0.2708,
+     "probe": 0.5729,
+     "logit_decoder": 0.3958
+    },
+    "2": {
+     "output": 0.2812,
+     "probe": 0.6042,
+     "logit_decoder": 0.375
+    },
+    "3": {
+     "output": 0.3438,
+     "probe": 0.5104,
+     "logit_decoder": 0.3333
+    },
+    "4": {
+     "output": 0.1979,
+     "probe": 0.5938,
+     "logit_decoder": 0.3333
+    },
+    "5": {
+     "output": 0.2292,
+     "probe": 0.6562,
+     "logit_decoder": 0.3854
+    }
+   }
+  },
+  "gpt2-large|D256": {
+   "label": "gpt2-large",
+   "cond": "D256",
+   "K": 16,
+   "layer": 27,
+   "n": 576,
+   "output": 0.1979,
+   "probe": 0.6215,
+   "logit_decoder": 0.3698,
+   "probe_minus_output": {
+    "mean": 0.4236,
+    "lo": 0.3785,
+    "hi": 0.4688
+   },
+   "probe_minus_logit": {
+    "mean": 0.2517,
+    "lo": 0.2083,
+    "hi": 0.2951
+   },
+   "per_seed": {
+    "0": {
+     "output": 0.1771,
+     "probe": 0.6042,
+     "logit_decoder": 0.3229
+    },
+    "1": {
+     "output": 0.1979,
+     "probe": 0.5625,
+     "logit_decoder": 0.3125
+    },
+    "2": {
+     "output": 0.1979,
+     "probe": 0.6042,
+     "logit_decoder": 0.4583
+    },
+    "3": {
+     "output": 0.1667,
+     "probe": 0.6458,
+     "logit_decoder": 0.3229
+    },
+    "4": {
+     "output": 0.1562,
+     "probe": 0.625,
+     "logit_decoder": 0.3854
+    },
+    "5": {
+     "output": 0.2917,
+     "probe": 0.6875,
+     "logit_decoder": 0.4167
+    }
+   }
+  },
+  "gpt2-medium|D0": {
+   "label": "gpt2-medium",
+   "cond": "D0",
+   "K": 16,
+   "layer": 18,
+   "n": 576,
+   "output": 0.125,
+   "probe": 0.3628,
+   "logit_decoder": 0.1701,
+   "probe_minus_output": {
+    "mean": 0.2378,
+    "lo": 0.1944,
+    "hi": 0.2812
+   },
+   "probe_minus_logit": {
+    "mean": 0.1927,
+    "lo": 0.1493,
+    "hi": 0.2378
+   },
+   "per_seed": {
+    "0": {
+     "output": 0.1146,
+     "probe": 0.3854,
+     "logit_decoder": 0.1458
+    },
+    "1": {
+     "output": 0.1042,
+     "probe": 0.4479,
+     "logit_decoder": 0.1146
+    },
+    "2": {
+     "output": 0.1042,
+     "probe": 0.2917,
+     "logit_decoder": 0.2083
+    },
+    "3": {
+     "output": 0.1562,
+     "probe": 0.3229,
+     "logit_decoder": 0.1667
+    },
+    "4": {
+     "output": 0.1562,
+     "probe": 0.3542,
+     "logit_decoder": 0.1667
+    },
+    "5": {
+     "output": 0.1146,
+     "probe": 0.375,
+     "logit_decoder": 0.2188
+    }
+   }
+  },
+  "gpt2-medium|D256": {
+   "label": "gpt2-medium",
+   "cond": "D256",
+   "K": 16,
+   "layer": 18,
+   "n": 576,
+   "output": 0.099,
+   "probe": 0.3038,
+   "logit_decoder": 0.1424,
+   "probe_minus_output": {
+    "mean": 0.2049,
+    "lo": 0.1615,
+    "hi": 0.2483
+   },
+   "probe_minus_logit": {
+    "mean": 0.1615,
+    "lo": 0.1198,
+    "hi": 0.2031
+   },
+   "per_seed": {
+    "0": {
+     "output": 0.1146,
+     "probe": 0.1979,
+     "logit_decoder": 0.1146
+    },
+    "1": {
+     "output": 0.0938,
+     "probe": 0.3125,
+     "logit_decoder": 0.1667
+    },
+    "2": {
+     "output": 0.1146,
+     "probe": 0.2917,
+     "logit_decoder": 0.2083
+    },
+    "3": {
+     "output": 0.0625,
+     "probe": 0.2917,
+     "logit_decoder": 0.0729
+    },
+    "4": {
+     "output": 0.0833,
+     "probe": 0.3021,
+     "logit_decoder": 0.125
+    },
+    "5": {
+     "output": 0.125,
+     "probe": 0.4271,
+     "logit_decoder": 0.1667
+    }
+   }
+  },
+  "olmo2-1b|D0": {
+   "label": "olmo2-1b",
+   "cond": "D0",
+   "K": 16,
+   "layer": 12,
+   "n": 576,
+   "output": 0.8021,
+   "probe": 0.8368,
+   "logit_decoder": 0.842,
+   "probe_minus_output": {
+    "mean": 0.0347,
+    "lo": -0.0052,
+    "hi": 0.0729
+   },
+   "probe_minus_logit": {
+    "mean": -0.0052,
+    "lo": -0.0417,
+    "hi": 0.0312
+   },
+   "per_seed": {
+    "0": {
+     "output": 0.7708,
+     "probe": 0.8229,
+     "logit_decoder": 0.8125
+    },
+    "1": {
+     "output": 0.8021,
+     "probe": 0.8333,
+     "logit_decoder": 0.8646
+    },
+    "2": {
+     "output": 0.8333,
+     "probe": 0.8229,
+     "logit_decoder": 0.8438
+    },
+    "3": {
+     "output": 0.8542,
+     "probe": 0.8958,
+     "logit_decoder": 0.8958
+    },
+    "4": {
+     "output": 0.7917,
+     "probe": 0.8125,
+     "logit_decoder": 0.7708
+    },
+    "5": {
+     "output": 0.7604,
+     "probe": 0.8333,
+     "logit_decoder": 0.8646
+    }
+   }
+  },
+  "olmo2-1b|D256": {
+   "label": "olmo2-1b",
+   "cond": "D256",
+   "K": 16,
+   "layer": 12,
+   "n": 576,
+   "output": 0.651,
+   "probe": 0.8646,
+   "logit_decoder": 0.7448,
+   "probe_minus_output": {
+    "mean": 0.2135,
+    "lo": 0.1719,
+    "hi": 0.2569
+   },
+   "probe_minus_logit": {
+    "mean": 0.1198,
+    "lo": 0.0816,
+    "hi": 0.158
+   },
+   "per_seed": {
+    "0": {
+     "output": 0.6979,
+     "probe": 0.7917,
+     "logit_decoder": 0.7292
+    },
+    "1": {
+     "output": 0.5833,
+     "probe": 0.9167,
+     "logit_decoder": 0.8021
+    },
+    "2": {
+     "output": 0.6771,
+     "probe": 0.9062,
+     "logit_decoder": 0.7708
+    },
+    "3": {
+     "output": 0.625,
+     "probe": 0.8438,
+     "logit_decoder": 0.75
+    },
+    "4": {
+     "output": 0.6354,
+     "probe": 0.8854,
+     "logit_decoder": 0.6875
+    },
+    "5": {
+     "output": 0.6875,
+     "probe": 0.8438,
+     "logit_decoder": 0.7292
+    }
+   }
+  },
+  "opt-1.3b|D0": {
+   "label": "opt-1.3b",
+   "cond": "D0",
+   "K": 16,
+   "layer": 18,
+   "n": 576,
+   "output": 0.6372,
+   "probe": 0.8941,
+   "logit_decoder": 0.7257,
+   "probe_minus_output": {
+    "mean": 0.2569,
+    "lo": 0.2153,
+    "hi": 0.2986
+   },
+   "probe_minus_logit": {
+    "mean": 0.1684,
+    "lo": 0.1319,
+    "hi": 0.2066
+   },
+   "per_seed": {
+    "0": {
+     "output": 0.6458,
+     "probe": 0.9167,
+     "logit_decoder": 0.6875
+    },
+    "1": {
+     "output": 0.6042,
+     "probe": 0.9167,
+     "logit_decoder": 0.6875
+    },
+    "2": {
+     "output": 0.6458,
+     "probe": 0.9271,
+     "logit_decoder": 0.7812
+    },
+    "3": {
+     "output": 0.5833,
+     "probe": 0.8333,
+     "logit_decoder": 0.6979
+    },
+    "4": {
+     "output": 0.625,
+     "probe": 0.9062,
+     "logit_decoder": 0.75
+    },
+    "5": {
+     "output": 0.7188,
+     "probe": 0.8646,
+     "logit_decoder": 0.75
+    }
+   }
+  },
+  "opt-1.3b|D256": {
+   "label": "opt-1.3b",
+   "cond": "D256",
+   "K": 16,
+   "layer": 18,
+   "n": 576,
+   "output": 0.6285,
+   "probe": 0.8854,
+   "logit_decoder": 0.7899,
+   "probe_minus_output": {
+    "mean": 0.2569,
+    "lo": 0.2135,
+    "hi": 0.3003
+   },
+   "probe_minus_logit": {
+    "mean": 0.0955,
+    "lo": 0.0573,
+    "hi": 0.1319
+   },
+   "per_seed": {
+    "0": {
+     "output": 0.5521,
+     "probe": 0.9062,
+     "logit_decoder": 0.7083
+    },
+    "1": {
+     "output": 0.6667,
+     "probe": 0.8958,
+     "logit_decoder": 0.8333
+    },
+    "2": {
+     "output": 0.6458,
+     "probe": 0.9062,
+     "logit_decoder": 0.7708
+    },
+    "3": {
+     "output": 0.6146,
+     "probe": 0.875,
+     "logit_decoder": 0.8438
+    },
+    "4": {
+     "output": 0.6458,
+     "probe": 0.8958,
+     "logit_decoder": 0.7396
+    },
+    "5": {
+     "output": 0.6458,
+     "probe": 0.8333,
+     "logit_decoder": 0.8438
+    }
+   }
+  },
+  "opt-125m|D0": {
+   "label": "opt-125m",
+   "cond": "D0",
+   "K": 16,
+   "layer": 9,
+   "n": 576,
+   "output": 0.1528,
+   "probe": 0.1458,
+   "logit_decoder": 0.1962,
+   "probe_minus_output": {
+    "mean": -0.0069,
+    "lo": -0.0417,
+    "hi": 0.0295
+   },
+   "probe_minus_logit": {
+    "mean": -0.0503,
+    "lo": -0.0868,
+    "hi": -0.0122
+   },
+   "per_seed": {
+    "0": {
+     "output": 0.1458,
+     "probe": 0.1875,
+     "logit_decoder": 0.2083
+    },
+    "1": {
+     "output": 0.1354,
+     "probe": 0.1458,
+     "logit_decoder": 0.1354
+    },
+    "2": {
+     "output": 0.1042,
+     "probe": 0.125,
+     "logit_decoder": 0.2083
+    },
+    "3": {
+     "output": 0.2188,
+     "probe": 0.1458,
+     "logit_decoder": 0.1979
+    },
+    "4": {
+     "output": 0.1354,
+     "probe": 0.1354,
+     "logit_decoder": 0.2708
+    },
+    "5": {
+     "output": 0.1771,
+     "probe": 0.1354,
+     "logit_decoder": 0.1562
+    }
+   }
+  },
+  "opt-125m|D256": {
+   "label": "opt-125m",
+   "cond": "D256",
+   "K": 16,
+   "layer": 9,
+   "n": 576,
+   "output": 0.184,
+   "probe": 0.1146,
+   "logit_decoder": 0.1927,
+   "probe_minus_output": {
+    "mean": -0.0694,
+    "lo": -0.1059,
+    "hi": -0.033
+   },
+   "probe_minus_logit": {
+    "mean": -0.0781,
+    "lo": -0.1128,
+    "hi": -0.0434
+   },
+   "per_seed": {
+    "0": {
+     "output": 0.1354,
+     "probe": 0.0625,
+     "logit_decoder": 0.1979
+    },
+    "1": {
+     "output": 0.2188,
+     "probe": 0.1458,
+     "logit_decoder": 0.1979
+    },
+    "2": {
+     "output": 0.2188,
+     "probe": 0.125,
+     "logit_decoder": 0.1875
+    },
+    "3": {
+     "output": 0.1771,
+     "probe": 0.0729,
+     "logit_decoder": 0.1667
+    },
+    "4": {
+     "output": 0.1354,
+     "probe": 0.1875,
+     "logit_decoder": 0.2188
+    },
+    "5": {
+     "output": 0.2188,
+     "probe": 0.0938,
+     "logit_decoder": 0.1875
+    }
+   }
+  },
+  "opt-350m|D0": {
+   "label": "opt-350m",
+   "cond": "D0",
+   "K": 16,
+   "layer": 18,
+   "n": 576,
+   "output": 0.1476,
+   "probe": 0.1701,
+   "logit_decoder": 0.1892,
+   "probe_minus_output": {
+    "mean": 0.0226,
+    "lo": -0.0139,
+    "hi": 0.059
+   },
+   "probe_minus_logit": {
+    "mean": -0.0191,
+    "lo": -0.0556,
+    "hi": 0.0174
+   },
+   "per_seed": {
+    "0": {
+     "output": 0.1667,
+     "probe": 0.1667,
+     "logit_decoder": 0.1771
+    },
+    "1": {
+     "output": 0.1354,
+     "probe": 0.1562,
+     "logit_decoder": 0.125
+    },
+    "2": {
+     "output": 0.1354,
+     "probe": 0.1771,
+     "logit_decoder": 0.2083
+    },
+    "3": {
+     "output": 0.1771,
+     "probe": 0.1771,
+     "logit_decoder": 0.2083
+    },
+    "4": {
+     "output": 0.1354,
+     "probe": 0.1562,
+     "logit_decoder": 0.2188
+    },
+    "5": {
+     "output": 0.1354,
+     "probe": 0.1875,
+     "logit_decoder": 0.1979
+    }
+   }
+  },
+  "opt-350m|D256": {
+   "label": "opt-350m",
+   "cond": "D256",
+   "K": 16,
+   "layer": 18,
+   "n": 576,
+   "output": 0.1493,
+   "probe": 0.2257,
+   "logit_decoder": 0.1927,
+   "probe_minus_output": {
+    "mean": 0.0764,
+    "lo": 0.0347,
+    "hi": 0.1181
+   },
+   "probe_minus_logit": {
+    "mean": 0.033,
+    "lo": -0.0069,
+    "hi": 0.0712
+   },
+   "per_seed": {
+    "0": {
+     "output": 0.1146,
+     "probe": 0.1979,
+     "logit_decoder": 0.125
+    },
+    "1": {
+     "output": 0.1562,
+     "probe": 0.3229,
+     "logit_decoder": 0.2083
+    },
+    "2": {
+     "output": 0.1875,
+     "probe": 0.1667,
+     "logit_decoder": 0.1771
+    },
+    "3": {
+     "output": 0.1458,
+     "probe": 0.2708,
+     "logit_decoder": 0.1979
+    },
+    "4": {
+     "output": 0.1458,
+     "probe": 0.2396,
+     "logit_decoder": 0.2292
+    },
+    "5": {
+     "output": 0.1458,
+     "probe": 0.1562,
+     "logit_decoder": 0.2188
+    }
+   }
+  },
+  "pythia-160m|D0": {
+   "label": "pythia-160m",
+   "cond": "D0",
+   "K": 16,
+   "layer": 9,
+   "n": 576,
+   "output": 0.099,
+   "probe": 0.1076,
+   "logit_decoder": 0.1285,
+   "probe_minus_output": {
+    "mean": 0.0087,
+    "lo": -0.0226,
+    "hi": 0.0399
+   },
+   "probe_minus_logit": {
+    "mean": -0.0208,
+    "lo": -0.0538,
+    "hi": 0.0122
+   },
+   "per_seed": {
+    "0": {
+     "output": 0.125,
+     "probe": 0.1146,
+     "logit_decoder": 0.1042
+    },
+    "1": {
+     "output": 0.0521,
+     "probe": 0.0729,
+     "logit_decoder": 0.1458
+    },
+    "2": {
+     "output": 0.125,
+     "probe": 0.1458,
+     "logit_decoder": 0.1562
+    },
+    "3": {
+     "output": 0.1354,
+     "probe": 0.1146,
+     "logit_decoder": 0.125
+    },
+    "4": {
+     "output": 0.0729,
+     "probe": 0.0938,
+     "logit_decoder": 0.0729
+    },
+    "5": {
+     "output": 0.0833,
+     "probe": 0.1042,
+     "logit_decoder": 0.1667
+    }
+   }
+  },
+  "pythia-160m|D256": {
+   "label": "pythia-160m",
+   "cond": "D256",
+   "K": 16,
+   "layer": 9,
+   "n": 576,
+   "output": 0.0885,
+   "probe": 0.0885,
+   "logit_decoder": 0.1181,
+   "probe_minus_output": {
+    "mean": 0.0,
+    "lo": -0.0312,
+    "hi": 0.0312
+   },
+   "probe_minus_logit": {
+    "mean": -0.0295,
+    "lo": -0.0608,
+    "hi": 0.0017
+   },
+   "per_seed": {
+    "0": {
+     "output": 0.1146,
+     "probe": 0.0729,
+     "logit_decoder": 0.0417
+    },
+    "1": {
+     "output": 0.0938,
+     "probe": 0.1146,
+     "logit_decoder": 0.1979
+    },
+    "2": {
+     "output": 0.0833,
+     "probe": 0.0729,
+     "logit_decoder": 0.1042
+    },
+    "3": {
+     "output": 0.0938,
+     "probe": 0.0833,
+     "logit_decoder": 0.125
+    },
+    "4": {
+     "output": 0.0938,
+     "probe": 0.1042,
+     "logit_decoder": 0.125
+    },
+    "5": {
+     "output": 0.0521,
+     "probe": 0.0833,
+     "logit_decoder": 0.1146
+    }
+   }
+  },
+  "pythia-1b|D0": {
+   "label": "pythia-1b",
+   "cond": "D0",
+   "K": 16,
+   "layer": 12,
+   "n": 576,
+   "output": 0.3056,
+   "probe": 0.441,
+   "logit_decoder": 0.3559,
+   "probe_minus_output": {
+    "mean": 0.1354,
+    "lo": 0.0903,
+    "hi": 0.1806
+   },
+   "probe_minus_logit": {
+    "mean": 0.0851,
+    "lo": 0.0451,
+    "hi": 0.125
+   },
+   "per_seed": {
+    "0": {
+     "output": 0.3229,
+     "probe": 0.4583,
+     "logit_decoder": 0.375
+    },
+    "1": {
+     "output": 0.3333,
+     "probe": 0.5312,
+     "logit_decoder": 0.4375
+    },
+    "2": {
+     "output": 0.3438,
+     "probe": 0.4896,
+     "logit_decoder": 0.3854
+    },
+    "3": {
+     "output": 0.3438,
+     "probe": 0.4375,
+     "logit_decoder": 0.375
+    },
+    "4": {
+     "output": 0.2188,
+     "probe": 0.3438,
+     "logit_decoder": 0.2292
+    },
+    "5": {
+     "output": 0.2708,
+     "probe": 0.3854,
+     "logit_decoder": 0.3333
+    }
+   }
+  },
+  "pythia-1b|D256": {
+   "label": "pythia-1b",
+   "cond": "D256",
+   "K": 16,
+   "layer": 12,
+   "n": 576,
+   "output": 0.3177,
+   "probe": 0.5938,
+   "logit_decoder": 0.3698,
+   "probe_minus_output": {
+    "mean": 0.276,
+    "lo": 0.2292,
+    "hi": 0.3229
+   },
+   "probe_minus_logit": {
+    "mean": 0.224,
+    "lo": 0.184,
+    "hi": 0.2656
+   },
+   "per_seed": {
+    "0": {
+     "output": 0.3333,
+     "probe": 0.4688,
+     "logit_decoder": 0.3333
+    },
+    "1": {
+     "output": 0.3125,
+     "probe": 0.5938,
+     "logit_decoder": 0.4479
+    },
+    "2": {
+     "output": 0.3229,
+     "probe": 0.5938,
+     "logit_decoder": 0.3542
+    },
+    "3": {
+     "output": 0.25,
+     "probe": 0.5938,
+     "logit_decoder": 0.3542
+    },
+    "4": {
+     "output": 0.4271,
+     "probe": 0.6354,
+     "logit_decoder": 0.4375
+    },
+    "5": {
+     "output": 0.2604,
+     "probe": 0.6771,
+     "logit_decoder": 0.2917
+    }
+   }
+  },
+  "pythia-410m|D0": {
+   "label": "pythia-410m",
+   "cond": "D0",
+   "K": 16,
+   "layer": 18,
+   "n": 576,
+   "output": 0.2274,
+   "probe": 0.474,
+   "logit_decoder": 0.3056,
+   "probe_minus_output": {
+    "mean": 0.2465,
+    "lo": 0.2014,
+    "hi": 0.2917
+   },
+   "probe_minus_logit": {
+    "mean": 0.1684,
+    "lo": 0.1285,
+    "hi": 0.2101
+   },
+   "per_seed": {
+    "0": {
+     "output": 0.2188,
+     "probe": 0.4792,
+     "logit_decoder": 0.3229
+    },
+    "1": {
+     "output": 0.1875,
+     "probe": 0.5208,
+     "logit_decoder": 0.3542
+    },
+    "2": {
+     "output": 0.2708,
+     "probe": 0.5312,
+     "logit_decoder": 0.3438
+    },
+    "3": {
+     "output": 0.2604,
+     "probe": 0.5208,
+     "logit_decoder": 0.2083
+    },
+    "4": {
+     "output": 0.1562,
+     "probe": 0.3958,
+     "logit_decoder": 0.3229
+    },
+    "5": {
+     "output": 0.2708,
+     "probe": 0.3958,
+     "logit_decoder": 0.2812
+    }
+   }
+  },
+  "pythia-410m|D256": {
+   "label": "pythia-410m",
+   "cond": "D256",
+   "K": 16,
+   "layer": 18,
+   "n": 576,
+   "output": 0.1198,
+   "probe": 0.3281,
+   "logit_decoder": 0.1927,
+   "probe_minus_output": {
+    "mean": 0.2083,
+    "lo": 0.1649,
+    "hi": 0.2517
+   },
+   "probe_minus_logit": {
+    "mean": 0.1354,
+    "lo": 0.092,
+    "hi": 0.1788
+   },
+   "per_seed": {
+    "0": {
+     "output": 0.1562,
+     "probe": 0.2708,
+     "logit_decoder": 0.1979
+    },
+    "1": {
+     "output": 0.1146,
+     "probe": 0.4271,
+     "logit_decoder": 0.2917
+    },
+    "2": {
+     "output": 0.1458,
+     "probe": 0.3021,
+     "logit_decoder": 0.2083
+    },
+    "3": {
+     "output": 0.1146,
+     "probe": 0.2708,
+     "logit_decoder": 0.1458
+    },
+    "4": {
+     "output": 0.1354,
+     "probe": 0.3021,
+     "logit_decoder": 0.125
+    },
+    "5": {
+     "output": 0.0521,
+     "probe": 0.3958,
+     "logit_decoder": 0.1875
+    }
+   }
+  },
+  "pythia-70m|D0": {
+   "label": "pythia-70m",
+   "cond": "D0",
+   "K": 16,
+   "layer": 4,
+   "n": 576,
+   "output": 0.1424,
+   "probe": 0.3021,
+   "logit_decoder": 0.1632,
+   "probe_minus_output": {
+    "mean": 0.1597,
+    "lo": 0.1198,
+    "hi": 0.1979
+   },
+   "probe_minus_logit": {
+    "mean": 0.1389,
+    "lo": 0.1042,
+    "hi": 0.1736
+   },
+   "per_seed": {
+    "0": {
+     "output": 0.1146,
+     "probe": 0.2708,
+     "logit_decoder": 0.1146
+    },
+    "1": {
+     "output": 0.1146,
+     "probe": 0.3125,
+     "logit_decoder": 0.1458
+    },
+    "2": {
+     "output": 0.1354,
+     "probe": 0.3229,
+     "logit_decoder": 0.1667
+    },
+    "3": {
+     "output": 0.1667,
+     "probe": 0.2708,
+     "logit_decoder": 0.1979
+    },
+    "4": {
+     "output": 0.1354,
+     "probe": 0.2292,
+     "logit_decoder": 0.1146
+    },
+    "5": {
+     "output": 0.1875,
+     "probe": 0.4062,
+     "logit_decoder": 0.2396
+    }
+   }
+  },
+  "pythia-70m|D256": {
+   "label": "pythia-70m",
+   "cond": "D256",
+   "K": 16,
+   "layer": 4,
+   "n": 576,
+   "output": 0.1128,
+   "probe": 0.2153,
+   "logit_decoder": 0.2031,
+   "probe_minus_output": {
+    "mean": 0.1024,
+    "lo": 0.0677,
+    "hi": 0.1372
+   },
+   "probe_minus_logit": {
+    "mean": 0.0122,
+    "lo": -0.0226,
+    "hi": 0.0451
+   },
+   "per_seed": {
+    "0": {
+     "output": 0.1042,
+     "probe": 0.2188,
+     "logit_decoder": 0.1667
+    },
+    "1": {
+     "output": 0.1354,
+     "probe": 0.3021,
+     "logit_decoder": 0.2812
+    },
+    "2": {
+     "output": 0.125,
+     "probe": 0.1979,
+     "logit_decoder": 0.2188
+    },
+    "3": {
+     "output": 0.1354,
+     "probe": 0.2188,
+     "logit_decoder": 0.2292
+    },
+    "4": {
+     "output": 0.125,
+     "probe": 0.2188,
+     "logit_decoder": 0.1979
+    },
+    "5": {
+     "output": 0.0521,
+     "probe": 0.1354,
+     "logit_decoder": 0.125
+    }
+   }
+  },
+  "qwen2.5-0.5b|D0": {
+   "label": "qwen2.5-0.5b",
+   "cond": "D0",
+   "K": 16,
+   "layer": 18,
+   "n": 576,
+   "output": 0.1927,
+   "probe": 0.4097,
+   "logit_decoder": 0.2031,
+   "probe_minus_output": {
+    "mean": 0.217,
+    "lo": 0.1753,
+    "hi": 0.2604
+   },
+   "probe_minus_logit": {
+    "mean": 0.2066,
+    "lo": 0.1632,
+    "hi": 0.25
+   },
+   "per_seed": {
+    "0": {
+     "output": 0.25,
+     "probe": 0.4271,
+     "logit_decoder": 0.1875
+    },
+    "1": {
+     "output": 0.1458,
+     "probe": 0.4167,
+     "logit_decoder": 0.2396
+    },
+    "2": {
+     "output": 0.1562,
+     "probe": 0.4062,
+     "logit_decoder": 0.1458
+    },
+    "3": {
+     "output": 0.1562,
+     "probe": 0.4583,
+     "logit_decoder": 0.2083
+    },
+    "4": {
+     "output": 0.2188,
+     "probe": 0.375,
+     "logit_decoder": 0.2292
+    },
+    "5": {
+     "output": 0.2292,
+     "probe": 0.375,
+     "logit_decoder": 0.2083
+    }
+   }
+  },
+  "qwen2.5-0.5b|D256": {
+   "label": "qwen2.5-0.5b",
+   "cond": "D256",
+   "K": 16,
+   "layer": 18,
+   "n": 576,
+   "output": 0.2344,
+   "probe": 0.4062,
+   "logit_decoder": 0.2083,
+   "probe_minus_output": {
+    "mean": 0.1719,
+    "lo": 0.1285,
+    "hi": 0.2135
+   },
+   "probe_minus_logit": {
+    "mean": 0.1979,
+    "lo": 0.1562,
+    "hi": 0.2378
+   },
+   "per_seed": {
+    "0": {
+     "output": 0.2917,
+     "probe": 0.4792,
+     "logit_decoder": 0.2708
+    },
+    "1": {
+     "output": 0.2083,
+     "probe": 0.4062,
+     "logit_decoder": 0.25
+    },
+    "2": {
+     "output": 0.2188,
+     "probe": 0.2812,
+     "logit_decoder": 0.1979
+    },
+    "3": {
+     "output": 0.25,
+     "probe": 0.4896,
+     "logit_decoder": 0.2083
+    },
+    "4": {
+     "output": 0.1667,
+     "probe": 0.3438,
+     "logit_decoder": 0.1146
+    },
+    "5": {
+     "output": 0.2708,
+     "probe": 0.4375,
+     "logit_decoder": 0.2083
+    }
+   }
+  },
+  "smollm2-360m|D0": {
+   "label": "smollm2-360m",
+   "cond": "D0",
+   "K": 16,
+   "layer": 24,
+   "n": 576,
+   "output": 0.2205,
+   "probe": 0.309,
+   "logit_decoder": 0.2257,
+   "probe_minus_output": {
+    "mean": 0.0885,
+    "lo": 0.0451,
+    "hi": 0.1319
+   },
+   "probe_minus_logit": {
+    "mean": 0.0833,
+    "lo": 0.0417,
+    "hi": 0.125
+   },
+   "per_seed": {
+    "0": {
+     "output": 0.1771,
+     "probe": 0.3229,
+     "logit_decoder": 0.2396
+    },
+    "1": {
+     "output": 0.2292,
+     "probe": 0.2812,
+     "logit_decoder": 0.1771
+    },
+    "2": {
+     "output": 0.2917,
+     "probe": 0.3438,
+     "logit_decoder": 0.2604
+    },
+    "3": {
+     "output": 0.1979,
+     "probe": 0.3229,
+     "logit_decoder": 0.2812
+    },
+    "4": {
+     "output": 0.2188,
+     "probe": 0.25,
+     "logit_decoder": 0.1979
+    },
+    "5": {
+     "output": 0.2083,
+     "probe": 0.3333,
+     "logit_decoder": 0.1979
+    }
+   }
+  },
+  "smollm2-360m|D256": {
+   "label": "smollm2-360m",
+   "cond": "D256",
+   "K": 16,
+   "layer": 24,
+   "n": 576,
+   "output": 0.1979,
+   "probe": 0.3993,
+   "logit_decoder": 0.2049,
+   "probe_minus_output": {
+    "mean": 0.2014,
+    "lo": 0.1545,
+    "hi": 0.25
+   },
+   "probe_minus_logit": {
+    "mean": 0.1944,
+    "lo": 0.1476,
+    "hi": 0.2431
+   },
+   "per_seed": {
+    "0": {
+     "output": 0.1875,
+     "probe": 0.375,
+     "logit_decoder": 0.1979
+    },
+    "1": {
+     "output": 0.2188,
+     "probe": 0.4583,
+     "logit_decoder": 0.2292
+    },
+    "2": {
+     "output": 0.2292,
+     "probe": 0.4062,
+     "logit_decoder": 0.2292
+    },
+    "3": {
+     "output": 0.1979,
+     "probe": 0.4479,
+     "logit_decoder": 0.1875
+    },
+    "4": {
+     "output": 0.1667,
+     "probe": 0.3125,
+     "logit_decoder": 0.1771
+    },
+    "5": {
+     "output": 0.1875,
+     "probe": 0.3958,
+     "logit_decoder": 0.2083
+    }
+   }
+  }
+ },
+ "_provenance": "analysis/p3_paired_ci.py"
+}

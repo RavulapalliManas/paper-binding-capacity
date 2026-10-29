@@ -1,0 +1,3155 @@
+{
+ "_provenance": "analysis/p3_probe_capacity.py from gpu_capacity_dev.py outputs",
+ "checkpoints": {
+  "olmo2-1b|main": {
+   "embed_md5": "9229cd715e0886bbb8dc6d30b413b995",
+   "label": "olmo2-1b",
+   "n_layers": 16,
+   "revision": "main",
+   "runs": [
+    {
+     "cond": "verbatim",
+     "control": "shuffled",
+     "layer": 12,
+     "rows": [
+      {
+       "K": 1,
+       "n": 288,
+       "n_wrong": 22,
+       "output": 0.9236111111111112,
+       "output_listed": 1.0,
+       "probe": 0.013888888888888888,
+       "probe_listed": 1.0,
+       "probe_right_on_wrong": 0.0
+      },
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 79,
+       "output": 0.7256944444444444,
+       "output_listed": 0.7395833333333334,
+       "probe": 0.020833333333333332,
+       "probe_listed": 0.4826388888888889,
+       "probe_right_on_wrong": 0.012658227848101266
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 74,
+       "output": 0.7430555555555556,
+       "output_listed": 0.7604166666666666,
+       "probe": 0.020833333333333332,
+       "probe_listed": 0.2881944444444444,
+       "probe_right_on_wrong": 0.04054054054054054
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 94,
+       "output": 0.6736111111111112,
+       "output_listed": 0.7118055555555556,
+       "probe": 0.017361111111111112,
+       "probe_listed": 0.1388888888888889,
+       "probe_right_on_wrong": 0.010638297872340425
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 99,
+       "output": 0.65625,
+       "output_listed": 0.6770833333333334,
+       "probe": 0.03125,
+       "probe_listed": 0.06944444444444445,
+       "probe_right_on_wrong": 0.04040404040404041
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 122,
+       "output": 0.5763888888888888,
+       "output_listed": 0.5972222222222222,
+       "probe": 0.010416666666666666,
+       "probe_listed": 0.034722222222222224,
+       "probe_right_on_wrong": 0.02459016393442623
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 160,
+       "output": 0.4444444444444444,
+       "output_listed": 0.4444444444444444,
+       "probe": 0.003472222222222222,
+       "probe_listed": 0.017361111111111112,
+       "probe_right_on_wrong": 0.00625
+      }
+     ]
+    },
+    {
+     "cond": "verbatim",
+     "control": "entity",
+     "layer": 12,
+     "rows": [
+      {
+       "K": 1,
+       "n": 288,
+       "n_wrong": 22,
+       "output": 0.9236111111111112,
+       "output_listed": 1.0,
+       "probe": 0.9791666666666666,
+       "probe_listed": 0.9791666666666666,
+       "probe_right_on_wrong": 1.0
+      },
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 79,
+       "output": 0.7256944444444444,
+       "output_listed": 0.7395833333333334,
+       "probe": 0.9756944444444444,
+       "probe_listed": 0.9756944444444444,
+       "probe_right_on_wrong": 0.9873417721518988
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 74,
+       "output": 0.7430555555555556,
+       "output_listed": 0.7604166666666666,
+       "probe": 0.9895833333333334,
+       "probe_listed": 0.9895833333333334,
+       "probe_right_on_wrong": 1.0
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 94,
+       "output": 0.6736111111111112,
+       "output_listed": 0.7118055555555556,
+       "probe": 1.0,
+       "probe_listed": 1.0,
+       "probe_right_on_wrong": 1.0
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 99,
+       "output": 0.65625,
+       "output_listed": 0.6770833333333334,
+       "probe": 0.9965277777777778,
+       "probe_listed": 0.9965277777777778,
+       "probe_right_on_wrong": 1.0
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 122,
+       "output": 0.5763888888888888,
+       "output_listed": 0.5972222222222222,
+       "probe": 0.9965277777777778,
+       "probe_listed": 0.9965277777777778,
+       "probe_right_on_wrong": 0.9918032786885246
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 160,
+       "output": 0.4444444444444444,
+       "output_listed": 0.4444444444444444,
+       "probe": 0.9965277777777778,
+       "probe_listed": 0.9965277777777778,
+       "probe_right_on_wrong": 0.99375
+      }
+     ]
+    },
+    {
+     "cond": "verbatim",
+     "control": "foil",
+     "layer": 12,
+     "rows": [
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 79,
+       "output": 0.7256944444444444,
+       "output_listed": 0.7395833333333334,
+       "probe": 0.08333333333333333,
+       "probe_listed": 0.375,
+       "probe_right_on_wrong": 0.0759493670886076
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 74,
+       "output": 0.7430555555555556,
+       "output_listed": 0.7604166666666666,
+       "probe": 0.0798611111111111,
+       "probe_listed": 0.19791666666666666,
+       "probe_right_on_wrong": 0.02702702702702703
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 94,
+       "output": 0.6736111111111112,
+       "output_listed": 0.7118055555555556,
+       "probe": 0.04861111111111111,
+       "probe_listed": 0.1111111111111111,
+       "probe_right_on_wrong": 0.07446808510638298
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 99,
+       "output": 0.65625,
+       "output_listed": 0.6770833333333334,
+       "probe": 0.020833333333333332,
+       "probe_listed": 0.0798611111111111,
+       "probe_right_on_wrong": 0.04040404040404041
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 122,
+       "output": 0.5763888888888888,
+       "output_listed": 0.5972222222222222,
+       "probe": 0.017361111111111112,
+       "probe_listed": 0.034722222222222224,
+       "probe_right_on_wrong": 0.0
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 160,
+       "output": 0.4444444444444444,
+       "output_listed": 0.4444444444444444,
+       "probe": 0.027777777777777776,
+       "probe_listed": 0.03125,
+       "probe_right_on_wrong": 0.03125
+      }
+     ]
+    },
+    {
+     "cond": "shots2",
+     "control": "shuffled",
+     "layer": 12,
+     "rows": [
+      {
+       "K": 1,
+       "n": 288,
+       "n_wrong": 5,
+       "output": 0.9826388888888888,
+       "output_listed": 1.0,
+       "probe": 0.03125,
+       "probe_listed": 1.0,
+       "probe_right_on_wrong": 0.0
+      },
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 12,
+       "output": 0.9583333333333334,
+       "output_listed": 0.9583333333333334,
+       "probe": 0.027777777777777776,
+       "probe_listed": 0.5590277777777778,
+       "probe_right_on_wrong": 0.0
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 17,
+       "output": 0.9409722222222222,
+       "output_listed": 0.9409722222222222,
+       "probe": 0.024305555555555556,
+       "probe_listed": 0.23958333333333334,
+       "probe_right_on_wrong": 0.058823529411764705
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 34,
+       "output": 0.8819444444444444,
+       "output_listed": 0.8819444444444444,
+       "probe": 0.006944444444444444,
+       "probe_listed": 0.1284722222222222,
+       "probe_right_on_wrong": 0.0
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 31,
+       "output": 0.8923611111111112,
+       "output_listed": 0.8923611111111112,
+       "probe": 0.020833333333333332,
+       "probe_listed": 0.1076388888888889,
+       "probe_right_on_wrong": 0.0
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 54,
+       "output": 0.8125,
+       "output_listed": 0.8125,
+       "probe": 0.010416666666666666,
+       "probe_listed": 0.03819444444444445,
+       "probe_right_on_wrong": 0.037037037037037035
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 75,
+       "output": 0.7395833333333334,
+       "output_listed": 0.7395833333333334,
+       "probe": 0.027777777777777776,
+       "probe_listed": 0.04513888888888889,
+       "probe_right_on_wrong": 0.02666666666666667
+      }
+     ]
+    },
+    {
+     "cond": "shots2",
+     "control": "entity",
+     "layer": 12,
+     "rows": [
+      {
+       "K": 1,
+       "n": 288,
+       "n_wrong": 5,
+       "output": 0.9826388888888888,
+       "output_listed": 1.0,
+       "probe": 0.9270833333333334,
+       "probe_listed": 0.9270833333333334,
+       "probe_right_on_wrong": 1.0
+      },
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 12,
+       "output": 0.9583333333333334,
+       "output_listed": 0.9583333333333334,
+       "probe": 0.9236111111111112,
+       "probe_listed": 0.9236111111111112,
+       "probe_right_on_wrong": 1.0
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 17,
+       "output": 0.9409722222222222,
+       "output_listed": 0.9409722222222222,
+       "probe": 0.9236111111111112,
+       "probe_listed": 0.9236111111111112,
+       "probe_right_on_wrong": 0.8823529411764706
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 34,
+       "output": 0.8819444444444444,
+       "output_listed": 0.8819444444444444,
+       "probe": 0.9618055555555556,
+       "probe_listed": 0.9618055555555556,
+       "probe_right_on_wrong": 0.9411764705882353
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 31,
+       "output": 0.8923611111111112,
+       "output_listed": 0.8923611111111112,
+       "probe": 0.9826388888888888,
+       "probe_listed": 0.9826388888888888,
+       "probe_right_on_wrong": 1.0
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 54,
+       "output": 0.8125,
+       "output_listed": 0.8125,
+       "probe": 0.9861111111111112,
+       "probe_listed": 0.9861111111111112,
+       "probe_right_on_wrong": 1.0
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 75,
+       "output": 0.7395833333333334,
+       "output_listed": 0.7395833333333334,
+       "probe": 0.9826388888888888,
+       "probe_listed": 0.9826388888888888,
+       "probe_right_on_wrong": 0.9866666666666667
+      }
+     ]
+    },
+    {
+     "cond": "shots2",
+     "control": "foil",
+     "layer": 12,
+     "rows": [
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 12,
+       "output": 0.9583333333333334,
+       "output_listed": 0.9583333333333334,
+       "probe": 0.4270833333333333,
+       "probe_listed": 0.8368055555555556,
+       "probe_right_on_wrong": 0.6666666666666666
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 17,
+       "output": 0.9409722222222222,
+       "output_listed": 0.9409722222222222,
+       "probe": 0.10416666666666667,
+       "probe_listed": 0.2986111111111111,
+       "probe_right_on_wrong": 0.11764705882352941
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 34,
+       "output": 0.8819444444444444,
+       "output_listed": 0.8819444444444444,
+       "probe": 0.04513888888888889,
+       "probe_listed": 0.1388888888888889,
+       "probe_right_on_wrong": 0.058823529411764705
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 31,
+       "output": 0.8923611111111112,
+       "output_listed": 0.8923611111111112,
+       "probe": 0.027777777777777776,
+       "probe_listed": 0.0625,
+       "probe_right_on_wrong": 0.03225806451612903
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 54,
+       "output": 0.8125,
+       "output_listed": 0.8125,
+       "probe": 0.027777777777777776,
+       "probe_listed": 0.052083333333333336,
+       "probe_right_on_wrong": 0.018518518518518517
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 75,
+       "output": 0.7395833333333334,
+       "output_listed": 0.7395833333333334,
+       "probe": 0.03819444444444445,
+       "probe_listed": 0.04861111111111111,
+       "probe_right_on_wrong": 0.04
+      }
+     ]
+    }
+   ]
+  },
+  "opt-1.3b|main": {
+   "embed_md5": "046a28e5306939f527346864a73201fb",
+   "label": "opt-1.3b",
+   "n_layers": 24,
+   "revision": "main",
+   "runs": [
+    {
+     "cond": "verbatim",
+     "control": "shuffled",
+     "layer": 18,
+     "rows": [
+      {
+       "K": 1,
+       "n": 288,
+       "n_wrong": 7,
+       "output": 0.9756944444444444,
+       "output_listed": 1.0,
+       "probe": 0.013888888888888888,
+       "probe_listed": 1.0,
+       "probe_right_on_wrong": 0.14285714285714285
+      },
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 69,
+       "output": 0.7604166666666666,
+       "output_listed": 0.8090277777777778,
+       "probe": 0.017361111111111112,
+       "probe_listed": 0.4930555555555556,
+       "probe_right_on_wrong": 0.0
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 92,
+       "output": 0.6805555555555556,
+       "output_listed": 0.7222222222222222,
+       "probe": 0.017361111111111112,
+       "probe_listed": 0.2986111111111111,
+       "probe_right_on_wrong": 0.010869565217391304
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 121,
+       "output": 0.5798611111111112,
+       "output_listed": 0.625,
+       "probe": 0.010416666666666666,
+       "probe_listed": 0.12152777777777778,
+       "probe_right_on_wrong": 0.0
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 101,
+       "output": 0.6493055555555556,
+       "output_listed": 0.6597222222222222,
+       "probe": 0.020833333333333332,
+       "probe_listed": 0.059027777777777776,
+       "probe_right_on_wrong": 0.019801980198019802
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 97,
+       "output": 0.6631944444444444,
+       "output_listed": 0.6805555555555556,
+       "probe": 0.013888888888888888,
+       "probe_listed": 0.027777777777777776,
+       "probe_right_on_wrong": 0.010309278350515464
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 96,
+       "output": 0.6666666666666666,
+       "output_listed": 0.6770833333333334,
+       "probe": 0.024305555555555556,
+       "probe_listed": 0.027777777777777776,
+       "probe_right_on_wrong": 0.03125
+      }
+     ]
+    },
+    {
+     "cond": "verbatim",
+     "control": "entity",
+     "layer": 18,
+     "rows": [
+      {
+       "K": 1,
+       "n": 288,
+       "n_wrong": 7,
+       "output": 0.9756944444444444,
+       "output_listed": 1.0,
+       "probe": 0.9791666666666666,
+       "probe_listed": 0.9791666666666666,
+       "probe_right_on_wrong": 1.0
+      },
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 69,
+       "output": 0.7604166666666666,
+       "output_listed": 0.8090277777777778,
+       "probe": 0.9965277777777778,
+       "probe_listed": 0.9965277777777778,
+       "probe_right_on_wrong": 1.0
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 92,
+       "output": 0.6805555555555556,
+       "output_listed": 0.7222222222222222,
+       "probe": 0.9895833333333334,
+       "probe_listed": 0.9895833333333334,
+       "probe_right_on_wrong": 0.9782608695652174
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 121,
+       "output": 0.5798611111111112,
+       "output_listed": 0.625,
+       "probe": 1.0,
+       "probe_listed": 1.0,
+       "probe_right_on_wrong": 1.0
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 101,
+       "output": 0.6493055555555556,
+       "output_listed": 0.6597222222222222,
+       "probe": 1.0,
+       "probe_listed": 1.0,
+       "probe_right_on_wrong": 1.0
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 97,
+       "output": 0.6631944444444444,
+       "output_listed": 0.6805555555555556,
+       "probe": 1.0,
+       "probe_listed": 1.0,
+       "probe_right_on_wrong": 1.0
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 96,
+       "output": 0.6666666666666666,
+       "output_listed": 0.6770833333333334,
+       "probe": 1.0,
+       "probe_listed": 1.0,
+       "probe_right_on_wrong": 1.0
+      }
+     ]
+    },
+    {
+     "cond": "verbatim",
+     "control": "foil",
+     "layer": 18,
+     "rows": [
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 69,
+       "output": 0.7604166666666666,
+       "output_listed": 0.8090277777777778,
+       "probe": 0.1284722222222222,
+       "probe_listed": 0.4097222222222222,
+       "probe_right_on_wrong": 0.057971014492753624
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 92,
+       "output": 0.6805555555555556,
+       "output_listed": 0.7222222222222222,
+       "probe": 0.125,
+       "probe_listed": 0.2847222222222222,
+       "probe_right_on_wrong": 0.14130434782608695
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 121,
+       "output": 0.5798611111111112,
+       "output_listed": 0.625,
+       "probe": 0.03819444444444445,
+       "probe_listed": 0.14930555555555555,
+       "probe_right_on_wrong": 0.01652892561983471
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 101,
+       "output": 0.6493055555555556,
+       "output_listed": 0.6597222222222222,
+       "probe": 0.06597222222222222,
+       "probe_listed": 0.1076388888888889,
+       "probe_right_on_wrong": 0.039603960396039604
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 97,
+       "output": 0.6631944444444444,
+       "output_listed": 0.6805555555555556,
+       "probe": 0.027777777777777776,
+       "probe_listed": 0.052083333333333336,
+       "probe_right_on_wrong": 0.020618556701030927
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 96,
+       "output": 0.6666666666666666,
+       "output_listed": 0.6770833333333334,
+       "probe": 0.013888888888888888,
+       "probe_listed": 0.024305555555555556,
+       "probe_right_on_wrong": 0.0
+      }
+     ]
+    },
+    {
+     "cond": "shots2",
+     "control": "shuffled",
+     "layer": 18,
+     "rows": [
+      {
+       "K": 1,
+       "n": 288,
+       "n_wrong": 5,
+       "output": 0.9826388888888888,
+       "output_listed": 1.0,
+       "probe": 0.013888888888888888,
+       "probe_listed": 1.0,
+       "probe_right_on_wrong": 0.2
+      },
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 51,
+       "output": 0.8229166666666666,
+       "output_listed": 0.8263888888888888,
+       "probe": 0.017361111111111112,
+       "probe_listed": 0.5347222222222222,
+       "probe_right_on_wrong": 0.0196078431372549
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 52,
+       "output": 0.8194444444444444,
+       "output_listed": 0.8194444444444444,
+       "probe": 0.024305555555555556,
+       "probe_listed": 0.2673611111111111,
+       "probe_right_on_wrong": 0.057692307692307696
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 62,
+       "output": 0.7847222222222222,
+       "output_listed": 0.7847222222222222,
+       "probe": 0.013888888888888888,
+       "probe_listed": 0.1284722222222222,
+       "probe_right_on_wrong": 0.016129032258064516
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 64,
+       "output": 0.7777777777777778,
+       "output_listed": 0.7777777777777778,
+       "probe": 0.013888888888888888,
+       "probe_listed": 0.05555555555555555,
+       "probe_right_on_wrong": 0.03125
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 78,
+       "output": 0.7291666666666666,
+       "output_listed": 0.7291666666666666,
+       "probe": 0.020833333333333332,
+       "probe_listed": 0.041666666666666664,
+       "probe_right_on_wrong": 0.01282051282051282
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 99,
+       "output": 0.65625,
+       "output_listed": 0.65625,
+       "probe": 0.013888888888888888,
+       "probe_listed": 0.020833333333333332,
+       "probe_right_on_wrong": 0.010101010101010102
+      }
+     ]
+    },
+    {
+     "cond": "shots2",
+     "control": "entity",
+     "layer": 18,
+     "rows": [
+      {
+       "K": 1,
+       "n": 288,
+       "n_wrong": 5,
+       "output": 0.9826388888888888,
+       "output_listed": 1.0,
+       "probe": 0.90625,
+       "probe_listed": 0.90625,
+       "probe_right_on_wrong": 1.0
+      },
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 51,
+       "output": 0.8229166666666666,
+       "output_listed": 0.8263888888888888,
+       "probe": 0.9131944444444444,
+       "probe_listed": 0.9131944444444444,
+       "probe_right_on_wrong": 0.9803921568627451
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 52,
+       "output": 0.8194444444444444,
+       "output_listed": 0.8194444444444444,
+       "probe": 0.9965277777777778,
+       "probe_listed": 0.9965277777777778,
+       "probe_right_on_wrong": 1.0
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 62,
+       "output": 0.7847222222222222,
+       "output_listed": 0.7847222222222222,
+       "probe": 0.9895833333333334,
+       "probe_listed": 0.9895833333333334,
+       "probe_right_on_wrong": 1.0
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 64,
+       "output": 0.7777777777777778,
+       "output_listed": 0.7777777777777778,
+       "probe": 0.9965277777777778,
+       "probe_listed": 0.9965277777777778,
+       "probe_right_on_wrong": 0.984375
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 78,
+       "output": 0.7291666666666666,
+       "output_listed": 0.7291666666666666,
+       "probe": 1.0,
+       "probe_listed": 1.0,
+       "probe_right_on_wrong": 1.0
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 99,
+       "output": 0.65625,
+       "output_listed": 0.65625,
+       "probe": 0.9965277777777778,
+       "probe_listed": 0.9965277777777778,
+       "probe_right_on_wrong": 1.0
+      }
+     ]
+    },
+    {
+     "cond": "shots2",
+     "control": "foil",
+     "layer": 18,
+     "rows": [
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 51,
+       "output": 0.8229166666666666,
+       "output_listed": 0.8263888888888888,
+       "probe": 0.6805555555555556,
+       "probe_listed": 0.90625,
+       "probe_right_on_wrong": 0.803921568627451
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 52,
+       "output": 0.8194444444444444,
+       "output_listed": 0.8194444444444444,
+       "probe": 0.15625,
+       "probe_listed": 0.3055555555555556,
+       "probe_right_on_wrong": 0.19230769230769232
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 62,
+       "output": 0.7847222222222222,
+       "output_listed": 0.7847222222222222,
+       "probe": 0.06597222222222222,
+       "probe_listed": 0.1736111111111111,
+       "probe_right_on_wrong": 0.03225806451612903
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 64,
+       "output": 0.7777777777777778,
+       "output_listed": 0.7777777777777778,
+       "probe": 0.03819444444444445,
+       "probe_listed": 0.08680555555555555,
+       "probe_right_on_wrong": 0.03125
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 78,
+       "output": 0.7291666666666666,
+       "output_listed": 0.7291666666666666,
+       "probe": 0.013888888888888888,
+       "probe_listed": 0.027777777777777776,
+       "probe_right_on_wrong": 0.01282051282051282
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 99,
+       "output": 0.65625,
+       "output_listed": 0.65625,
+       "probe": 0.017361111111111112,
+       "probe_listed": 0.034722222222222224,
+       "probe_right_on_wrong": 0.0
+      }
+     ]
+    }
+   ]
+  },
+  "pythia-160m|main": {
+   "embed_md5": "4abc660540c40818cea51abb7b977f3b",
+   "label": "pythia-160m",
+   "n_layers": 12,
+   "revision": "main",
+   "runs": [
+    {
+     "cond": "verbatim",
+     "control": "shuffled",
+     "layer": 9,
+     "rows": [
+      {
+       "K": 1,
+       "n": 288,
+       "n_wrong": 1,
+       "output": 0.9965277777777778,
+       "output_listed": 1.0,
+       "probe": 0.017361111111111112,
+       "probe_listed": 1.0,
+       "probe_right_on_wrong": 0.0
+      },
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 44,
+       "output": 0.8472222222222222,
+       "output_listed": 0.8680555555555556,
+       "probe": 0.010416666666666666,
+       "probe_listed": 0.5451388888888888,
+       "probe_right_on_wrong": 0.0
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 58,
+       "output": 0.7986111111111112,
+       "output_listed": 0.8090277777777778,
+       "probe": 0.010416666666666666,
+       "probe_listed": 0.19791666666666666,
+       "probe_right_on_wrong": 0.017241379310344827
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 94,
+       "output": 0.6736111111111112,
+       "output_listed": 0.6875,
+       "probe": 0.013888888888888888,
+       "probe_listed": 0.14583333333333334,
+       "probe_right_on_wrong": 0.010638297872340425
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 92,
+       "output": 0.6805555555555556,
+       "output_listed": 0.7013888888888888,
+       "probe": 0.020833333333333332,
+       "probe_listed": 0.0798611111111111,
+       "probe_right_on_wrong": 0.021739130434782608
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 99,
+       "output": 0.65625,
+       "output_listed": 0.6666666666666666,
+       "probe": 0.006944444444444444,
+       "probe_listed": 0.013888888888888888,
+       "probe_right_on_wrong": 0.020202020202020204
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 88,
+       "output": 0.6944444444444444,
+       "output_listed": 0.7013888888888888,
+       "probe": 0.006944444444444444,
+       "probe_listed": 0.017361111111111112,
+       "probe_right_on_wrong": 0.022727272727272728
+      }
+     ]
+    },
+    {
+     "cond": "verbatim",
+     "control": "entity",
+     "layer": 9,
+     "rows": [
+      {
+       "K": 1,
+       "n": 288,
+       "n_wrong": 1,
+       "output": 0.9965277777777778,
+       "output_listed": 1.0,
+       "probe": 0.9826388888888888,
+       "probe_listed": 0.9826388888888888,
+       "probe_right_on_wrong": 1.0
+      },
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 44,
+       "output": 0.8472222222222222,
+       "output_listed": 0.8680555555555556,
+       "probe": 0.9513888888888888,
+       "probe_listed": 0.9513888888888888,
+       "probe_right_on_wrong": 0.9090909090909091
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 58,
+       "output": 0.7986111111111112,
+       "output_listed": 0.8090277777777778,
+       "probe": 0.9722222222222222,
+       "probe_listed": 0.9722222222222222,
+       "probe_right_on_wrong": 0.9827586206896551
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 94,
+       "output": 0.6736111111111112,
+       "output_listed": 0.6875,
+       "probe": 0.9722222222222222,
+       "probe_listed": 0.9722222222222222,
+       "probe_right_on_wrong": 0.9893617021276596
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 92,
+       "output": 0.6805555555555556,
+       "output_listed": 0.7013888888888888,
+       "probe": 0.9756944444444444,
+       "probe_listed": 0.9756944444444444,
+       "probe_right_on_wrong": 0.9782608695652174
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 99,
+       "output": 0.65625,
+       "output_listed": 0.6666666666666666,
+       "probe": 0.9722222222222222,
+       "probe_listed": 0.9722222222222222,
+       "probe_right_on_wrong": 0.98989898989899
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 88,
+       "output": 0.6944444444444444,
+       "output_listed": 0.7013888888888888,
+       "probe": 0.9826388888888888,
+       "probe_listed": 0.9826388888888888,
+       "probe_right_on_wrong": 0.9886363636363636
+      }
+     ]
+    },
+    {
+     "cond": "verbatim",
+     "control": "foil",
+     "layer": 9,
+     "rows": [
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 44,
+       "output": 0.8472222222222222,
+       "output_listed": 0.8680555555555556,
+       "probe": 0.14930555555555555,
+       "probe_listed": 0.28125,
+       "probe_right_on_wrong": 0.25
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 58,
+       "output": 0.7986111111111112,
+       "output_listed": 0.8090277777777778,
+       "probe": 0.0625,
+       "probe_listed": 0.15625,
+       "probe_right_on_wrong": 0.08620689655172414
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 94,
+       "output": 0.6736111111111112,
+       "output_listed": 0.6875,
+       "probe": 0.034722222222222224,
+       "probe_listed": 0.1076388888888889,
+       "probe_right_on_wrong": 0.031914893617021274
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 92,
+       "output": 0.6805555555555556,
+       "output_listed": 0.7013888888888888,
+       "probe": 0.027777777777777776,
+       "probe_listed": 0.0763888888888889,
+       "probe_right_on_wrong": 0.0
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 99,
+       "output": 0.65625,
+       "output_listed": 0.6666666666666666,
+       "probe": 0.017361111111111112,
+       "probe_listed": 0.020833333333333332,
+       "probe_right_on_wrong": 0.020202020202020204
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 88,
+       "output": 0.6944444444444444,
+       "output_listed": 0.7013888888888888,
+       "probe": 0.024305555555555556,
+       "probe_listed": 0.03819444444444445,
+       "probe_right_on_wrong": 0.022727272727272728
+      }
+     ]
+    },
+    {
+     "cond": "shots2",
+     "control": "shuffled",
+     "layer": 9,
+     "rows": [
+      {
+       "K": 1,
+       "n": 288,
+       "n_wrong": 31,
+       "output": 0.8923611111111112,
+       "output_listed": 1.0,
+       "probe": 0.010416666666666666,
+       "probe_listed": 1.0,
+       "probe_right_on_wrong": 0.0
+      },
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 269,
+       "output": 0.06597222222222222,
+       "output_listed": 0.06597222222222222,
+       "probe": 0.020833333333333332,
+       "probe_listed": 0.5069444444444444,
+       "probe_right_on_wrong": 0.01858736059479554
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 277,
+       "output": 0.03819444444444445,
+       "output_listed": 0.041666666666666664,
+       "probe": 0.010416666666666666,
+       "probe_listed": 0.2569444444444444,
+       "probe_right_on_wrong": 0.010830324909747292
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 268,
+       "output": 0.06944444444444445,
+       "output_listed": 0.07291666666666667,
+       "probe": 0.006944444444444444,
+       "probe_listed": 0.125,
+       "probe_right_on_wrong": 0.007462686567164179
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 271,
+       "output": 0.059027777777777776,
+       "output_listed": 0.059027777777777776,
+       "probe": 0.003472222222222222,
+       "probe_listed": 0.08680555555555555,
+       "probe_right_on_wrong": 0.0036900369003690036
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 278,
+       "output": 0.034722222222222224,
+       "output_listed": 0.03819444444444445,
+       "probe": 0.034722222222222224,
+       "probe_listed": 0.06944444444444445,
+       "probe_right_on_wrong": 0.03597122302158273
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 283,
+       "output": 0.017361111111111112,
+       "output_listed": 0.017361111111111112,
+       "probe": 0.006944444444444444,
+       "probe_listed": 0.024305555555555556,
+       "probe_right_on_wrong": 0.007067137809187279
+      }
+     ]
+    },
+    {
+     "cond": "shots2",
+     "control": "entity",
+     "layer": 9,
+     "rows": [
+      {
+       "K": 1,
+       "n": 288,
+       "n_wrong": 31,
+       "output": 0.8923611111111112,
+       "output_listed": 1.0,
+       "probe": 0.9409722222222222,
+       "probe_listed": 0.9409722222222222,
+       "probe_right_on_wrong": 0.967741935483871
+      },
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 269,
+       "output": 0.06597222222222222,
+       "output_listed": 0.06597222222222222,
+       "probe": 0.8645833333333334,
+       "probe_listed": 0.8645833333333334,
+       "probe_right_on_wrong": 0.8661710037174721
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 277,
+       "output": 0.03819444444444445,
+       "output_listed": 0.041666666666666664,
+       "probe": 0.65625,
+       "probe_listed": 0.65625,
+       "probe_right_on_wrong": 0.6462093862815884
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 268,
+       "output": 0.06944444444444445,
+       "output_listed": 0.07291666666666667,
+       "probe": 0.6909722222222222,
+       "probe_listed": 0.6909722222222222,
+       "probe_right_on_wrong": 0.7014925373134329
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 271,
+       "output": 0.059027777777777776,
+       "output_listed": 0.059027777777777776,
+       "probe": 0.6423611111111112,
+       "probe_listed": 0.6423611111111112,
+       "probe_right_on_wrong": 0.6494464944649446
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 278,
+       "output": 0.034722222222222224,
+       "output_listed": 0.03819444444444445,
+       "probe": 0.5868055555555556,
+       "probe_listed": 0.5868055555555556,
+       "probe_right_on_wrong": 0.5935251798561151
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 283,
+       "output": 0.017361111111111112,
+       "output_listed": 0.017361111111111112,
+       "probe": 0.6388888888888888,
+       "probe_listed": 0.6388888888888888,
+       "probe_right_on_wrong": 0.6360424028268551
+      }
+     ]
+    },
+    {
+     "cond": "shots2",
+     "control": "foil",
+     "layer": 9,
+     "rows": [
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 269,
+       "output": 0.06597222222222222,
+       "output_listed": 0.06597222222222222,
+       "probe": 0.6319444444444444,
+       "probe_listed": 0.8645833333333334,
+       "probe_right_on_wrong": 0.6356877323420075
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 277,
+       "output": 0.03819444444444445,
+       "output_listed": 0.041666666666666664,
+       "probe": 0.2152777777777778,
+       "probe_listed": 0.3194444444444444,
+       "probe_right_on_wrong": 0.21660649819494585
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 268,
+       "output": 0.06944444444444445,
+       "output_listed": 0.07291666666666667,
+       "probe": 0.09375,
+       "probe_listed": 0.15625,
+       "probe_right_on_wrong": 0.09701492537313433
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 271,
+       "output": 0.059027777777777776,
+       "output_listed": 0.059027777777777776,
+       "probe": 0.03125,
+       "probe_listed": 0.06597222222222222,
+       "probe_right_on_wrong": 0.033210332103321034
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 278,
+       "output": 0.034722222222222224,
+       "output_listed": 0.03819444444444445,
+       "probe": 0.017361111111111112,
+       "probe_listed": 0.027777777777777776,
+       "probe_right_on_wrong": 0.014388489208633094
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 283,
+       "output": 0.017361111111111112,
+       "output_listed": 0.017361111111111112,
+       "probe": 0.017361111111111112,
+       "probe_listed": 0.017361111111111112,
+       "probe_right_on_wrong": 0.0176678445229682
+      }
+     ]
+    }
+   ]
+  },
+  "pythia-1b|main": {
+   "embed_md5": "ca343ccd829af39577dd86cf96144dbe",
+   "label": "pythia-1b",
+   "n_layers": 16,
+   "revision": "main",
+   "runs": [
+    {
+     "cond": "verbatim",
+     "control": "shuffled",
+     "layer": 12,
+     "rows": [
+      {
+       "K": 1,
+       "n": 288,
+       "n_wrong": 11,
+       "output": 0.9618055555555556,
+       "output_listed": 1.0,
+       "probe": 0.013888888888888888,
+       "probe_listed": 1.0,
+       "probe_right_on_wrong": 0.0
+      },
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 58,
+       "output": 0.7986111111111112,
+       "output_listed": 0.8229166666666666,
+       "probe": 0.034722222222222224,
+       "probe_listed": 0.5555555555555556,
+       "probe_right_on_wrong": 0.06896551724137931
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 71,
+       "output": 0.7534722222222222,
+       "output_listed": 0.78125,
+       "probe": 0.010416666666666666,
+       "probe_listed": 0.2013888888888889,
+       "probe_right_on_wrong": 0.014084507042253521
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 86,
+       "output": 0.7013888888888888,
+       "output_listed": 0.7118055555555556,
+       "probe": 0.017361111111111112,
+       "probe_listed": 0.14583333333333334,
+       "probe_right_on_wrong": 0.011627906976744186
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 88,
+       "output": 0.6944444444444444,
+       "output_listed": 0.7118055555555556,
+       "probe": 0.020833333333333332,
+       "probe_listed": 0.09027777777777778,
+       "probe_right_on_wrong": 0.03409090909090909
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 93,
+       "output": 0.6770833333333334,
+       "output_listed": 0.6875,
+       "probe": 0.017361111111111112,
+       "probe_listed": 0.04861111111111111,
+       "probe_right_on_wrong": 0.021505376344086023
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 87,
+       "output": 0.6979166666666666,
+       "output_listed": 0.7118055555555556,
+       "probe": 0.013888888888888888,
+       "probe_listed": 0.020833333333333332,
+       "probe_right_on_wrong": 0.011494252873563218
+      }
+     ]
+    },
+    {
+     "cond": "verbatim",
+     "control": "entity",
+     "layer": 12,
+     "rows": [
+      {
+       "K": 1,
+       "n": 288,
+       "n_wrong": 11,
+       "output": 0.9618055555555556,
+       "output_listed": 1.0,
+       "probe": 1.0,
+       "probe_listed": 1.0,
+       "probe_right_on_wrong": 1.0
+      },
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 58,
+       "output": 0.7986111111111112,
+       "output_listed": 0.8229166666666666,
+       "probe": 0.9861111111111112,
+       "probe_listed": 0.9861111111111112,
+       "probe_right_on_wrong": 0.9827586206896551
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 71,
+       "output": 0.7534722222222222,
+       "output_listed": 0.78125,
+       "probe": 0.9895833333333334,
+       "probe_listed": 0.9895833333333334,
+       "probe_right_on_wrong": 0.9859154929577465
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 86,
+       "output": 0.7013888888888888,
+       "output_listed": 0.7118055555555556,
+       "probe": 0.9965277777777778,
+       "probe_listed": 0.9965277777777778,
+       "probe_right_on_wrong": 1.0
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 88,
+       "output": 0.6944444444444444,
+       "output_listed": 0.7118055555555556,
+       "probe": 0.9965277777777778,
+       "probe_listed": 0.9965277777777778,
+       "probe_right_on_wrong": 1.0
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 93,
+       "output": 0.6770833333333334,
+       "output_listed": 0.6875,
+       "probe": 1.0,
+       "probe_listed": 1.0,
+       "probe_right_on_wrong": 1.0
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 87,
+       "output": 0.6979166666666666,
+       "output_listed": 0.7118055555555556,
+       "probe": 1.0,
+       "probe_listed": 1.0,
+       "probe_right_on_wrong": 1.0
+      }
+     ]
+    },
+    {
+     "cond": "verbatim",
+     "control": "foil",
+     "layer": 12,
+     "rows": [
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 58,
+       "output": 0.7986111111111112,
+       "output_listed": 0.8229166666666666,
+       "probe": 0.1701388888888889,
+       "probe_listed": 0.3055555555555556,
+       "probe_right_on_wrong": 0.22413793103448276
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 71,
+       "output": 0.7534722222222222,
+       "output_listed": 0.78125,
+       "probe": 0.09722222222222222,
+       "probe_listed": 0.14930555555555555,
+       "probe_right_on_wrong": 0.1267605633802817
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 86,
+       "output": 0.7013888888888888,
+       "output_listed": 0.7118055555555556,
+       "probe": 0.06944444444444445,
+       "probe_listed": 0.10069444444444445,
+       "probe_right_on_wrong": 0.023255813953488372
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 88,
+       "output": 0.6944444444444444,
+       "output_listed": 0.7118055555555556,
+       "probe": 0.05555555555555555,
+       "probe_listed": 0.06944444444444445,
+       "probe_right_on_wrong": 0.056818181818181816
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 93,
+       "output": 0.6770833333333334,
+       "output_listed": 0.6875,
+       "probe": 0.024305555555555556,
+       "probe_listed": 0.034722222222222224,
+       "probe_right_on_wrong": 0.021505376344086023
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 87,
+       "output": 0.6979166666666666,
+       "output_listed": 0.7118055555555556,
+       "probe": 0.020833333333333332,
+       "probe_listed": 0.020833333333333332,
+       "probe_right_on_wrong": 0.011494252873563218
+      }
+     ]
+    },
+    {
+     "cond": "shots2",
+     "control": "shuffled",
+     "layer": 12,
+     "rows": [
+      {
+       "K": 1,
+       "n": 288,
+       "n_wrong": 5,
+       "output": 0.9826388888888888,
+       "output_listed": 1.0,
+       "probe": 0.010416666666666666,
+       "probe_listed": 1.0,
+       "probe_right_on_wrong": 0.2
+      },
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 98,
+       "output": 0.6597222222222222,
+       "output_listed": 0.6597222222222222,
+       "probe": 0.017361111111111112,
+       "probe_listed": 0.5555555555555556,
+       "probe_right_on_wrong": 0.01020408163265306
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 44,
+       "output": 0.8472222222222222,
+       "output_listed": 0.8472222222222222,
+       "probe": 0.013888888888888888,
+       "probe_listed": 0.21180555555555555,
+       "probe_right_on_wrong": 0.022727272727272728
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 40,
+       "output": 0.8611111111111112,
+       "output_listed": 0.8611111111111112,
+       "probe": 0.017361111111111112,
+       "probe_listed": 0.1284722222222222,
+       "probe_right_on_wrong": 0.0
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 56,
+       "output": 0.8055555555555556,
+       "output_listed": 0.8055555555555556,
+       "probe": 0.020833333333333332,
+       "probe_listed": 0.0625,
+       "probe_right_on_wrong": 0.0
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 91,
+       "output": 0.6840277777777778,
+       "output_listed": 0.6840277777777778,
+       "probe": 0.010416666666666666,
+       "probe_listed": 0.017361111111111112,
+       "probe_right_on_wrong": 0.01098901098901099
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 132,
+       "output": 0.5416666666666666,
+       "output_listed": 0.5451388888888888,
+       "probe": 0.006944444444444444,
+       "probe_listed": 0.013888888888888888,
+       "probe_right_on_wrong": 0.007575757575757576
+      }
+     ]
+    },
+    {
+     "cond": "shots2",
+     "control": "entity",
+     "layer": 12,
+     "rows": [
+      {
+       "K": 1,
+       "n": 288,
+       "n_wrong": 5,
+       "output": 0.9826388888888888,
+       "output_listed": 1.0,
+       "probe": 0.96875,
+       "probe_listed": 0.96875,
+       "probe_right_on_wrong": 1.0
+      },
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 98,
+       "output": 0.6597222222222222,
+       "output_listed": 0.6597222222222222,
+       "probe": 0.9444444444444444,
+       "probe_listed": 0.9444444444444444,
+       "probe_right_on_wrong": 0.9693877551020408
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 44,
+       "output": 0.8472222222222222,
+       "output_listed": 0.8472222222222222,
+       "probe": 0.9027777777777778,
+       "probe_listed": 0.9027777777777778,
+       "probe_right_on_wrong": 0.9090909090909091
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 40,
+       "output": 0.8611111111111112,
+       "output_listed": 0.8611111111111112,
+       "probe": 0.9097222222222222,
+       "probe_listed": 0.9097222222222222,
+       "probe_right_on_wrong": 0.95
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 56,
+       "output": 0.8055555555555556,
+       "output_listed": 0.8055555555555556,
+       "probe": 0.9340277777777778,
+       "probe_listed": 0.9340277777777778,
+       "probe_right_on_wrong": 0.8571428571428571
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 91,
+       "output": 0.6840277777777778,
+       "output_listed": 0.6840277777777778,
+       "probe": 0.9652777777777778,
+       "probe_listed": 0.9652777777777778,
+       "probe_right_on_wrong": 0.9560439560439561
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 132,
+       "output": 0.5416666666666666,
+       "output_listed": 0.5451388888888888,
+       "probe": 0.9895833333333334,
+       "probe_listed": 0.9895833333333334,
+       "probe_right_on_wrong": 0.9772727272727273
+      }
+     ]
+    },
+    {
+     "cond": "shots2",
+     "control": "foil",
+     "layer": 12,
+     "rows": [
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 98,
+       "output": 0.6597222222222222,
+       "output_listed": 0.6597222222222222,
+       "probe": 0.6423611111111112,
+       "probe_listed": 0.6875,
+       "probe_right_on_wrong": 0.7755102040816326
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 44,
+       "output": 0.8472222222222222,
+       "output_listed": 0.8472222222222222,
+       "probe": 0.15625,
+       "probe_listed": 0.2152777777777778,
+       "probe_right_on_wrong": 0.20454545454545456
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 40,
+       "output": 0.8611111111111112,
+       "output_listed": 0.8611111111111112,
+       "probe": 0.08680555555555555,
+       "probe_listed": 0.1076388888888889,
+       "probe_right_on_wrong": 0.125
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 56,
+       "output": 0.8055555555555556,
+       "output_listed": 0.8055555555555556,
+       "probe": 0.09027777777777778,
+       "probe_listed": 0.10416666666666667,
+       "probe_right_on_wrong": 0.08928571428571429
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 91,
+       "output": 0.6840277777777778,
+       "output_listed": 0.6840277777777778,
+       "probe": 0.03125,
+       "probe_listed": 0.034722222222222224,
+       "probe_right_on_wrong": 0.03296703296703297
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 132,
+       "output": 0.5416666666666666,
+       "output_listed": 0.5451388888888888,
+       "probe": 0.03125,
+       "probe_listed": 0.03819444444444445,
+       "probe_right_on_wrong": 0.03787878787878788
+      }
+     ]
+    }
+   ]
+  },
+  "pythia-410m|main": {
+   "embed_md5": "a954dc59b950de49c0a0e309e0df3bdd",
+   "label": "pythia-410m",
+   "n_layers": 24,
+   "revision": "main",
+   "runs": [
+    {
+     "cond": "verbatim",
+     "control": "shuffled",
+     "layer": 18,
+     "rows": [
+      {
+       "K": 1,
+       "n": 288,
+       "n_wrong": 8,
+       "output": 0.9722222222222222,
+       "output_listed": 1.0,
+       "probe": 0.027777777777777776,
+       "probe_listed": 1.0,
+       "probe_right_on_wrong": 0.0
+      },
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 77,
+       "output": 0.7326388888888888,
+       "output_listed": 0.7951388888888888,
+       "probe": 0.020833333333333332,
+       "probe_listed": 0.5347222222222222,
+       "probe_right_on_wrong": 0.012987012987012988
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 100,
+       "output": 0.6527777777777778,
+       "output_listed": 0.6909722222222222,
+       "probe": 0.017361111111111112,
+       "probe_listed": 0.2569444444444444,
+       "probe_right_on_wrong": 0.03
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 105,
+       "output": 0.6354166666666666,
+       "output_listed": 0.6701388888888888,
+       "probe": 0.020833333333333332,
+       "probe_listed": 0.1527777777777778,
+       "probe_right_on_wrong": 0.01904761904761905
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 109,
+       "output": 0.6215277777777778,
+       "output_listed": 0.6423611111111112,
+       "probe": 0.020833333333333332,
+       "probe_listed": 0.09027777777777778,
+       "probe_right_on_wrong": 0.027522935779816515
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 144,
+       "output": 0.5,
+       "output_listed": 0.5138888888888888,
+       "probe": 0.017361111111111112,
+       "probe_listed": 0.027777777777777776,
+       "probe_right_on_wrong": 0.013888888888888888
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 172,
+       "output": 0.4027777777777778,
+       "output_listed": 0.40625,
+       "probe": 0.006944444444444444,
+       "probe_listed": 0.017361111111111112,
+       "probe_right_on_wrong": 0.011627906976744186
+      }
+     ]
+    },
+    {
+     "cond": "verbatim",
+     "control": "entity",
+     "layer": 18,
+     "rows": [
+      {
+       "K": 1,
+       "n": 288,
+       "n_wrong": 8,
+       "output": 0.9722222222222222,
+       "output_listed": 1.0,
+       "probe": 0.9861111111111112,
+       "probe_listed": 0.9861111111111112,
+       "probe_right_on_wrong": 1.0
+      },
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 77,
+       "output": 0.7326388888888888,
+       "output_listed": 0.7951388888888888,
+       "probe": 0.9722222222222222,
+       "probe_listed": 0.9722222222222222,
+       "probe_right_on_wrong": 0.987012987012987
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 100,
+       "output": 0.6527777777777778,
+       "output_listed": 0.6909722222222222,
+       "probe": 0.9618055555555556,
+       "probe_listed": 0.9618055555555556,
+       "probe_right_on_wrong": 0.97
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 105,
+       "output": 0.6354166666666666,
+       "output_listed": 0.6701388888888888,
+       "probe": 0.9756944444444444,
+       "probe_listed": 0.9756944444444444,
+       "probe_right_on_wrong": 0.9714285714285714
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 109,
+       "output": 0.6215277777777778,
+       "output_listed": 0.6423611111111112,
+       "probe": 0.9930555555555556,
+       "probe_listed": 0.9930555555555556,
+       "probe_right_on_wrong": 0.9908256880733946
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 144,
+       "output": 0.5,
+       "output_listed": 0.5138888888888888,
+       "probe": 0.9895833333333334,
+       "probe_listed": 0.9895833333333334,
+       "probe_right_on_wrong": 0.9930555555555556
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 172,
+       "output": 0.4027777777777778,
+       "output_listed": 0.40625,
+       "probe": 0.9756944444444444,
+       "probe_listed": 0.9756944444444444,
+       "probe_right_on_wrong": 0.9709302325581395
+      }
+     ]
+    },
+    {
+     "cond": "verbatim",
+     "control": "foil",
+     "layer": 18,
+     "rows": [
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 77,
+       "output": 0.7326388888888888,
+       "output_listed": 0.7951388888888888,
+       "probe": 0.14930555555555555,
+       "probe_listed": 0.3541666666666667,
+       "probe_right_on_wrong": 0.2077922077922078
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 100,
+       "output": 0.6527777777777778,
+       "output_listed": 0.6909722222222222,
+       "probe": 0.0763888888888889,
+       "probe_listed": 0.1875,
+       "probe_right_on_wrong": 0.09
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 105,
+       "output": 0.6354166666666666,
+       "output_listed": 0.6701388888888888,
+       "probe": 0.059027777777777776,
+       "probe_listed": 0.11458333333333333,
+       "probe_right_on_wrong": 0.0761904761904762
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 109,
+       "output": 0.6215277777777778,
+       "output_listed": 0.6423611111111112,
+       "probe": 0.05555555555555555,
+       "probe_listed": 0.08680555555555555,
+       "probe_right_on_wrong": 0.045871559633027525
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 144,
+       "output": 0.5,
+       "output_listed": 0.5138888888888888,
+       "probe": 0.027777777777777776,
+       "probe_listed": 0.041666666666666664,
+       "probe_right_on_wrong": 0.027777777777777776
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 172,
+       "output": 0.4027777777777778,
+       "output_listed": 0.40625,
+       "probe": 0.04513888888888889,
+       "probe_listed": 0.04861111111111111,
+       "probe_right_on_wrong": 0.046511627906976744
+      }
+     ]
+    },
+    {
+     "cond": "shots2",
+     "control": "shuffled",
+     "layer": 18,
+     "rows": [
+      {
+       "K": 1,
+       "n": 288,
+       "n_wrong": 17,
+       "output": 0.9409722222222222,
+       "output_listed": 1.0,
+       "probe": 0.020833333333333332,
+       "probe_listed": 1.0,
+       "probe_right_on_wrong": 0.058823529411764705
+      },
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 59,
+       "output": 0.7951388888888888,
+       "output_listed": 0.8020833333333334,
+       "probe": 0.010416666666666666,
+       "probe_listed": 0.5659722222222222,
+       "probe_right_on_wrong": 0.0
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 36,
+       "output": 0.875,
+       "output_listed": 0.875,
+       "probe": 0.027777777777777776,
+       "probe_listed": 0.2465277777777778,
+       "probe_right_on_wrong": 0.027777777777777776
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 43,
+       "output": 0.8506944444444444,
+       "output_listed": 0.8506944444444444,
+       "probe": 0.017361111111111112,
+       "probe_listed": 0.1597222222222222,
+       "probe_right_on_wrong": 0.023255813953488372
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 67,
+       "output": 0.7673611111111112,
+       "output_listed": 0.7673611111111112,
+       "probe": 0.010416666666666666,
+       "probe_listed": 0.0798611111111111,
+       "probe_right_on_wrong": 0.014925373134328358
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 97,
+       "output": 0.6631944444444444,
+       "output_listed": 0.6666666666666666,
+       "probe": 0.010416666666666666,
+       "probe_listed": 0.03125,
+       "probe_right_on_wrong": 0.010309278350515464
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 151,
+       "output": 0.4756944444444444,
+       "output_listed": 0.4791666666666667,
+       "probe": 0.010416666666666666,
+       "probe_listed": 0.013888888888888888,
+       "probe_right_on_wrong": 0.006622516556291391
+      }
+     ]
+    },
+    {
+     "cond": "shots2",
+     "control": "entity",
+     "layer": 18,
+     "rows": [
+      {
+       "K": 1,
+       "n": 288,
+       "n_wrong": 17,
+       "output": 0.9409722222222222,
+       "output_listed": 1.0,
+       "probe": 0.9444444444444444,
+       "probe_listed": 0.9444444444444444,
+       "probe_right_on_wrong": 0.9411764705882353
+      },
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 59,
+       "output": 0.7951388888888888,
+       "output_listed": 0.8020833333333334,
+       "probe": 0.8888888888888888,
+       "probe_listed": 0.8888888888888888,
+       "probe_right_on_wrong": 0.8135593220338984
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 36,
+       "output": 0.875,
+       "output_listed": 0.875,
+       "probe": 0.8125,
+       "probe_listed": 0.8125,
+       "probe_right_on_wrong": 0.8055555555555556
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 43,
+       "output": 0.8506944444444444,
+       "output_listed": 0.8506944444444444,
+       "probe": 0.8125,
+       "probe_listed": 0.8125,
+       "probe_right_on_wrong": 0.6976744186046512
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 67,
+       "output": 0.7673611111111112,
+       "output_listed": 0.7673611111111112,
+       "probe": 0.8229166666666666,
+       "probe_listed": 0.8229166666666666,
+       "probe_right_on_wrong": 0.835820895522388
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 97,
+       "output": 0.6631944444444444,
+       "output_listed": 0.6666666666666666,
+       "probe": 0.8784722222222222,
+       "probe_listed": 0.8784722222222222,
+       "probe_right_on_wrong": 0.9072164948453608
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 151,
+       "output": 0.4756944444444444,
+       "output_listed": 0.4791666666666667,
+       "probe": 0.9270833333333334,
+       "probe_listed": 0.9270833333333334,
+       "probe_right_on_wrong": 0.9072847682119205
+      }
+     ]
+    },
+    {
+     "cond": "shots2",
+     "control": "foil",
+     "layer": 18,
+     "rows": [
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 59,
+       "output": 0.7951388888888888,
+       "output_listed": 0.8020833333333334,
+       "probe": 0.5069444444444444,
+       "probe_listed": 0.6631944444444444,
+       "probe_right_on_wrong": 0.5932203389830508
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 36,
+       "output": 0.875,
+       "output_listed": 0.875,
+       "probe": 0.12152777777777778,
+       "probe_listed": 0.2152777777777778,
+       "probe_right_on_wrong": 0.16666666666666666
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 43,
+       "output": 0.8506944444444444,
+       "output_listed": 0.8506944444444444,
+       "probe": 0.059027777777777776,
+       "probe_listed": 0.10069444444444445,
+       "probe_right_on_wrong": 0.09302325581395349
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 67,
+       "output": 0.7673611111111112,
+       "output_listed": 0.7673611111111112,
+       "probe": 0.052083333333333336,
+       "probe_listed": 0.08333333333333333,
+       "probe_right_on_wrong": 0.1044776119402985
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 97,
+       "output": 0.6631944444444444,
+       "output_listed": 0.6666666666666666,
+       "probe": 0.03125,
+       "probe_listed": 0.034722222222222224,
+       "probe_right_on_wrong": 0.020618556701030927
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 151,
+       "output": 0.4756944444444444,
+       "output_listed": 0.4791666666666667,
+       "probe": 0.024305555555555556,
+       "probe_listed": 0.03125,
+       "probe_right_on_wrong": 0.006622516556291391
+      }
+     ]
+    }
+   ]
+  },
+  "qwen2.5-0.5b|main": {
+   "embed_md5": "f81b47c7aecb3731c39c33f8d2490cfc",
+   "label": "qwen2.5-0.5b",
+   "n_layers": 24,
+   "revision": "main",
+   "runs": [
+    {
+     "cond": "verbatim",
+     "control": "shuffled",
+     "layer": 18,
+     "rows": [
+      {
+       "K": 1,
+       "n": 288,
+       "n_wrong": 22,
+       "output": 0.9236111111111112,
+       "output_listed": 1.0,
+       "probe": 0.006944444444444444,
+       "probe_listed": 1.0,
+       "probe_right_on_wrong": 0.0
+      },
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 58,
+       "output": 0.7986111111111112,
+       "output_listed": 0.8472222222222222,
+       "probe": 0.017361111111111112,
+       "probe_listed": 0.5173611111111112,
+       "probe_right_on_wrong": 0.0
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 84,
+       "output": 0.7083333333333334,
+       "output_listed": 0.7291666666666666,
+       "probe": 0.010416666666666666,
+       "probe_listed": 0.2465277777777778,
+       "probe_right_on_wrong": 0.0
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 135,
+       "output": 0.53125,
+       "output_listed": 0.5486111111111112,
+       "probe": 0.017361111111111112,
+       "probe_listed": 0.1388888888888889,
+       "probe_right_on_wrong": 0.007407407407407408
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 181,
+       "output": 0.3715277777777778,
+       "output_listed": 0.3784722222222222,
+       "probe": 0.017361111111111112,
+       "probe_listed": 0.0763888888888889,
+       "probe_right_on_wrong": 0.0
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 225,
+       "output": 0.21875,
+       "output_listed": 0.2222222222222222,
+       "probe": 0.017361111111111112,
+       "probe_listed": 0.03819444444444445,
+       "probe_right_on_wrong": 0.013333333333333334
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 267,
+       "output": 0.07291666666666667,
+       "output_listed": 0.07291666666666667,
+       "probe": 0.027777777777777776,
+       "probe_listed": 0.03125,
+       "probe_right_on_wrong": 0.0299625468164794
+      }
+     ]
+    },
+    {
+     "cond": "verbatim",
+     "control": "entity",
+     "layer": 18,
+     "rows": [
+      {
+       "K": 1,
+       "n": 288,
+       "n_wrong": 22,
+       "output": 0.9236111111111112,
+       "output_listed": 1.0,
+       "probe": 0.8993055555555556,
+       "probe_listed": 0.8993055555555556,
+       "probe_right_on_wrong": 0.9545454545454546
+      },
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 58,
+       "output": 0.7986111111111112,
+       "output_listed": 0.8472222222222222,
+       "probe": 0.8923611111111112,
+       "probe_listed": 0.8923611111111112,
+       "probe_right_on_wrong": 0.8793103448275862
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 84,
+       "output": 0.7083333333333334,
+       "output_listed": 0.7291666666666666,
+       "probe": 0.9201388888888888,
+       "probe_listed": 0.9201388888888888,
+       "probe_right_on_wrong": 0.9047619047619048
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 135,
+       "output": 0.53125,
+       "output_listed": 0.5486111111111112,
+       "probe": 0.8888888888888888,
+       "probe_listed": 0.8888888888888888,
+       "probe_right_on_wrong": 0.8740740740740741
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 181,
+       "output": 0.3715277777777778,
+       "output_listed": 0.3784722222222222,
+       "probe": 0.8541666666666666,
+       "probe_listed": 0.8541666666666666,
+       "probe_right_on_wrong": 0.8342541436464088
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 225,
+       "output": 0.21875,
+       "output_listed": 0.2222222222222222,
+       "probe": 0.8715277777777778,
+       "probe_listed": 0.8715277777777778,
+       "probe_right_on_wrong": 0.8666666666666667
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 267,
+       "output": 0.07291666666666667,
+       "output_listed": 0.07291666666666667,
+       "probe": 0.8645833333333334,
+       "probe_listed": 0.8645833333333334,
+       "probe_right_on_wrong": 0.8614232209737828
+      }
+     ]
+    },
+    {
+     "cond": "verbatim",
+     "control": "foil",
+     "layer": 18,
+     "rows": [
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 58,
+       "output": 0.7986111111111112,
+       "output_listed": 0.8472222222222222,
+       "probe": 0.08680555555555555,
+       "probe_listed": 0.2534722222222222,
+       "probe_right_on_wrong": 0.1206896551724138
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 84,
+       "output": 0.7083333333333334,
+       "output_listed": 0.7291666666666666,
+       "probe": 0.0798611111111111,
+       "probe_listed": 0.19791666666666666,
+       "probe_right_on_wrong": 0.09523809523809523
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 135,
+       "output": 0.53125,
+       "output_listed": 0.5486111111111112,
+       "probe": 0.0798611111111111,
+       "probe_listed": 0.13194444444444445,
+       "probe_right_on_wrong": 0.1111111111111111
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 181,
+       "output": 0.3715277777777778,
+       "output_listed": 0.3784722222222222,
+       "probe": 0.0625,
+       "probe_listed": 0.10069444444444445,
+       "probe_right_on_wrong": 0.06629834254143646
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 225,
+       "output": 0.21875,
+       "output_listed": 0.2222222222222222,
+       "probe": 0.04861111111111111,
+       "probe_listed": 0.05555555555555555,
+       "probe_right_on_wrong": 0.044444444444444446
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 267,
+       "output": 0.07291666666666667,
+       "output_listed": 0.07291666666666667,
+       "probe": 0.041666666666666664,
+       "probe_listed": 0.05555555555555555,
+       "probe_right_on_wrong": 0.03745318352059925
+      }
+     ]
+    },
+    {
+     "cond": "shots2",
+     "control": "shuffled",
+     "layer": 18,
+     "rows": [
+      {
+       "K": 1,
+       "n": 288,
+       "n_wrong": 9,
+       "output": 0.96875,
+       "output_listed": 1.0,
+       "probe": 0.013888888888888888,
+       "probe_listed": 1.0,
+       "probe_right_on_wrong": 0.0
+      },
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 18,
+       "output": 0.9375,
+       "output_listed": 0.9444444444444444,
+       "probe": 0.003472222222222222,
+       "probe_listed": 0.5381944444444444,
+       "probe_right_on_wrong": 0.0
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 56,
+       "output": 0.8055555555555556,
+       "output_listed": 0.8055555555555556,
+       "probe": 0.013888888888888888,
+       "probe_listed": 0.2638888888888889,
+       "probe_right_on_wrong": 0.0
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 64,
+       "output": 0.7777777777777778,
+       "output_listed": 0.7777777777777778,
+       "probe": 0.006944444444444444,
+       "probe_listed": 0.16666666666666666,
+       "probe_right_on_wrong": 0.015625
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 61,
+       "output": 0.7881944444444444,
+       "output_listed": 0.7881944444444444,
+       "probe": 0.027777777777777776,
+       "probe_listed": 0.1076388888888889,
+       "probe_right_on_wrong": 0.01639344262295082
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 79,
+       "output": 0.7256944444444444,
+       "output_listed": 0.7256944444444444,
+       "probe": 0.034722222222222224,
+       "probe_listed": 0.059027777777777776,
+       "probe_right_on_wrong": 0.0379746835443038
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 109,
+       "output": 0.6215277777777778,
+       "output_listed": 0.6215277777777778,
+       "probe": 0.010416666666666666,
+       "probe_listed": 0.020833333333333332,
+       "probe_right_on_wrong": 0.009174311926605505
+      }
+     ]
+    },
+    {
+     "cond": "shots2",
+     "control": "entity",
+     "layer": 18,
+     "rows": [
+      {
+       "K": 1,
+       "n": 288,
+       "n_wrong": 9,
+       "output": 0.96875,
+       "output_listed": 1.0,
+       "probe": 0.8263888888888888,
+       "probe_listed": 0.8263888888888888,
+       "probe_right_on_wrong": 1.0
+      },
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 18,
+       "output": 0.9375,
+       "output_listed": 0.9444444444444444,
+       "probe": 0.6111111111111112,
+       "probe_listed": 0.6111111111111112,
+       "probe_right_on_wrong": 0.7222222222222222
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 56,
+       "output": 0.8055555555555556,
+       "output_listed": 0.8055555555555556,
+       "probe": 0.6527777777777778,
+       "probe_listed": 0.6527777777777778,
+       "probe_right_on_wrong": 0.6785714285714286
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 64,
+       "output": 0.7777777777777778,
+       "output_listed": 0.7777777777777778,
+       "probe": 0.7395833333333334,
+       "probe_listed": 0.7395833333333334,
+       "probe_right_on_wrong": 0.78125
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 61,
+       "output": 0.7881944444444444,
+       "output_listed": 0.7881944444444444,
+       "probe": 0.7013888888888888,
+       "probe_listed": 0.7013888888888888,
+       "probe_right_on_wrong": 0.7213114754098361
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 79,
+       "output": 0.7256944444444444,
+       "output_listed": 0.7256944444444444,
+       "probe": 0.7291666666666666,
+       "probe_listed": 0.7291666666666666,
+       "probe_right_on_wrong": 0.7215189873417721
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 109,
+       "output": 0.6215277777777778,
+       "output_listed": 0.6215277777777778,
+       "probe": 0.7326388888888888,
+       "probe_listed": 0.7326388888888888,
+       "probe_right_on_wrong": 0.7431192660550459
+      }
+     ]
+    },
+    {
+     "cond": "shots2",
+     "control": "foil",
+     "layer": 18,
+     "rows": [
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 18,
+       "output": 0.9375,
+       "output_listed": 0.9444444444444444,
+       "probe": 0.24305555555555555,
+       "probe_listed": 0.5833333333333334,
+       "probe_right_on_wrong": 0.3333333333333333
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 56,
+       "output": 0.8055555555555556,
+       "output_listed": 0.8055555555555556,
+       "probe": 0.1597222222222222,
+       "probe_listed": 0.3368055555555556,
+       "probe_right_on_wrong": 0.26785714285714285
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 64,
+       "output": 0.7777777777777778,
+       "output_listed": 0.7777777777777778,
+       "probe": 0.04513888888888889,
+       "probe_listed": 0.125,
+       "probe_right_on_wrong": 0.078125
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 61,
+       "output": 0.7881944444444444,
+       "output_listed": 0.7881944444444444,
+       "probe": 0.020833333333333332,
+       "probe_listed": 0.05555555555555555,
+       "probe_right_on_wrong": 0.0
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 79,
+       "output": 0.7256944444444444,
+       "output_listed": 0.7256944444444444,
+       "probe": 0.020833333333333332,
+       "probe_listed": 0.034722222222222224,
+       "probe_right_on_wrong": 0.0379746835443038
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 109,
+       "output": 0.6215277777777778,
+       "output_listed": 0.6215277777777778,
+       "probe": 0.034722222222222224,
+       "probe_listed": 0.04513888888888889,
+       "probe_right_on_wrong": 0.06422018348623854
+      }
+     ]
+    }
+   ]
+  },
+  "smollm2-360m|main": {
+   "embed_md5": "594784948a4ed3b532345f7ef463cf6d",
+   "label": "smollm2-360m",
+   "n_layers": 32,
+   "revision": "main",
+   "runs": [
+    {
+     "cond": "verbatim",
+     "control": "shuffled",
+     "layer": 24,
+     "rows": [
+      {
+       "K": 1,
+       "n": 288,
+       "n_wrong": 20,
+       "output": 0.9305555555555556,
+       "output_listed": 1.0,
+       "probe": 0.010416666666666666,
+       "probe_listed": 1.0,
+       "probe_right_on_wrong": 0.0
+      },
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 50,
+       "output": 0.8263888888888888,
+       "output_listed": 0.8402777777777778,
+       "probe": 0.013888888888888888,
+       "probe_listed": 0.5138888888888888,
+       "probe_right_on_wrong": 0.0
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 96,
+       "output": 0.6666666666666666,
+       "output_listed": 0.7048611111111112,
+       "probe": 0.017361111111111112,
+       "probe_listed": 0.24305555555555555,
+       "probe_right_on_wrong": 0.0
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 140,
+       "output": 0.5138888888888888,
+       "output_listed": 0.5520833333333334,
+       "probe": 0.006944444444444444,
+       "probe_listed": 0.1284722222222222,
+       "probe_right_on_wrong": 0.007142857142857143
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 150,
+       "output": 0.4791666666666667,
+       "output_listed": 0.4895833333333333,
+       "probe": 0.013888888888888888,
+       "probe_listed": 0.05555555555555555,
+       "probe_right_on_wrong": 0.013333333333333334
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 181,
+       "output": 0.3715277777777778,
+       "output_listed": 0.3854166666666667,
+       "probe": 0.003472222222222222,
+       "probe_listed": 0.013888888888888888,
+       "probe_right_on_wrong": 0.0055248618784530384
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 192,
+       "output": 0.3333333333333333,
+       "output_listed": 0.3368055555555556,
+       "probe": 0.024305555555555556,
+       "probe_listed": 0.027777777777777776,
+       "probe_right_on_wrong": 0.026041666666666668
+      }
+     ]
+    },
+    {
+     "cond": "verbatim",
+     "control": "entity",
+     "layer": 24,
+     "rows": [
+      {
+       "K": 1,
+       "n": 288,
+       "n_wrong": 20,
+       "output": 0.9305555555555556,
+       "output_listed": 1.0,
+       "probe": 0.9791666666666666,
+       "probe_listed": 0.9791666666666666,
+       "probe_right_on_wrong": 1.0
+      },
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 50,
+       "output": 0.8263888888888888,
+       "output_listed": 0.8402777777777778,
+       "probe": 0.9618055555555556,
+       "probe_listed": 0.9618055555555556,
+       "probe_right_on_wrong": 0.92
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 96,
+       "output": 0.6666666666666666,
+       "output_listed": 0.7048611111111112,
+       "probe": 0.96875,
+       "probe_listed": 0.96875,
+       "probe_right_on_wrong": 0.9895833333333334
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 140,
+       "output": 0.5138888888888888,
+       "output_listed": 0.5520833333333334,
+       "probe": 0.9861111111111112,
+       "probe_listed": 0.9861111111111112,
+       "probe_right_on_wrong": 0.9785714285714285
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 150,
+       "output": 0.4791666666666667,
+       "output_listed": 0.4895833333333333,
+       "probe": 0.9895833333333334,
+       "probe_listed": 0.9895833333333334,
+       "probe_right_on_wrong": 0.9933333333333333
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 181,
+       "output": 0.3715277777777778,
+       "output_listed": 0.3854166666666667,
+       "probe": 1.0,
+       "probe_listed": 1.0,
+       "probe_right_on_wrong": 1.0
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 192,
+       "output": 0.3333333333333333,
+       "output_listed": 0.3368055555555556,
+       "probe": 0.9965277777777778,
+       "probe_listed": 0.9965277777777778,
+       "probe_right_on_wrong": 0.9947916666666666
+      }
+     ]
+    },
+    {
+     "cond": "verbatim",
+     "control": "foil",
+     "layer": 24,
+     "rows": [
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 50,
+       "output": 0.8263888888888888,
+       "output_listed": 0.8402777777777778,
+       "probe": 0.14583333333333334,
+       "probe_listed": 0.3923611111111111,
+       "probe_right_on_wrong": 0.18
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 96,
+       "output": 0.6666666666666666,
+       "output_listed": 0.7048611111111112,
+       "probe": 0.125,
+       "probe_listed": 0.2743055555555556,
+       "probe_right_on_wrong": 0.052083333333333336
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 140,
+       "output": 0.5138888888888888,
+       "output_listed": 0.5520833333333334,
+       "probe": 0.04861111111111111,
+       "probe_listed": 0.16666666666666666,
+       "probe_right_on_wrong": 0.02857142857142857
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 150,
+       "output": 0.4791666666666667,
+       "output_listed": 0.4895833333333333,
+       "probe": 0.03819444444444445,
+       "probe_listed": 0.10069444444444445,
+       "probe_right_on_wrong": 0.04
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 181,
+       "output": 0.3715277777777778,
+       "output_listed": 0.3854166666666667,
+       "probe": 0.03125,
+       "probe_listed": 0.052083333333333336,
+       "probe_right_on_wrong": 0.03867403314917127
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 192,
+       "output": 0.3333333333333333,
+       "output_listed": 0.3368055555555556,
+       "probe": 0.020833333333333332,
+       "probe_listed": 0.03125,
+       "probe_right_on_wrong": 0.020833333333333332
+      }
+     ]
+    },
+    {
+     "cond": "shots2",
+     "control": "shuffled",
+     "layer": 24,
+     "rows": [
+      {
+       "K": 1,
+       "n": 288,
+       "n_wrong": 16,
+       "output": 0.9444444444444444,
+       "output_listed": 1.0,
+       "probe": 0.020833333333333332,
+       "probe_listed": 1.0,
+       "probe_right_on_wrong": 0.0
+      },
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 24,
+       "output": 0.9166666666666666,
+       "output_listed": 0.9201388888888888,
+       "probe": 0.010416666666666666,
+       "probe_listed": 0.5243055555555556,
+       "probe_right_on_wrong": 0.0
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 40,
+       "output": 0.8611111111111112,
+       "output_listed": 0.8611111111111112,
+       "probe": 0.013888888888888888,
+       "probe_listed": 0.2708333333333333,
+       "probe_right_on_wrong": 0.05
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 62,
+       "output": 0.7847222222222222,
+       "output_listed": 0.7847222222222222,
+       "probe": 0.020833333333333332,
+       "probe_listed": 0.17708333333333334,
+       "probe_right_on_wrong": 0.0
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 87,
+       "output": 0.6979166666666666,
+       "output_listed": 0.7013888888888888,
+       "probe": 0.017361111111111112,
+       "probe_listed": 0.06944444444444445,
+       "probe_right_on_wrong": 0.0
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 157,
+       "output": 0.4548611111111111,
+       "output_listed": 0.4548611111111111,
+       "probe": 0.013888888888888888,
+       "probe_listed": 0.024305555555555556,
+       "probe_right_on_wrong": 0.01910828025477707
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 195,
+       "output": 0.3229166666666667,
+       "output_listed": 0.3229166666666667,
+       "probe": 0.003472222222222222,
+       "probe_listed": 0.010416666666666666,
+       "probe_right_on_wrong": 0.005128205128205128
+      }
+     ]
+    },
+    {
+     "cond": "shots2",
+     "control": "entity",
+     "layer": 24,
+     "rows": [
+      {
+       "K": 1,
+       "n": 288,
+       "n_wrong": 16,
+       "output": 0.9444444444444444,
+       "output_listed": 1.0,
+       "probe": 0.9375,
+       "probe_listed": 0.9375,
+       "probe_right_on_wrong": 0.9375
+      },
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 24,
+       "output": 0.9166666666666666,
+       "output_listed": 0.9201388888888888,
+       "probe": 0.84375,
+       "probe_listed": 0.84375,
+       "probe_right_on_wrong": 0.875
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 40,
+       "output": 0.8611111111111112,
+       "output_listed": 0.8611111111111112,
+       "probe": 0.8472222222222222,
+       "probe_listed": 0.8472222222222222,
+       "probe_right_on_wrong": 0.95
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 62,
+       "output": 0.7847222222222222,
+       "output_listed": 0.7847222222222222,
+       "probe": 0.9166666666666666,
+       "probe_listed": 0.9166666666666666,
+       "probe_right_on_wrong": 0.9516129032258065
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 87,
+       "output": 0.6979166666666666,
+       "output_listed": 0.7013888888888888,
+       "probe": 0.96875,
+       "probe_listed": 0.96875,
+       "probe_right_on_wrong": 0.9885057471264368
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 157,
+       "output": 0.4548611111111111,
+       "output_listed": 0.4548611111111111,
+       "probe": 0.9895833333333334,
+       "probe_listed": 0.9895833333333334,
+       "probe_right_on_wrong": 1.0
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 195,
+       "output": 0.3229166666666667,
+       "output_listed": 0.3229166666666667,
+       "probe": 0.9791666666666666,
+       "probe_listed": 0.9791666666666666,
+       "probe_right_on_wrong": 0.9846153846153847
+      }
+     ]
+    },
+    {
+     "cond": "shots2",
+     "control": "foil",
+     "layer": 24,
+     "rows": [
+      {
+       "K": 2,
+       "n": 288,
+       "n_wrong": 24,
+       "output": 0.9166666666666666,
+       "output_listed": 0.9201388888888888,
+       "probe": 0.3958333333333333,
+       "probe_listed": 0.7118055555555556,
+       "probe_right_on_wrong": 0.5416666666666666
+      },
+      {
+       "K": 4,
+       "n": 288,
+       "n_wrong": 40,
+       "output": 0.8611111111111112,
+       "output_listed": 0.8611111111111112,
+       "probe": 0.11458333333333333,
+       "probe_listed": 0.2777777777777778,
+       "probe_right_on_wrong": 0.225
+      },
+      {
+       "K": 8,
+       "n": 288,
+       "n_wrong": 62,
+       "output": 0.7847222222222222,
+       "output_listed": 0.7847222222222222,
+       "probe": 0.04513888888888889,
+       "probe_listed": 0.12152777777777778,
+       "probe_right_on_wrong": 0.04838709677419355
+      },
+      {
+       "K": 16,
+       "n": 288,
+       "n_wrong": 87,
+       "output": 0.6979166666666666,
+       "output_listed": 0.7013888888888888,
+       "probe": 0.03819444444444445,
+       "probe_listed": 0.08333333333333333,
+       "probe_right_on_wrong": 0.04597701149425287
+      },
+      {
+       "K": 32,
+       "n": 288,
+       "n_wrong": 157,
+       "output": 0.4548611111111111,
+       "output_listed": 0.4548611111111111,
+       "probe": 0.03125,
+       "probe_listed": 0.07291666666666667,
+       "probe_right_on_wrong": 0.01910828025477707
+      },
+      {
+       "K": 64,
+       "n": 288,
+       "n_wrong": 195,
+       "output": 0.3229166666666667,
+       "output_listed": 0.3229166666666667,
+       "probe": 0.013888888888888888,
+       "probe_listed": 0.017361111111111112,
+       "probe_right_on_wrong": 0.020512820512820513
+      }
+     ]
+    }
+   ]
+  }
+ }
+}

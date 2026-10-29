@@ -1,28 +1,9 @@
-% p3_capacity.tex -- the merged capacity paper (former P2 "Binding Capacity Tracks the
-% Pretraining Recipe" + former P6 "Two laws and a boundary"; p6_laws.tex is retired).
-%
-% GATE 0 (paper-craft), updated at the merge:
-%   Readers: scaling-law, capacity-benchmark, and interpretability researchers who treat
-%            "how much can a model hold" as one quantity that grows with scale.
-%   Denial:  it is three separable quantities with different laws -- zero-shot use, robustness
-%            of use, and learnability under task training -- and the instrument scope decides
-%            which law you see.
-%   Ping:    in-context binding capacity decomposes: a recipe split on the k* instrument to
-%            12B, a scaling law K50 = c N^0.82 on continuous curves to 3B, a 26x regime
-%            boundary fixing what the law prices, and a cost-of-load law for acquiring the
-%            capability from scratch.
-%   Nugget:  the same task measured in two training regimes differs by a factor of 26, which
-%            converts an apparent scaling law into a statement about pretraining, not about
-%            transformers.
-%   ABT:     Capacity looks like one number per model, AND both scaling work and benchmark
-%            work report it that way. BUT the Pythia ladder is flat to 12B while continuous
-%            curves at <=3B fit a scaling law, a task-trained 5M model holds 26x the law, and
-%            robustness is uncorrelated with capacity. THEREFORE capacity decomposes into use,
-%            robustness, and learnability, and every capacity number needs its instrument and
-%            regime attached.
 \documentclass{article}
 \pdfoutput=1
-\usepackage[preprint]{neurips_2024}
+% Camera-ready for the NeurIPS 2026 workshop on Linguistic Principles for Foundation Models.
+% For the arXiv version, replace the option list with [preprint].
+\usepackage[dblblindworkshop,final]{neurips_2026}
+\workshoptitle{Linguistic Principles for Foundation Models}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[hidelinks]{hyperref}
@@ -35,17 +16,18 @@
 \usepackage{microtype}
 \usepackage{graphicx}
 \usepackage{xcolor}
-\usepackage{enumitem}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta}
-\graphicspath{{figs/}{figs_p456/}}
+\graphicspath{{build/assets/}{figs_p456/}}
 \newcommand{\kstar}{k^{\ast}}
 \newcommand{\ddecl}{d_{\mathrm{decl}}}
-\input{numbers}
+\input{numbers_revision}
+\input{numbers_development}
+\input{numbers_measured}
 \definecolor{housetea}{HTML}{1F6F78}
 \definecolor{houseclay}{HTML}{C0442E}
 
-\title{The Capacity of In-Context Binding:\\ a Recipe Split, a Scaling Law, and the Price of Memory}
+\title{In-Context Binding Capacity in Language Models:\\ What the Query and Readout Change}
 
 \author{%
   Manas Venkata Sai Ravulapalli\\
@@ -57,610 +39,789 @@
   \texttt{samrath@perseus.so}
 }
 
+% neurips_2026.sty sets \flushbottom, which stretches paragraph and section glue to force
+% every page to the same depth; \raggedbottom keeps the glue at its natural size.
+\raggedbottom
+
 \begin{document}
 \maketitle
 
 \begin{abstract}
-How many entity--attribute bindings can a language model hold in context before recall collapses? We
-measure this capacity two ways on one controlled binding task, and the two instruments return
-different answers, with a scope tension between them. On the original instrument, spanning
-\NModelsRaw{} open models to 12B parameters, scale alone does not buy capacity: after excluding one model
-whose single-binding accuracy is already at chance, $\kstar$ spans $\KstarMin$ to $\KstarMax$, an
-$\KstarRangeFactor\times$ range that tracks the pretraining \emph{recipe}, while the Pythia ladder is
-flat from 410M to 12B. The recipe difference (median $\KstarOldMed$ for pre-2023 recipes vs
-$\KstarModMed$ for modern ones) survives a bootstrap clustered on families ($95\%$ CI $\KstarFamCI$,
-$p=\KstarFamP$). On an independent re-measurement with committed code and full recall-versus-$K$ curves
-(twelve models, $\le$3B), capacity follows a scaling law: $K_{50} = c\,N^{\alpha}$ with
-$\alpha=\CapAlpha$ ($R^2=\CapRsq$; family-clustered CI $[\CapAlphaCILo, \CapAlphaCIHi]$, containing
-proportionality and excluding zero; deleting any single model moves $\alpha$ by at most $\CapLooMax$).
-On those curves the recipe coefficient spans zero once scale is controlled, an unresolved scope tension
-that larger-model curves must settle. A boundary fixes what the scaling law is a law of: a
-4.98M-parameter transformer trained directly on the task holds $\BoundMeasured$ bindings where the law
-predicts $\BoundPredicted$, a factor of $\BoundFactor$, so the law prices what pretraining delivers for
-zero-shot use, far below what the architecture supports. Acquiring the capability from scratch has its
-own law: formation time grows as a power of load, with exponent roughly
-\TimeLawExpNoKeight--\TimeLawHExp, replicated across two independent codebases. Robustness is a third
-axis that capacity does not predict. On mechanism we report a negative result together with its
-diagnosis: neither non-tautological geometric predictor of $\kstar$ survives family clustering, and
-three measurement artifacts, each strong enough to invert the answer, show why the declaration-site
-geometry misleads (its vector sits at the entity token, which causally precedes its obligation and
-cannot encode the binding). The picture that emerges replaces ``how much can a model hold'' with three
-separately measured, separately budgetable quantities: what pretraining delivers for zero-shot use, how
-robust that use is under interference, and what the architecture supports when trained for the task.
+A low retrieval score can reflect the question and output rule as well as a model's ability to associate names with values.
+Across \NewNModels{} open models from 70M to 2.8B parameters, we measure recall over load and compare alternative questions on matched assignments.
+At sixteen bindings, deleting \texttt{is} from the original question raises Pythia-410M recall from \NewFourTenOriginal{} to \NewFourTenColon{} without changing the weights or scoring rule.
+Under the original question, a preregistered test finds that a supervised hidden-state probe exceeds a trained candidate-logit decoder in all three held-out models.
+Two of those models also meet the registered ten-point probe advantage over native output.
+The query and decoder comparisons distinguish protocol-dependent retrieval from supervised recoverability, providing a basis for evaluating both before interpreting poor recall as a requirement for a larger model.
 \end{abstract}
 
-\section{Introduction}
-A language model reading code must keep \texttt{lock}$\rightarrow$\texttt{balance} apart from
-\texttt{mutex}$\rightarrow$\texttt{queue}. A planner must track which subtask belongs to which actor. This is
-in-context \emph{binding}, and like human working memory it is capacity-limited: past some number of
-simultaneous bindings, recall collapses.
+\section{Introduction}\label{sec:intro}
+A prompt lists \texttt{cache: rotate}, \texttt{token: verify}, and \texttt{socket: flush}, then asks \texttt{The task for token is:}.
+To return \texttt{verify}, a language model must distinguish the value assigned to \texttt{token} from values assigned to the other names.
+This is in-context binding: associating an entity with an attribute supplied by the current context \citep{binding2310}.
+If the model returns \texttt{flush}, the error is easy to score but harder to interpret.
+It may fail to retrieve the queried association, or a different query or readout may recover an answer that its current output misses.
+The distinction determines whether poor recall provides a reason to change the retrieval protocol before selecting a larger model.
 
-The obvious hypothesis is that capacity is bought with parameters alone. On the instrument that spans the
-largest models, it is not: the Pythia ladder holds $\kstar\in[\PythiaKstarLo,\PythiaKstarHi]$ from 410M
-to 12B (a $29\times$ increase in parameters buys essentially nothing), while a 3B Qwen2.5 reaches the
-measurement ceiling. What varies is the recipe. Yet on continuous recall-versus-$K$ curves at $\le$3B,
-parameters do buy capacity, lawfully: $K_{50} = c\,N^{\alpha}$ with $\alpha=\CapAlpha$. Both
-instruments are in this paper (each statistic is defined in Section~\ref{sec:setup} and
-Figure~\ref{fig:task}), and Section~\ref{sec:trn1} states the tension between their answers.
+This question matters for small models because their appeal depends on what they can accomplish at a limited inference cost.
+Longer pretraining can make a smaller model attractive for repeated use \citep{touvron2023}, and on-device models target settings where model size is constrained \citep{mobilellm2024}.
+A configuration lookup or tool argument illustrates the resulting requirement: the model must return the value assigned to a particular name, even when other plausible values occur nearby.
+A large context window establishes that the text can be presented to the model; it does not specify how accurately the model will retrieve the requested association.
+We study this retrieval requirement in isolation, before asking whether it predicts success on a complete application.
 
-The question ``how much can a model hold'' in fact decomposes into three separately measurable
-quantities: what pretraining delivers for zero-shot use, how robust that use is to interference, and what
-the architecture can learn when trained on the task directly. Conflating them produces wrong conclusions
-on both sides: capacity read through a scaling-law lens \citep{kaplan2020, hoffmann2022} risks being
-taken for an architectural limit, and training work over-reads learnability as something pretraining
-should have delivered. The regime boundary of Section~\ref{sec:trn1}, a factor of $\BoundFactor$ between
-the two, is the quantitative form of that distinction.
+The interpretation of a capacity curve depends on how the model is queried.
+Under the question above, Pythia-410M recalls \NewFourTenOriginal{} of queried values at sixteen bindings.
+Deleting \texttt{is}, to ask \texttt{The task for token:}, raises recall to \NewFourTenColon{} on the same assignments and queried entities.
+The model's weights and scoring rule are unchanged.
+The original curve therefore describes a failure under that question, rather than a bound on the number of associations the model can retrieve under other questions.
+Because changing the question also changes the hidden states, this comparison alone does not locate the failure within the network.
 
-Section~\ref{sec:capacity} reports the recipe split and
-the two exclusions it depends on. Section~\ref{sec:geometry} asks what the recipe controls geometrically and
-reports the answer twice: once at the model level and then again under clustering on families, at which
-point \emph{neither} non-tautological
-geometric predictor survives. Section~\ref{sec:notmech} reports a head-to-head against a competing mechanism; our geometry \emph{loses}
-it. Section~\ref{sec:robust} separates capacity from interference-robustness.
-Section~\ref{sec:confounds} documents three measurement artifacts in the declaration-site geometry.
-Section~\ref{sec:trn1} reports the independent re-measurement: the continuous curves, the $K_{50}$
-scaling law with its regime boundary, and the $\le$3B scope tension. Section~\ref{sec:cost} prices
-acquisition: formation time from scratch follows its own power law in load.
+To investigate the readout while holding the original question fixed, we compare three ways of predicting its answer.
+The native output chooses the value with the highest model score.
+A supervised decoder learns to combine all candidate-value scores, and a supervised hidden-state probe predicts the value from an intermediate activation vector.
+The score decoder matters because a probe could beat the native choice even when the output scores retain useful information: the native decision rule may use those scores poorly.
+Only after that comparison can a probe advantage be interpreted as predictive information recoverable beyond the specified score decoder.
+It still does not identify a mechanism or establish that the model uses the probed information \citep{hewitt2019,belinkov2022}.
 
-\paragraph{What this paper claims, and what it does not.} It claims an observational regularity over real
-models, on the $\kstar$ instrument spanning models to 12B: \emph{binding capacity is a
-recipe$\,\times\,$scale interaction: scale alone does not buy capacity, while
-scale within a modern recipe does}. It claims the quantitative laws of the re-measurement: the zero-shot
-scaling law $K_{50} = c\,N^{\alpha}$ on the $\le$3B curves (a post-hoc fit, flagged as such in the
-research program's claim ledger), the $\BoundFactor\times$ regime boundary,
-and the cost-of-load law for acquisition, replicated across two codebases. It does \emph{not} claim a
-mechanism: not a geometric one (the supporting correlates do not survive clustering on families,
-Section~\ref{sec:geometry}), not a per-trial one (a positional account beats ours head-to-head,
-Section~\ref{sec:notmech}), and not a geometry of the entity--obligation binding itself (the quantity
-we measure at the declaration site is a property of the \emph{entity code},
-Section~\ref{sec:confounds}).
+These questions connect two existing research directions.
+Copying and phone-book lookup studies show that transformers can retrieve associations from context \citep{jelassi2024}, while probing studies recover correct-answer information on trials where a model answers incorrectly \citep{orgad2024,karim2026}.
+We extend our earlier comparison of trained state and candidate-logit decoders \citep{decodable2609} by examining it alongside load and matched query changes, then testing a fixed comparison prospectively on additional models.
+The matched assignments let us distinguish a query-dependent change in retrieval from differences in the underlying examples.
+The trained score decoder gives the internal measurement a more informative comparator than the native choice alone.
 
-\paragraph{Two exclusions.} \emph{(i)} $\kstar$ is defined as a threshold crossing
-relative to a model's own $K=1$ ceiling. If that ceiling is itself at chance, the threshold is noise. One
-model, Pythia-70M, has a $K=1$ accuracy of $\PythiaSeventyCeiling$ against a chance of $\Chance$: it cannot hold a
-\emph{single} binding, so its $\kstar=\PythiaSeventyKstar$ is not a measurement. We exclude it, leaving $n=\NModels$. This matters,
-% 12x is the retracted range. Deliberately a literal: no macro should ever hold it.
-because that one model is the sole source of the $12\times$ range one obtains from the raw table; excluding it,
-the range is $\KstarMin$ to $\KstarMax$, i.e.\ $\KstarRangeFactor\times$. \emph{(ii)} Three models sit at $\kstar=\KstarMax$, the ceiling imposed by
-the entity pool, and are \emph{right-censored}: OLMo-1-7B, Qwen2.5-3B, and, informatively, the old-recipe
-OPT-6.7B. The trustworthy signal is the low end of the range.
+The measurements establish complementary results.
+Matched wording controls improve retrieval in five models, with additional exact-cue and worked-example tests showing that gains depend on both model and query (Section~\ref{sec:wording}).
+Original-query curves across \NewNModels{} models quantify the load-dependent failures that those controls address (Section~\ref{sec:capacity}).
+At the registered layer and load, hidden-state probes exceed trained candidate-logit decoders in all three held-out models (Section~\ref{sec:hidden}).
+Checkpoint measurements then show why a middle-layer probe cannot stand for the whole network (Section~\ref{sec:development}).
+Together, these comparisons make the protocol part of the empirical capacity claim and identify what must be checked before using that claim to guide small-model selection.
 
-\section{Measuring capacity}\label{sec:setup}
-\paragraph{Task.} Each trial presents $K$ bindings ``\texttt{$e_i$: $o_i$}'' (entity $e_i$, single-token
-obligation $o_i$, from disjoint pools), then an interference block of $D$ distractor tokens, then a recall
-query ``\texttt{The task for $e_j$ is:}'' for a random $j$. The model is correct iff its highest-logit obligation token is $o_j$. Varying $K$ probes \emph{capacity}; varying $D$ probes \emph{interference-robustness}. Chance
-is $1/|\mathcal{O}|=\Chance$.
+\section{Measuring retrieval under a specified protocol}\label{sec:setup}
+\paragraph{Task and scoring.}
+Each trial lists $K$ assignments in the form \texttt{entity: value}, then queries one uniformly selected entity.
+We call $K$ the load.
+Entities are distinct within a prompt, while values are sampled uniformly with replacement from a tokenizer-specific pool $\mathcal V$ of 67 to 71 single-token words.
+Using single-token values makes correctness an exact comparison at one output position, without an additional rule for matching generated strings.
+Under the original question, \texttt{The task for $e_j$ is:}, we select the value with the highest next-token logit, the model's unnormalized score, among $\mathcal V$.
+We call this the native output and measure recall as the fraction of trials where it equals the queried entity's value.
+Tokens outside the pool do not compete, so the score measures restricted retrieval rather than free-form instruction following.
 
+\paragraph{Load and distractors.}
+The main grid uses $K\in\{1,2,3,4,6,8,10,12,16,20,24,32,40,48,64\}$.
+For each load, six random seeds generate 96 trials each, giving 576 trials per condition.
+Each seed fixes the assignments and queried entity; models sharing a tokenizer therefore receive the same prompts.
+We compare no distractors ($D=0$) with a code-like block between the list and question (nominal $D=256$).
+The block contains 32 assignment lines that mention neither the selected entities nor the value words.
+It measures \RevFillerLo{} to \RevFillerHi{} tokens depending on the tokenizer, so its nominal name is not a token count.
+This condition measures the combined effect of added text and greater separation from the question.
+
+\paragraph{Models and execution.}
+The cohort comprises GPT-2 at three sizes; OPT-125M, 350M and 1.3B; Pythia-70M, 160M, 410M, 1B, 1.4B and 2.8B; Qwen2.5-0.5B and 1.5B; SmolLM2-360M; and OLMo-2-1B \citep{zhang2022opt,biderman2023,qwen2024,smollm2025,olmo2024}.
+All are base models.
+Their weights remain frozen throughout evaluation; the separate probes and score decoders described below are trained on labeled examples.
+The current results use float32 execution, TF32 disabled, dynamic left padding and mask-derived position IDs for GPT-2.
+This configuration restores single-binding recall in four models excluded from the earlier measurement.
+Because several execution settings change together, we treat the rerun as a configuration correction and leave its causal attribution open (Appendix~\ref{app:protocol}).
+
+\paragraph{What a guess can achieve.}
+Pool chance is $b=1/|\mathcal V|$, but a model can do better without linking the queried entity to its value.
+Suppose it chooses a random listed entity and returns that entity's value.
+It chooses the queried entity with probability $1/K$; if it chooses another entity, the value can still match because values repeat.
+Its expected recall is therefore
+\begin{equation}
+ g(K)=\frac{1}{K}+\frac{K-1}{K|\mathcal V|}.
+ \label{eq:listed-guess}
+\end{equation}
+At sixteen bindings and 67 values, this guess reaches \NewGuessSixteen{} recall.
+Comparison with this baseline asks whether performance exceeds what the list alone supplies, without identifying the particular computation that produced the answer.
+Supervised probes require additional controls for what their labeled training data permit them to learn \citep{hewitt2019}.
+
+\paragraph{What the capacity statistic summarizes.}
+Let $p_D(K)$ denote original-query recall and $C=p_0(1)$ the no-distractor single-binding ceiling.
+We normalize recall as $r_D(K)=(p_D(K)-b)/(C-b)$ and use the existing logistic fit against $\log K$ to estimate its half-recall load, $K_{50}$.
+This puts models with different single-binding ceilings on a common retained-recall scale.
+It also means that $K_{50}$ is not the load at which raw recall reaches a fixed application threshold.
+For distractors, $K_{50}^{D}$ retains the original ceiling $C$, so a loss at one binding contributes to the reported capacity decline.
+The estimator requires a single-binding ceiling of at least 0.5, records an above-half endpoint as right-censored, and falls back to log-linear interpolation when fitting fails.
+We report the curves because a scalar fit can hide a dip followed by recovery; wording and probe comparisons use raw recall throughout.
+
+\section{A query change reverses the apparent small-model limit}\label{sec:wording}
 \begin{figure}[t]
 \centering
-\begin{tikzpicture}[x=1cm, y=1cm, line width=0.5pt, font=\scriptsize]
-% token strip
-\foreach \i/\xa in {1/0, 2/1.4} {
-  \draw[draw=housetea, fill=housetea!10] (\xa, 1.1) rectangle (\xa+1.3, 1.75);
-  \node at (\xa+0.65, 1.425) {$e_{\i}{:}\,o_{\i}$};
-}
-\node at (3.0, 1.425) {$\cdots$};
-\draw[draw=housetea, fill=housetea!10] (3.3, 1.1) rectangle (4.6, 1.75);
-\node at (3.95, 1.425) {$e_K{:}\,o_K$};
-\draw[draw=black!45, fill=black!7] (4.8, 1.1) rectangle (7.4, 1.75);
-\node at (6.1, 1.425) {$D$ distractor tokens};
-\draw[draw=houseclay, fill=houseclay!10] (7.6, 1.1) rectangle (9.7, 1.75);
-\node at (8.65, 1.425) {``task for $e_j$ is:''};
-% axis spans
-\draw[housetea, |-|] (0, 0.72) -- (4.6, 0.72);
-\node[housetea, anchor=north] at (2.3, 0.62) {capacity axis: vary $K$};
-\draw[black!60, |-|] (4.8, 0.72) -- (7.4, 0.72);
-\node[black!60, anchor=north] at (6.1, 0.62) {robustness axis: vary $D$};
-\node[houseclay, anchor=north, align=center] at (8.65, 0.62) {correct iff the top\\ logit is $o_j$};
-% stylised recall curve with the capacity statistic
-\begin{scope}[shift={(10.6, 0)}]
-\draw[->] (0, 0) -- (3.35, 0) node[anchor=north east, inner sep=2pt] {$K$};
-\draw[->] (0, 0) -- (0, 1.95);
-\node[rotate=90, anchor=south] at (-0.15, 0.95) {recall};
-\draw[housetea, line width=0.8pt] plot[smooth] coordinates
-  {(0.15, 1.7) (0.8, 1.65) (1.3, 1.5) (1.8, 1.05) (2.3, 0.55) (2.9, 0.35)};
-\draw[black!50, dashed] (0, 1.02) -- (3.2, 1.02);
-\node[black!50, anchor=east, inner sep=1pt] at (3.2, 1.22) {midpoint};
-\draw[black!50, dashed] (1.82, 0) -- (1.82, 1.05);
-\node[anchor=north] at (1.82, -0.02) {$\kstar,\,K_{50}$};
-\end{scope}
-\end{tikzpicture}
-\caption{\textbf{The task and its two axes.} Each trial presents $K$ entity--obligation bindings, a
-$D$-token distractor block, and a recall query; the model is correct iff its highest-logit obligation
-token matches the queried binding. Varying $K$ probes capacity, varying $D$ probes
-interference-robustness. Right: both capacity statistics are midpoint crossings of the recall curve
-between the model's own $K{=}1$ ceiling and chance: $\kstar$ on the measurement grid
-(Section~\ref{sec:setup}), $K_{50}$ under a logistic fit to the continuous curves
-(Section~\ref{sec:trn1}).}
-\label{fig:task}
+\includegraphics[width=\linewidth]{fig_p3_wording.pdf}
+\caption{Query wording changes retrieval without changing the model's weights.
+Left: Pythia-410M recall across loads under the original question, deletion of \texttt{is}, an entity-only question retaining \texttt{is}, and a list rewritten to match the original question.
+Right: original and deletion conditions at sixteen bindings across five models.
+Each condition has 288 trials per load.
+Bars are descriptive Wilson 95\% intervals for each recall, not intervals for paired differences.
+All conditions use no distractors and the same assignments and queried entities.}
+\label{fig:wording}
 \end{figure}
+The wording study asks whether the original curve constrains retrieval by the model or retrieval under its particular question.
+We evaluate five models on six loads, $K\in\{2,4,8,16,32,64\}$, with three seeds of 96 trials per cell.
+Every condition retains the assignments and queried entity from the corresponding original-query trial.
+Deleting \texttt{is} changes only the question to \texttt{The task for $e_j$:}.
+At sixteen bindings, Pythia-410M improves from \NewFourTenOriginal{} to \NewFourTenColon{}, Qwen2.5-0.5B from \NewQwenSmallOriginal{} to \NewQwenSmallColon{}, and Pythia-160M from \NewOneSixtyOriginal{} to \NewOneSixtyColon{}.
+All five models improve, although the improved Pythia-160M score remains below those of the other models (Table~\ref{tab:wording}).
 
-\paragraph{The capacity statistic, and its pitfall.} $\kstar$ is the smallest $K$ at which recall falls below the midpoint between the $K=1$ ceiling and chance. It is a threshold crossing of a smooth curve, and thresholded
-metrics can manufacture apparent discontinuities where the underlying quantity varies continuously
-\citep{mirage2304}. We therefore treat $\kstar$ as a \emph{summary statistic} and not as evidence of a sharp
-transition. The released table contains $\kstar$ and the geometry but not the full recall-versus-$K$ curves,
-so we cannot rule out the thresholding artifact from it directly. We mitigate the artifact in three ways instead: by
-excluding any model whose $K=1$ ceiling is near chance (its threshold is noise), by reporting the
-\emph{median} difference rather than the range, and by clustering on families. The re-measurement runner ships with the paper's code (\texttt{analysis/ksweep.py}, with \texttt{analysis/compare\_ksweep.py} as the agreement check), and Section~\ref{sec:trn1} releases the curves for twelve of the models.
-
-\paragraph{The geometric quantities, and what they measure.} At the declaration site we take one residual
-vector per declared entity and compute $\ddecl$, the participation ratio of those vectors (their effective
-dimension), and the mean off-diagonal squared cosine among them (pairwise \emph{interference}).
-
-The natural name for these quantities, a binding geometry, overstates them. Each declaration reads
-\texttt{entity: obligation.}, so the entity token \emph{precedes} its obligation, and attention is causal. The
-hidden state at an entity token therefore \emph{cannot} encode which obligation was bound to it. Probing
-% Provenance note: 1.000 and 0.017--0.054 are the declaration-site probe. The measurement script was not
-% preserved (disclosed in Section 7), so these stay literals until a committed file holds them.
-confirms it: from the entity-token residual with the per-slot mean removed, the entity decodes at $1.000$ and
-its bound obligation at $0.017$--$0.054$ against a chance of $\Chance$ (Pythia-1.4B/6.9B, Qwen2.5-7B, OLMo-2-7B).
-$\ddecl$ and the interference term are thus properties of the \emph{declaration-site entity code}: how many
-directions a model spends on the entities it must keep distinct, and how much those directions overlap. That is
-a sensible thing for capacity to depend on. It is not a measurement of the binding.
-
-\paragraph{Models.} The released capacity table covers \NModelsRaw{} open models from ten families. \emph{Old} (pre-2023)
-\emph{recipe} ($n=\NOldRaw$): GPT-2 (M/L/XL) \citep{radford2019}, GPT-Neo (125M, 1.3B), OPT (350M, 1.3B, 2.7B, 6.7B), BLOOM (560M, 1.7B), Cerebras-1.3B,
-and the Pythia ladder (70M--12B) \citep{biderman2023}. \emph{Modern} ($n=\NModernRaw$): OLMo-1-7B, OLMo-2-7B with its SFT/DPO/Instruct ladder,
-OLMoE, Qwen2.5 (0.5B--7B), Mistral-7B, DeepSeek-Coder-6.7B. All measurements are on frozen models. The
-interference sweep of Section~\ref{sec:robust} covers the eight of these models with committed $D$-sweep
-curves.
-
-\section{An $\KstarRangeFactor\times$ capacity range that tracks the recipe}\label{sec:capacity}
-Figure~\ref{fig:capacity} shows $\kstar$ across the \NModels{} measurable models. It spans $\KstarMin$ to $\KstarMax$. The median is
-$\mathbf{\KstarOldMed}$ for old recipes ($n=\NOldModels$) and $\mathbf{\KstarModMed}$ for modern ones ($n=\NModernModels$); the model-level
-Mann--Whitney gives $p=\KstarModelP$, and, because \NModelsRaw{} models are ten families, a bootstrap clustered on
-families puts the $95\%$ CI of the median difference at $\KstarFamCI$, with a family-level test at $p=\KstarFamP$.
-\textbf{The recipe split survives clustering.}
-
-\paragraph{Scale \emph{alone} does not buy capacity; the recipe does.} The Pythia ladder holds $\kstar=\PythiaLadder$ at 410M,
-1.4B, 2.8B, 6.9B and 12B: flat across a $29\times$ range of parameters. Within a \emph{modern} recipe, scale
-does help: Qwen2.5 goes $\QwenLadder$ at 0.5B, 1.5B, 3B and 7B. So capacity is a
-recipe$\,\times\,$scale interaction. The Qwen ladder is \emph{not monotone}: the 3B
-model reaches the censored ceiling and the 7B model sits below it.
-Alignment leaves capacity untouched: the OLMo-2 base/SFT/DPO/Instruct ladder holds $\kstar=\KstarOlmoLadder$ at every stage. \citet{kim2405} established the absence of a consistent alignment benefit for entity
-tracking; this ladder puts that absence on a capacity threshold.
-
-\paragraph{The classes overlap.} Modern recipes do not uniformly
-dominate. OLMoE, a modern model, sits at $\kstar=\KstarOlmoE$; OPT-1.3B, an old one, reaches $\KstarOptOneThree$; and OPT-6.7B, also
-old, reaches the censored ceiling at $\KstarMax$. Both classes span the full $\KstarMin$--$\KstarMax$ range. The recipe effect is a
-large difference in \emph{central tendency} (median $\KstarOldMed$ versus $\KstarModMed$), and the family-clustered
-interval reflects that.
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=\linewidth]{fig5_capacity.pdf}
-  \caption{\textbf{Binding capacity $\kstar$ clusters by pretraining recipe.} Median $\kstar$ is $\KstarOldMed$ for old
-  recipes and $\KstarModMed$ for modern ones (family-clustered $95\%$ CI of the difference $\KstarFamCI$; family-level
-  $p=\KstarFamP$). The classes \emph{overlap}: OLMoE (modern) sits at $\KstarOlmoE$ and OPT-6.7B (old) reaches the censored
-  ceiling. Arrows mark models right-censored at the entity-pool ceiling ($\kstar=\KstarMax$). Pythia-70M is excluded:
-  its $K=1$ accuracy is $\PythiaSeventyCeiling$ against a chance of $\Chance$, so its $\kstar$ is not a measurement.
-  Regenerated from a committed table (\texttt{results/figdata.json}); statistics by
-  \texttt{analysis/capacity\_stats.py}.}
-  \label{fig:capacity}
-\end{figure}
-
-\section{No geometric predictor survives family clustering}\label{sec:geometry}
-Capacity has two geometric correlates at the model level (Figure~\ref{fig:recipe}). Across the \NModels{} models, $\kstar$ rises with $\ddecl$
-(Pearson $r=\DdeclPearson$, Spearman $\rho=\DdeclSpearman$; partial $\DdeclPartial$ controlling for interference) and falls with
-pairwise interference (Pearson $r=\OffdiagPearson$; partial $\OffdiagPartial$). Modern recipes show a higher packing efficiency
-$\kstar/\ddecl$ (median $\PackModMed$ vs.\ $\PackOldMed$) at lower interference ($\OffdiagModMed$ vs.\ $\OffdiagOldMed$), and every one of these
-comparisons is significant at the model level. These numbers suggest a simple picture: old recipes cram entity codes onto overlapping directions and modern recipes spread them, which would connect binding capacity to
-the superposition regime of \citet{superposition2505}, where \emph{loss} scales inversely with model dimension
-under strong superposition and the degree of superposition is tunable by weight decay. It would also sit
-alongside \citet{largercap2605}, who attribute larger models' advantage to reduced gradient interference
-on rare tasks.
-
-\paragraph{Thirty models are not thirty independent samples.} They are \emph{ten families}, and Pythia and
-OLMo contribute six apiece. A model-level test treats siblings as independent draws. Under a bootstrap clustered on families, and under a family-level test, the picture does not hold (Table~\ref{tab:famclust}).
-
-\begin{table}[h]
+\begin{table}[t]
 \centering
-\caption{Family-clustered comparisons. Medians by recipe with the family-clustered bootstrap
-interval and the family-level $p$-value for each quantity; bold marks the two that survive
-clustering.}
-\label{tab:famclust}
+\caption{Recall at sixteen bindings under matched wording controls, with 288 trials per cell.
+Original: \texttt{The task for $e_j$ is:}.
+Drop \texttt{is}: \texttt{The task for $e_j$:}.
+The third condition asks \texttt{$e_j$ is:}.
+Matched list rewrites each assignment as \texttt{The task for $e_i$ is: $v_i$} and retains the original question.}
+\label{tab:wording}
 \small
-\begin{tabular}{@{}lrrcc@{}}
-\toprule
-quantity & old med. & modern med. & family-clustered $95\%$ CI & family $p$ \\
-\midrule
-capacity $\kstar$                   & $\KstarOldMed$  & $\KstarModMed$ & $\KstarFamCI$ & $\mathbf{\KstarFamP}$ \\
-packing efficiency $\kstar/\ddecl$  & $\PackOldMed$ & $\PackModMed$ & $\PackFamCI$ & $\mathbf{\PackFamP}$ \\
-subspace dimension $\ddecl$         & $\DdimOldMed$ & $\DdimModMed$ & $\DdimFamCI$ & $\DbindFamP$ \\
-interference                        & $\OffdiagOldMed$ & $\OffdiagModMed$ & $\OffdiagFamCITab$ & $\OffdiagFamP$ \\
-\bottomrule
-\end{tabular}
+\input{table_wording}
 \end{table}
+The remaining variants test two possible descriptions of the effect.
+Asking only \texttt{$e_j$ is:} removes more introductory words but retains \texttt{is}; it produces smaller gains than deleting \texttt{is} in every tested model.
+Rewriting each assignment as \texttt{The task for $e_i$ is: $v_i$} matches the original question's form and also improves recall, despite lengthening the list.
+Thus, fewer question words and exact agreement between list and question do not individually account for the strongest result.
+Token positions and continuation patterns also change, so these controls leave the responsible linguistic or circuit mechanism unidentified.
 
-\textbf{Of the two \emph{non-tautological} geometric predictors, neither survives.} The clustered interval for
-$\ddecl$ touches zero and its family-level test is not significant; the interval for interference touches zero
-as well. The only geometric quantity that survives is packing efficiency, and packing efficiency contains
-$\kstar$ in its numerator. It is descriptive by construction and cannot be used to \emph{predict} $\kstar$.
+A related pilot connects these findings to earlier retrieval evaluations.
+\citet{jelassi2024} use phone-book entries followed by worked lookup examples, whereas the original question here supplies no demonstration.
+We test both an exact-cue question, \texttt{$e_j$:}, and two answered questions about other entities in the same list.
+Because values repeat, an example about another entity can display the target value.
+The example condition therefore tests added demonstrations, including possible target-value repetition, rather than wording alone.
+On 288 trials at sixteen bindings, Pythia-410M reaches \NewPilotFourTenExact{} with the exact cue and \NewPilotFourTenExamples{} with examples, against \NewPilotFourTenOriginal{} under the original question.
+The examples are not a general repair: Pythia-160M falls from \NewPilotSmallOriginal{} to \NewPilotSmallExamples{}, although its exact-cue recall reaches \NewPilotSmallExact{}.
+OLMo-2-1B also loses recall under the exact cue relative to its original question.
+Appendix~\ref{app:wording} gives all seven pilot models, prompt construction and readout comparisons.
 
-We therefore report the recipe split as Section~\ref{sec:capacity}'s result and \emph{decline to claim a
-geometric mechanism}. The model-level $p$-values are the ones a reader will compute from the released table; we report them alongside the family-clustered results. With ten families (six old, four modern), this is a study with less power than
-thirty points suggests; the geometric comparisons do not survive it.
+These experiments establish that an apparent low capacity can depend on the retrieval protocol.
+They do not equate the alternative queries, because worked examples provide extra supervision and the exact cue changes the local continuation.
+All variants were chosen after inspecting original-query failures, making this an exploratory comparison.
+Its implication for the remaining analyses is specific: capacity and internal recoverability must be reported under a named question, rather than treated as fixed properties revealed by any wording.
 
+\section{Original-query recall falls with load}\label{sec:capacity}
 \begin{figure}[t]
-  \centering
-  \includegraphics[width=\linewidth]{fig8_recipe.pdf}
-  \caption{\textbf{How a model spends directions on the entities it must keep distinct, at the model
-  level.} \textbf{(a)} Packing efficiency
-  $\kstar/\ddecl$ of the declaration-site \emph{entity} subspace and \textbf{(b)} pairwise interference
-  separate the recipes at the model level (each point is a model; black dash: median). \textbf{(c)} $\kstar$
-  against $\ddecl$ over the \NModels{} measurable models, colored by interference. Both group comparisons are
-  significant at the model level, and \emph{neither non-tautological predictor survives clustering on
-  families} (Section~\ref{sec:geometry}); the panels show the model-level pattern in the released table.}
-  \label{fig:recipe}
+\centering
+\includegraphics[width=\linewidth]{fig_p3_measured.pdf}
+\caption{Recall under the original question in the corrected float32 configuration, without distractors.
+The panels separate models below one billion parameters from larger models for readability.
+Each curve has 576 trials per load.
+The dashed grey curve is the collision-adjusted guess among listed values for a pool of 67.
+These curves describe the original query; Figure~\ref{fig:wording} changes that query while retaining the associations.}
+\label{fig:capacity}
 \end{figure}
+The original-query grid establishes the failures that the wording controls address.
+All \NewNModels{} models retrieve a single listed value with recall between \NewSingleLo{} and \NewSingleHi{} in the current configuration.
+At one binding, copying the only value is sufficient; distinguishing associations becomes necessary when other values appear.
+With two bindings, no model exceeds \NewTwoHi{} recall.
+At sixteen bindings, the \NewNSmall{} models below one billion parameters range from \NewSmallSixteenLo{} to \NewSmallSixteenHi{} (Figure~\ref{fig:capacity}).
+These are limitations of the measured protocol, with the alternative-query results supplying counterexamples to an intrinsic storage interpretation.
 
-\section{Cross-model capacity and within-model retrieval separate}\label{sec:notmech}
-Capacity across models and retrieval within a model sit at different explanatory levels, and the
-geometry above speaks only to the first.
-The packing story could be read as a competitor to the positional-mechanism account of
-\citet{mixing2510}, who attribute multi-binding retrieval failure to a positional circuit that grows noisy as
-bindings accumulate. We ran the comparison on our own trials, regressing per-trial error on serial position
-and on the pairwise overlap of the declaration-site entity vectors. \textbf{The geometry loses.} Once position is controlled,
-subspace overlap adds between $\HtHIncLo$ and $\HtHIncHi$ AUROC on all seven models tested; position alone reaches
-$\HtHPosAurocLo$--$\HtHPosAurocHi$.
+The fitted no-distractor capacities span \NewKLo{} to a right-censored endpoint above 64, with substantial variation across model families (Table~\ref{tab:measured}).
+OLMo-2-1B illustrates why the curve matters: recall at two bindings is lower than at several larger loads.
+A high fitted capacity therefore does not guarantee that every smaller load meets a reliability requirement.
+Because model families also differ in architecture, tokenizer, data and pretraining duration, these observational curves do not assign the variation to a single cause.
 
-Neither our geometry nor a bare positional pointer predicts \emph{which} distractor is emitted in our
-setting: the emitted obligation is the maximum-overlap competitor on $\HtHFoilOvlLo$--$\HtHFoilOvlHi$ of failures against a
-$\HtHFoilOvlChance$ chance rate, and a positional neighbour at or below chance. We note that \citet{mixing2510} do predict
-the emitted token, with a causal model that combines the positional mechanism with a \emph{lexical} and a
-\emph{reflexive} one and reaches $95\%$ agreement with next-token distributions; our head-to-head pits only their positional term against our overlap term, and it is the positional term alone that wins.
+\paragraph{Distractor text.}\label{sec:interference}
+The added block lowers fitted capacity in many models, while OPT-1.3B improves under this summary.
+Among the \NewRetainedN{} models with uncensored fitted endpoints in both conditions, the median ratio $K_{50}^{D}/K_{50}$ is \NewRetained{}.
+OLMo-2-1B is omitted from that ratio because its no-distractor value is a bound.
+The result combines length, content and distance; it does not estimate the effect of distractors under the improved query.
+Raw recalls in Table~\ref{tab:measured} retain the distinction between a changed curve and a change in its fitted summary.
 
-So: \emph{across-model} capacity tracks packing efficiency; \emph{within-model, per-trial} error does not. The
-cross-model correlation is an observational regularity over \NModels{} models, not a per-trial mechanism.
+\paragraph{Which wrong values are returned.}
+In the thirteen exploratory models with saved error classifications, most wrong outputs are values assigned to another listed entity.
+At sixteen bindings without distractors, this share ranges from \NewListedErrorLo{} to \NewListedErrorHi{}, conditional on each model's errors among 576 prompts.
+A uniform draw from nongold pool values would produce shares of \NewListedNullLo{} to \NewListedNullHi{} on those same error trials.
+The errors therefore concentrate on alternatives supplied by the list rather than arbitrary pool values.
+This motivates asking whether the hidden state better distinguishes the queried value from those alternatives; the error counts alone do not locate a misbinding mechanism.
 
-One caveat on the comparison itself: our error curve is a primacy curve rather than the U-shape of \citet{mixing2510}, because a $\Dblock$-token
-distractor block sits between the declarations and the query and destroys recency. The two settings are not
-directly comparable.
+\section{Hidden-state probes exceed a trained candidate-logit decoder}\label{sec:hidden}
+The output-error pattern leaves open whether the original query produces a useful internal distinction that its native output fails to express.
+We test supervised recoverability at the last question token, using the residual-stream activation vector at quarter, half, three-quarter and full depth.
+A multinomial logistic regression, the hidden-state probe, learns to predict the assigned value from that vector \citep{alain2016}.
+The language model stays frozen while the probe learns from labeled prompts.
+Each trial is evaluated out of fold: the probe trains on other seed groups, with standardization fit only to those training groups.
+The reported accuracy therefore tests prediction on held-out prompts within the same task, not memorization of the scored examples.
 
-\section{Capacity and robustness are distinct axes}\label{sec:robust}
-Raw capacity $\kstar$ (how many bindings fit under mild load) and interference-\emph{robustness} (how recall
-degrades as the distractor block $D$ grows at fixed $K$) are distinct axes. We sweep $D$ at $K=\RobustK$ for the
-eight models with committed curves (Figure~\ref{fig:robust}). Recall at $D=0$ already spans $\RobustDzeroLo$ to
-$\RobustDzeroHi$ (median $\RobustDzeroMed$), and the split in \emph{starting level} tracks the capacity split, with one disclosed exception: the \RobustLowKN{}
-models whose $\kstar$ is below $K=\RobustK$ start at $\RobustDzeroLo$--$\RobustLowKDzeroHi$, while the four with
-$\kstar\geq16$ start at $\RobustHighKDzeroLo$--$\RobustDzeroHi$ (the 0.5B entry is the Instruct variant of a
-base model with $\kstar=3$). By $D=\RobustDmax$ every model sits at $\RobustDendLo$--$\RobustDendHi$ (median
-$\RobustDendMed$), and the collapse \emph{rates} do not follow the capacity ranking. A model can therefore
-top the capacity ranking yet collapse as fast as the rest once distractors accumulate, or the reverse. This dissociation matters for the interference wall reported by
-\citet{pillm2506}, which our $D$-sweep reproduces: robustness is a second property, and it should be measured
-separately from capacity.
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=0.8\linewidth]{fig7_robustness.pdf}
-  \caption{\textbf{Capacity $\neq$ robustness.} Recall vs.\ interference load $D$ at fixed $K=\RobustK$ for the
-  eight models with committed curves (teal: modern recipe; clay: pre-2023). Dashed curves mark the
-  \RobustLowKN{} models whose $\kstar$ is below $K=\RobustK$; they start at $\RobustDzeroLo$--$\RobustLowKDzeroHi$
-  before any distractor arrives. Collapse rates do not follow the capacity ranking, so robustness is a second
-  axis, measured separately.}
-  \label{fig:robust}
-\end{figure}
-
-\section{Three measurement artifacts, each strong enough to invert the answer}\label{sec:confounds}
-Each of these artifacts produces a wrong but plausible-looking number, and each is easy to walk into.
-
-\paragraph{1. Position dominates the raw vectors.} Entity $i$ sits in slot $i$, so declaration-site hidden
-states are overwhelmingly positional: the per-slot mean carries $\PosVarLoPct$--$\PosVarHiPct\%$ of their
-variance on \GeoNNonOlmo{} of the \GeoNModels{} models with committed geometry; the exception is OLMo-2, at
-$\PosVarOlmoPct\%$. A participation ratio taken on the raw vectors reports an effective dimension of at most
-$\DrawHi$ and a pairwise squared cosine of $\RawIntLo$--$\RawIntHi$: it is describing \emph{position}.
-Estimating the positional component as the per-slot mean across trials and measuring on the residual gives an
-interference of $\ResidIntLo$--$\ResidIntHi$ on all \GeoNModels{} models: the entity code is close to
-orthogonal to the positional one.
-
-\paragraph{2. Massive activations dominate the covariance.} Once position is removed, a \emph{covariance}
-participation ratio is dominated by the residual stream's few massive-activation directions \citep{sink2410}.
-It reports an effective dimension of $\DcovQsevenB$ for Qwen2.5-7B, a model that carries $\TopOneQsevenB\%$ of its residual variance
-in a single coordinate. Standardizing per coordinate gives $\DdimQsevenB$, and the dimension then scales sensibly with
-model size within the family ($\DdimQonefiveB$, $\DdimQsevenB$, $\DdimQfourteenB$ for $1.5$B, $7$B, $14$B).
-
-Both artifacts are \emph{installed by pretraining}. Across Pythia-1.4B checkpoints the positional variance
-fraction rises from $\PosVarDevFirst$ to $\PosVarDevLast$ and the top coordinate's share from $\TopOneDevFirst$ to $\TopOneDevLast$, so a measurement
-that behaves well on an early checkpoint can invert on a converged one. Under the corrected estimator the
-declaration-site subspace does not \emph{compress} over pretraining, as a covariance ratio suggests, but expands
-and then plateaus.
-
-\paragraph{3. The site cannot carry a binding.} Most consequential for how the quantity should be read: the
-declaration-site vector is taken at the entity token, which causally precedes its obligation. It cannot carry
-the binding. The probe numbers in Section~\ref{sec:setup} confirm it: the entity decodes at $1.000$, the obligation at
-chance.
-$\ddecl$ is therefore the effective dimension of the \emph{entity code}, and the packing-efficiency result is a
-statement about how a model spends directions on the entities it must hold apart.
-
-No downstream figure exposes this. The artifact is visible only in the projection of the
-declaration-site residuals onto the obligation classes, which gives no separation in any frame, including
-a supervised one. A
-further provenance caveat: the plotting generator for Figure~\ref{fig:recipe} reads a
-committed table, but the \emph{measurement} script that produced the $\ddecl$ values was not preserved, so we
-cannot independently verify the token position at which those particular numbers were taken. Re-deriving them at
-a position that \emph{can} carry a binding is the correct next measurement: the query site, where the retrieved obligation decodes at $\QueryDecodeLo$--$\QueryDecodeHi$ against a chance of $\Chance$.
-
-\section{The scaling law and its boundary: an independent re-measurement}\label{sec:trn1}
-A re-measurement with committed code releases the full recall-versus-$K$ curves: twelve of the models re-run
-on one instrument with a $K$ grid to 64 and six seeds per cell
-(\texttt{results/capacity\_trn1\_summary.json}). The statistic on these curves is $K_{50}$, the load at
-which retained performance $r(K)$ (recall normalised between the model's own $K{=}1$ ceiling and chance)
-crosses one half under a logistic fit in $\log K$. It is the continuous analogue of the grid crossing
-behind $\kstar$, with right-censoring reported rather than clipped, computed by an estimator validated
-on synthetic curves with known answers before touching data. A first-wave sweep on this instrument found
-the GPT-2 family and Pythia-70M below the $K{=}1$ exclusion floor; the extension wave then ran the
-twelve models of the committed summary above that floor with the full grid (one of them, OLMo-2-1B,
-enters only this re-measurement). The GPT-2 result disagrees with the original
-instrument, where those models hold a measurable $\kstar$; we report the disagreement as an instrument
-difference rather than resolving it here. Models the first wave's $K{=}24$ grid had censored resolve to
-real values on the full grid (OPT-1.3B to $\TrnOptResolved$).
-
-Two findings revise this paper's scope. First, at $\le$3B parameters the recipe effect does not survive
-controlling for scale: in a regression of $\log K_{50}$ on recipe and $\log$ parameters over the
-re-measured curves, the recipe coefficient is $\TrnRecipeCoef$ (family-clustered CI
-$[\TrnRecipeCILo, \TrnRecipeCIHi]$, spanning zero) while the scale coefficient is $\TrnScaleCoef$ (CI
-$[\TrnScaleCILo, \TrnScaleCIHi]$, excluding it). Because the headline claim rests on models up to 12B and
-this re-measurement stops at 3B, this is an unresolved scope tension requiring larger models, not a
-refutation. Below 3B, capacity is bought with parameters, and whether the recipe span reasserts itself
-above 3B is an empirical question the present range cannot answer. Second, over the same curves capacity
-fits a power law, $K_{50} = c\,N^{\alpha}$ with $\alpha=\CapAlpha$ ($R^2=\CapRsq$), family-clustered CI
-$[\CapAlphaCILo, \CapAlphaCIHi]$, leave-one-family-out range $[\CapLofoLo, \CapLofoHi]$
-(Figure~\ref{fig:capacitylaw}). The interval contains proportionality and excludes zero, and the estimate
-is robust to deletion: removing any single model moves $\alpha$ by at most $\CapLooMax$. The fit uses the
-$\CapFitN$ of twelve models with an uncensored $K_{50}$ (OLMo-2-1B is right-censored at the grid maximum).
-That analysis is post hoc and is labelled as such in the program's claim ledger
-(\texttt{results/claim\_ledger.json}).
+The native output provides a necessary but incomplete comparator.
+Taking the highest candidate logit discards how the other values are scored, while a classifier could use that full score pattern to recover the correct answer.
+We therefore train a second multinomial logistic regression on all candidate-value logits, with the same labels, folds and regularization rule as the hidden-state probe.
+This candidate-logit decoder tests one specified way to improve the decision from information already available at the output.
+If the hidden-state probe still performs better, its advantage exceeds this learned score mapping.
+It does not establish optimal decoding of either representation or exclude a stronger nonlinear score decoder.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.8\linewidth]{p6_capacitylaw.pdf}
-\caption{\textbf{The $K_{50}$ scaling law, and the regime boundary that fixes what it prices.}
-Circles: $K_{50}$ for the $\CapFitN$ uncensored re-measured models; the line is the fitted
-$K_{50} = c\,N^{\CapAlpha}$. Star: a 4.98M-parameter transformer trained directly on the task, at
-$\BoundFactor\times$ the law's prediction for its size (dotted riser). The two estimands differ (largest
-learnable $K$ versus zero-shot $K_{50}$), so the boundary is an order-of-magnitude comparison by
-construction. Generated by \texttt{analysis/make\_p456\_figs.py} from
-\texttt{results/capacity\_trn1\_summary.json}, \texttt{results/capacity\_alpha\_fit.json}, and
-\texttt{results/cross\_campaign\_capacity.json}.}
-\label{fig:capacitylaw}
+\includegraphics[width=\linewidth]{fig_p3_heldout.pdf}
+\caption{Held-out-model test at sixteen bindings and three-quarter depth.
+Circles show probe recall minus native-output recall; squares show probe recall minus candidate-logit-decoder recall.
+Bars are percentile 95\% intervals from 10{,}000 paired prompt resamples, conditional on saved out-of-fold predictions.
+No distractor is the registered primary condition; the distractor result is secondary.
+There are 576 trials per model and condition.
+The registration fixes the layer, load and decision rule before probes are fit on these models.}
+\label{fig:heldout}
 \end{figure}
+\paragraph{A fixed comparison on additional models.}
+The first thirteen models were exploratory; we then registered the analysis for Pythia-1.4B, Pythia-2.8B and Qwen2.5-1.5B before fitting their probes.
+The registration fixes three-quarter depth, sixteen bindings and no distractors, preventing selection of the layer and load from these models' probe results.
+It requires a probe advantage of at least 0.10 over native output, with a positive lower confidence bound, in at least two models.
+A separate criterion requires a positive lower bound over the candidate-logit decoder in at least two models.
+A foil probe predicts the next listed entity's value; its registered acceptance interval checks whether the main probe's success could be matched by reading another listed value.
+Two pooled native-output summaries were visible at registration, so the held-out status applies to the probe comparison rather than to every observed model statistic.
 
-The boundary fixes what the power law is a law of. A 4.98M-parameter transformer trained directly on the
-task holds $\BoundMeasured$ bindings where the law predicts $\BoundPredicted$, a factor of $\BoundFactor$
-(400 from-scratch runs stand behind the measurement). The gap survives the difference in estimands
-(largest learnable $K$ versus zero-shot $K_{50}$), which is an order-of-magnitude comparison by
-construction. The boundary converts the law from a statement about transformers into a statement about
-pretraining: $c\,N^{\alpha}$ measures how much binding capacity general text pretraining delivers at the
-query interface, a quantity distinct from and far below what the same architecture supports when trained
-for the task. Scaling analyses that read zero-shot capacity as an architectural ceiling inherit exactly
-this conflation.
+Both primary comparison criteria pass (Figure~\ref{fig:heldout}).
+\NewHeldPone{} of three models meet the registered advantage over native output, and \NewHeldPtwo{} of three exceed the trained candidate-logit decoder with positive lower bounds.
+Pythia-1.4B reaches \NewHeldOneFourProbe{} probe recall, compared with \NewHeldOneFourOutput{} native recall and \NewHeldOneFourLogits{} for the score decoder.
+Pythia-2.8B reaches \NewHeldTwoEightProbe{}, compared with \NewHeldTwoEightOutput{} and \NewHeldTwoEightLogits{}.
+Qwen2.5-1.5B reaches \NewHeldQwenProbe{}, compared with \NewHeldQwenOutput{} and \NewHeldQwenLogits{}; its positive gain over output misses the registered ten-point minimum.
+All three primary foil controls meet their registered interval (Appendix~\ref{app:heldout}).
 
-One supporting result transfers cleanly. Distractor interference roughly halves effective capacity (median retained
-fraction $\TrnIntRetained$; capacity reduced in $\TrnIntReduced$ of $\TrnIntN$ models) and capacity does not
-predict the loss (Spearman $\rho=\TrnIntRho$, $p=\TrnIntP$), which supports the separate-axes claim of
-Section~\ref{sec:robust}; the interfered curve must be normalized by the uninterfered ceiling, since
-own-ceiling normalization reverses the sign of the effect.
+The prospective result supports the fixed analysis recipe on additional models, each with its own trained classifier.
+It does not show transfer of a probe between models or repair of a deployed system.
+The alternative-query pilot gives a useful extension: under the exact-cue question, the Pythia-160M probe reaches \NewPilotSmallProbe{} recall, against \NewPilotSmallExact{} native recall and \NewPilotSmallLogits{} for its score decoder.
+Improved native recall coexists with a probe advantage in this condition.
+The worked-example conditions show a different pattern across models (Appendix~\ref{app:wording}).
+The central conclusion remains supervised and protocol-specific: answer prediction from a sampled internal state can exceed prediction by the specified output-score decoder.
 
-\section{The cost of load}\label{sec:cost}
-Acquisition has its own law. In the from-scratch regime, median time to formation grows as a power of the
-binding load: $t \approx \TimeLawHCoef\,K^{\TimeLawHExp}$ ($R^2=\TimeLawHRsq$) in one codebase and
-$t \approx \TimeLawDCoef\,K^{\TimeLawDExp}$ ($R^2=\TimeLawDRsq$) in the other, on different accelerator
-hardware, with the second corpus analysed after the first fit was fixed (Figure~\ref{fig:timelaw}; 423
-and 96 emergence-measured runs enter the two fits). Doubling the load costs a factor of
-\TimeLawDblLo{}--\TimeLawDblHi{} in training steps. Both exponents are lower bounds, since runs that
-never form are censored, and the smaller corpus's $K{=}8$ cell holds two runs: removing it moves that
-exponent to \TimeLawExpNoKeight. The supportable statement is a power law in load with exponent between
-roughly \TimeLawExpNoKeight{} and \TimeLawHExp; the replicated finding is the form. Formation is the
-first evaluation at which use-side accuracy clears the run's own capability criterion,
-$\mathrm{chance} + 0.5\,(1-\mathrm{chance})$; the runs are transformers of 1.3M--5M parameters trained
-from scratch on the task, at loads between $K{=}2$ and $K{=}8$, with per-cell configurations in the two
-committed result files. A threshold bounds the regime from below: at 1.3M parameters the task does not
-form at all in the budgets measured (\LearnSmallEmerged{} of \LearnSmallN{} runs). The retention and
-supply behaviour of the same from-scratch models is the subject of a companion manuscript.
-
-The law can also be stated in tokens rather than optimizer steps. Tokens per step is batch size
-times sequence length, both recorded in every raw run record, and sequences lengthen with $K$, so
-the token-denominated exponent is steeper than the step-denominated one: refitting the same
-committed cell medians gives \TokLawHExp{} ($R^2=\TokLawHRsq$) on the larger corpus and
-\TokLawDExp{} ($R^2=\TokLawDRsq$; \TokLawDExpNoKeight{} without the two-run $K{=}8$ cell) on the
-smaller. In absolute terms, forming the $K{=}4$ capability costs \TokKfourD{}M tokens in one corpus
-and \TokKfourH{}M in the other. The two totals are not directly comparable, because the corpora
-differ in distractor length and batch size, and both inherit the censoring of the step law, so
-they are lower bounds (\texttt{analysis/token\_costs.py}, \texttt{results/token\_costs.json}).
+\section{Pretraining evidence depends on the layer tested}\label{sec:development}
+Load curves ask how retrieval changes when more associations compete in a fixed model.
+Checkpoint comparisons ask how the available readouts change while training changes the model itself.
+These are related measurements, but a better probe at one checkpoint cannot by itself identify when bindings first become available throughout the network.
+We therefore sample four depths in Pythia-160M and Pythia-410M, using the same capacity protocol at ten checkpoints from step 1{,}000 to 96{,}000.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.7\linewidth]{p6_timelaw.pdf}
-\caption{\textbf{The cost-of-load law, in two codebases.} Median steps to formation against binding
-load, both axes logarithmic, for the two independent codebases on different accelerator hardware; faint
-lines are the committed power-law fits ($t \approx \TimeLawHCoef\,K^{\TimeLawHExp}$ and
-$t \approx \TimeLawDCoef\,K^{\TimeLawDExp}$). The second corpus was analysed after the first fit was
-fixed. Runs that never formed are censored out of the medians, so both curves are lower bounds.
-Generated by \texttt{analysis/make\_p456\_figs.py} from \texttt{results/extra\_analyses.json} and
-\texttt{results/devaxis\_analyses.json}.}
-\label{fig:timelaw}
+\includegraphics[width=\linewidth]{fig_p3_checkpoint.pdf}
+\caption{Exploratory checkpoint probes on the same capacity protocol at sixteen bindings.
+Pythia-160M and Pythia-410M each have ten checkpoints from step 1{,}000 to 96{,}000.
+Each plotted recall uses 576 out-of-fold trials.
+Teal lines distinguish the four sampled layers; clay is native output.
+Dashed grey is the collision-adjusted listed-value guess.
+The final saved state includes the final layer normalization.
+These are sampled-depth trajectories, not a registered test of an emergence threshold.}
+\label{fig:checkpoint}
 \end{figure}
+Pythia-410M shows why the sampled depth changes the interpretation.
+Under distractors at step 96{,}000, its layer-18 probe reaches \NewCkptProbe{} recall, against \NewCkptOutput{} native recall and \NewGuessSixteen{} for the listed-value guess.
+Its layer-12 probe reaches \NewCkptMiddle{} on the same condition (Figure~\ref{fig:checkpoint}).
+The later layer thus supports prediction that a middle-layer measurement largely misses.
+By contrast, no sampled Pythia-160M layer exceeds \NewCkptSmallMax{} across these checkpoints and conditions.
+Given its improved recall under another question, that result is a limit of the tested probes under the original query, not evidence that the model lacks binding information under every query.
+
+Our earlier developmental study follows a related distinction across larger Pythia models \citep{decodable2609}.
+In its six-binding protocol, the share of Pythia-1.4B errors with a correct listed-value probe prediction rises from \DvPostProbeRightFirst{} to \DvPostProbeRightFinal{} across the recorded checkpoints.
+This describes changes in error groups; missing prompt identifiers prevent tracking individual errors through training.
+In a separate selected-layer steering experiment, intervening where probe and output disagree raises final-checkpoint accuracy from \DvStAcc{} to \DvGatedFinal{}.
+That gain requires a supervised probe and a large intervention that can impose an answer, so it demonstrates controllability without establishing ordinary causal use (Appendix~\ref{app:probes}).
+
+Our earlier study also compared trained state and candidate-logit decoders, finding no detected final-state advantage on late-checkpoint model errors.
+The present test instead compares intermediate-state decoding with candidate-logit decoding, using accuracy over all trials under the capacity protocol.
+These differences prevent attributing the contrasting results to layer choice alone.
+Their joint implication is methodological: a developmental claim must identify the state, decoder, scoring population and metric before interpreting a gap as information lost at the output.
+
+\section{What a capacity measurement can decide}\label{sec:use}
+The practical use of these measurements is to distinguish evaluation choices before treating a low score as a model-size requirement.
+For a small model assigned a fixed retrieval task, query validation tests whether a cheap change in how the value is requested improves recall on matched contexts.
+A candidate-logit decoder then tests whether labeled examples improve selection from existing output scores, while a hidden-state probe tests a different supervised readout.
+These options have different requirements: query changes need validation examples, score decoders require logits, and hidden-state probes require activations and labeled training data.
+Their measured gains here establish which comparisons are worth testing, not which method will improve an unmeasured application.
+
+An application also needs an absolute reliability criterion.
+For target recall $\pi$, the relevant measured loads are $\{K:p_D(K)\geq\pi\}$ under its selected protocol.
+A fitted $K_{50}$ cannot supply that set, because it rescales by single-binding performance and smooths a curve that may be nonmonotone.
+Every model here fails a 0.9 criterion at two bindings under the original question, while the wording controls establish that some failures are query-dependent.
+Protocol selection should therefore precede testing on new contexts at the loads the application requires.
+
+Multiple required values introduce an additional question.
+If their marginal recalls are $p_1,\ldots,p_m$, then
+\begin{equation}
+\max\Big\{0,1-\sum_{j=1}^{m}(1-p_j)\Big\}
+\leq \Pr(\text{all }m\text{ correct})\leq\min_j p_j.
+\label{eq:joint-recall}
+\end{equation}
+The lower bound follows because failure of the whole set requires at least one individual error; the upper bound follows because joint success requires every individual success.
+No independence assumption is needed.
+For example, five marginal recalls of 0.9 permit joint success as low as 0.5.
+Since our trials query one entity per context, they do not measure this joint event.
+That gap explains why tool calls motivate the task but still require a separate transfer experiment.
 
 \section{Related work}\label{sec:related}
-\citet{kim2405} established, on entity tracking with matched base/code-trained pairs, that code pretraining
-drives the capability and that alignment tuning adds no consistent benefit; our contribution is the
-\emph{quantity}: a named capacity threshold $\kstar$, swept on one instrument across $\NModelsRaw$ models,
-with the flat Pythia ladder against an $\KstarRangeFactor\times$ recipe span as the result their
-paired-model design could not see. \citet{binding2310} identify the binding-ID mechanism whose fidelity \emph{improves} with scale, an apparent tension with our flat ladder that we leave open: a mechanism's fidelity and a capacity
-ceiling can move independently, and a dissociation experiment is the natural next measurement. Two recent
-results sharpen the recipe construct. Entity-tracking capacity moves with \emph{architecture} at fixed scale
-and data \citep{archentity2606}, so architecture sits inside what we call the recipe; and across a zoo the
-same composed-task capability is implemented by different circuits in different models
-\citep{mechhet2606}: convergent, from the mechanistic side, with our own finding that no geometric
-correlate of $\kstar$ survives family clustering (Section~\ref{sec:geometry}). On the scaling side,
-\citet{kaplan2020} and \citet{hoffmann2022} fit loss against scale; the $K_{50}$ law prices a specific
-in-context capacity instead, and its regime boundary shows what such zero-shot laws are laws of.
-\citet{muennighoff2023} extend the loss accounting to data-constrained training, pricing the decaying
-value of a repeated token; the cost-of-load law of Section~\ref{sec:cost} spends the same currency,
-tokens, on a named capability rather than on loss.
-\citet{allenzhu2024} price parametric knowledge in bits per parameter; in-context binding state is the
-complementary quantity, held in activations rather than weights. The mechanisms that implement it are
-identified in \citet{olsson2022} and \citet{bietti2023}.
+\paragraph{From copying to binding mechanisms.}
+\citet{jelassi2024} show that pretrained transformers retrieve phone-book entries using prompts with worked examples.
+This establishes a related retrieval capability under a different protocol; it does not set the expected score for our zero-shot question.
+Our exact-cue and worked-example controls make that protocol distinction visible on the same assignments.
+\citet{binding2310} identify binding IDs through causal interventions, while \citet{mixing2510} show that models combine positional, lexical and reflexive retrieval mechanisms as contexts become more complex.
+Our output errors and query sensitivity are compatible with several such computations.
+We measure their behavioral consequences without identifying which mechanism a wording change recruits.
 
-\section{Operating regime and next measurements}\label{sec:limits}
-\textbf{The recipe split is observational.} It is a regularity across the \NModels{} measurable models, which
-differ in data, tokenizer, optimizer, and era simultaneously. That simultaneity is what makes a recipe effect
-visible at this range, and what stops it from isolating a single knob. The natural confirmation, a
-from-scratch causal ablation that varies \emph{one} recipe knob in matched models and flips $\kstar$,
-is staged future work; the causal knob remains untested here.
+\paragraph{Entity tracking and downstream relevance.}
+\citet{kimschuster2023} evaluate tracking through sequences of state changes, and \citet{kim2405} find gains from code pretraining.
+\citet{drozdz2026} report human-level tracking in naturalistic narratives at 410M parameters.
+These tasks require operations absent from our static lists, making their scores complementary rather than directly comparable measures of capacity.
+RULER already varies retrieval complexity, target count and variable tracking \citep{ruler2404}.
+HELMET further shows that synthetic needle scores do not reliably predict downstream performance \citep{yen2025helmet}.
+We use the synthetic task to match assignments across conditions and isolate a measurement question; predictive validity for applications remains a separate empirical requirement.
 
-\textbf{$\kstar$ is right-censored} at $\KstarMax$ by the entity pool, so the trustworthy signal is the low end.
+\paragraph{Recoverable information and its expression.}
+\citet{orgad2024} and \citet{karim2026} recover correct-answer information on model errors, including synthetic key--value failures in the latter study.
+\citet{lepori2026} extend the distinction to models that encode novel semantics in context but struggle to use them in downstream tasks.
+These studies establish the broader phenomenon; a probe-versus-output gap is not itself our novelty.
+\citet{villuri2026} show that output calibration explains much of such a gap in a synthetic verification task, motivating a learned score decoder before attributing the advantage to internal access.
+The trained-decoder comparison extends our earlier analysis \citep{decodable2609}; the matched query controls and prospective model-level test provide the present contribution.
+The claim remains relative to specified supervised decoders, consistent with the methodological limits of probing \citep{hewitt2019,belinkov2022}.
 
-\textbf{The recipe claim is scale-scoped by the re-measurement.} At $\le$3B on the continuous curves the
-recipe adds no detectable effect once scale is controlled (Section~\ref{sec:trn1}); the recipe-split
-claim is carried by the full range to 12B. Reconciling the two requires capacity curves above 3B.
+\paragraph{Development and intervention.}
+\citet{billa2026} find task-relevant probe information before behavioral improvement in transformers, while our earlier binding study follows probe accuracy and steering across training \citep{decodable2609}.
+The checkpoint results here connect that developmental question to the capacity protocol and show the importance of probing more than one depth.
+Our earlier error-detection and repair study addresses actionable probes at final checkpoints \citep{legible2609}.
+We retain those results as supporting evidence rather than treating them as an independent replication of the current held-out test.
+Activation steering can change a model's answer \citep{li2023iti,turner2023}; establishing that ordinary generation uses the same information requires a more selective causal test.
 
-\textbf{The scaling law is post hoc.} The $\alpha$ fit was noticed, not predicted; it is flagged POST-HOC
-in the program's claim ledger, and its pre-registered replication is the first item of future work. The
-cost-of-load law rests on few loads, and its exponent is not pinned down
-(Section~\ref{sec:cost}).
+\section{Limitations}\label{sec:limits}
+The task measures static, single-token retrieval with pool-restricted scoring.
+It does not evaluate natural-language coreference, state updates, generated tool calls or joint retrieval, and we do not measure whether its capacity summaries predict those tasks.
+The five-model wording factorial and seven-model pilot are exploratory and use no distractors.
+Their results establish sensitivity to the tested questions, not robustness across paraphrases or a linguistic cause.
+Load changes length, distractors change both length and content, and the execution correction combines precision, padding and position handling.
+These comparisons leave the corresponding causal effects unresolved.
 
-\textbf{The task is synthetic and single-token}, chosen for control. It is a model of working memory, not a
-naturalistic benchmark.
+The supervised readouts also bound the interpretation.
+Each model and condition receives separately fitted classifiers, and the candidate-logit decoder is one linear comparator rather than an optimal decoder of all output information.
+Prompt bootstrap intervals condition on fitted predictions and exclude probe-refitting and training-run variation.
+The held-out models overlap the exploratory families, while the smaller wording pilots use fewer training examples and loads than the main probes.
+The checkpoint sweep samples four depths at two sizes, so failed decoding cannot establish absence from other states or readouts.
+Earlier steering uses a different protocol and large vectors that can impose an answer.
 
-\textbf{The geometry is a correlate, not a mechanism}, and Section~\ref{sec:notmech} reports the head-to-head
-it loses. It describes what differs across recipes; it does not predict which trial fails.
+\section{Conclusion}\label{sec:conclusion}
+Binding capacity becomes useful for model selection when the measurement identifies what failed and under which retrieval protocol.
+Here a matched question change recovers associations that an original-query curve appears to place beyond the model's capacity, and a registered supervised comparison recovers values more accurately from an intermediate state than from a trained candidate-logit decoder.
+The matched comparisons support validating the query and comparing readouts at the required load before interpreting output failure as a reason to increase model size.
+The next experiment must freeze the selected protocol and measure joint retrieval on new formats and downstream tasks.
+That test would establish whether the recovered retrieval changes a practical small-model decision.
 
-\section{Conclusion}
-Model size alone does not set how many in-context bindings a language model can hold: a $29\times$ increase in Pythia's parameters moves $\kstar$ from $\PythiaKstarFirst$ to $\PythiaKstarLast$, while the recipe moves the
-median from $\KstarOldMed$ to $\KstarModMed$, and that difference survives clustering on families. On
-continuous curves at or below 3B, the recipe adds no detectable effect once scale is controlled;
-reconciling the two ranges needs capacity curves above 3B, and until then both findings carry their
-stated scopes.
+\paragraph{Code and data.}
+The paper source, recorded results, compact trial predictions and reproduction commands are available at
+\url{https://github.com/RavulapalliManas/paper-binding-capacity}.
+Appendix~\ref{app:protocol} identifies the released evidence and the limits of reproducing the earlier runs.
 
-The geometry behind the split is not settled by our measurements. Two of its three natural readings are
-estimator artifacts (position dominates the raw vectors; massive activations dominate the
-covariance), and the third is an artifact of the site: the entity token precedes its obligation, so the
-declaration-site vector cannot carry the binding at all. After those corrections, with the ten families clustered, the recipe split survives, the subspace encodes
-entities rather than their bindings, and the two geometric correlates have confidence intervals that touch
-zero.
-
-The quantitative laws change how capacity numbers should be read and produced. The scaling law is an
-operating budget for in-context state: $c\,N^{\alpha}$ is the load at which a pretrained model's
-zero-shot retained recall halves, a size-indexed bound on how many independent bindings to hand a
-model of a given size before task training. The $\BoundFactor\times$
-boundary quantifies the headroom that task-directed training can claim over what pretraining delivers
-zero-shot. The cost law makes in-context memory load a budgetable quantity: doubling the binding load
-carried in context prices at \TimeLawDblLo{}--\TimeLawDblHi$\times$ the training effort in this
-regime. And because capacity does not predict robustness, systems that select models by capacity
-alone will not get robustness with it; the two must be measured separately, with the ceiling-fixed
-protocol given here.
-
-Every capacity number in circulation implicitly chooses an instrument and a training regime. This
-paper measures all three quantities on one task, prices the difference between the regimes, and
-supplies the protocols, the released curves, and the macro-backed pipeline needed to run the same
-measurement on the next model.
-
-\section*{Reproducibility Statement}
-Code, data, and the paper source are public at
-\url{https://github.com/RavulapalliManas/paper-binding-capacity}: the released capacity table and robustness
-curves every figure reads (\texttt{results/figdata.json}), the statistics pipeline
-(\texttt{analysis/capacity\_stats.py}), the figure generators (\texttt{figs/gen\_capacity\_figs.py}), and the
-macro pipeline that emits every macro-backed number in this paper's prose from a committed file
-(\texttt{analysis/make\_numbers.py} regenerates \texttt{numbers.tex} byte-for-byte). All models are frozen
-public checkpoints; the task and the capacity statistic are specified in Section~\ref{sec:setup}. Section~\ref{sec:trn1} releases the
-full recall-versus-$K$ curves for twelve models
-(\texttt{results/capacity\_trn1\_summary.json}). The re-measurement artifacts are committed alongside:
-\texttt{results/capacity\_alpha\_fit.json} (the $\alpha$ fit with its family-clustered and deletion
-diagnostics, produced by \texttt{analysis/capacity\_alpha\_fit.py}),
-\texttt{results/cross\_campaign\_capacity.json} (the boundary),
-\texttt{results/extra\_analyses.json} and \texttt{results/devaxis\_analyses.json} (the cost-law fits),
-with Figures~\ref{fig:capacitylaw} and~\ref{fig:timelaw} generated by
-\texttt{analysis/make\_p456\_figs.py}. The remaining open item is the unpreserved declaration-site
-measurement script, which leaves both the $\ddecl$ values and the probe literals of
-Section~\ref{sec:setup} outside the macro pipeline (disclosed in Section~\ref{sec:confounds}).
+\section*{Acknowledgements}
+We thank Kevin Li for proofreading, for help with the paper's readability, and for the suggestions that led to this paper.
 
 \bibliographystyle{plainnat}
 \begin{thebibliography}{99}
 
-\bibitem[Allen-Zhu and Li(2024)]{allenzhu2024}
-Z.~Allen-Zhu and Y.~Li. Physics of language models: part 3.3, knowledge capacity scaling laws.
-2024. arXiv:2404.05405.
+\bibitem[Alain and Bengio(2016)]{alain2016}
+G.~Alain and Y.~Bengio. Understanding intermediate layers using linear classifier probes. 2016.
+arXiv:1610.01644.
+
+\bibitem[Allal et al.(2025)]{smollm2025}
+L.~B.~Allal, A.~Lozhkov, E.~Bakouch, et al. SmolLM2: when smol goes big, data-centric training of a
+small language model. 2025. arXiv:2502.02737.
+
+\bibitem[Belinkov(2022)]{belinkov2022}
+Y.~Belinkov. Probing classifiers: promises, shortcomings, and advances. \emph{Computational
+Linguistics}, 48(1):207--219, 2022.
 
 \bibitem[Biderman et al.(2023)]{biderman2023}
 S.~Biderman, H.~Schoelkopf, Q.~Anthony, et al. Pythia: a suite for analyzing large language
 models across training and scaling. \emph{ICML}, 2023. arXiv:2304.01373.
 
-\bibitem[Bietti et al.(2023)]{bietti2023}
-A.~Bietti, V.~Cabannes, D.~Bouchacourt, H.~Jegou, and L.~Bottou. Birth of a transformer: a
-memory viewpoint. \emph{NeurIPS}, 2023. arXiv:2306.00802.
+\bibitem[Billa(2026)]{billa2026}
+J.~Billa. The geometric anatomy of capability acquisition in transformers. 2026.
+arXiv:2602.15997v4.
+
+\bibitem[Dro\.{z}d\.{z} and Heilbron(2026)]{drozdz2026}
+K.~Dro\.{z}d\.{z} and M.~Heilbron. Entity tracking emerges in sub-billion parameter language
+models and exceeds human performance in naturalistic narratives. \emph{EMNLP}, 2026.
+arXiv:2608.18083.
 
 \bibitem[Feng and Steinhardt(2024)]{binding2310}
-J.~Feng and J.~Steinhardt. How do language models bind entities in context? \emph{ICLR}, 2024. arXiv:2310.17191.
-
-\bibitem[Gu et al.(2025)]{sink2410}
-X.~Gu, T.~Pang, C.~Du, Q.~Liu, F.~Zhang, C.~Du, Y.~Wang, and M.~Lin. When attention sink emerges in language models: an empirical view. \emph{ICLR}, 2025. arXiv:2410.10781.
+J.~Feng and J.~Steinhardt. How do language models bind entities in context? \emph{ICLR}, 2024.
+arXiv:2310.17191.
 
 \bibitem[Gur-Arieh et al.(2026)]{mixing2510}
-Y.~Gur-Arieh, M.~Geva, and A.~Geiger. Mixing mechanisms: how language models retrieve bound entities in-context. \emph{ICLR}, 2026. arXiv:2510.06182.
+Y.~Gur-Arieh, M.~Geva, and A.~Geiger. Mixing mechanisms: how language models retrieve bound
+entities in-context. \emph{ICLR}, 2026. arXiv:2510.06182.
 
-\bibitem[Hoffmann et al.(2022)]{hoffmann2022}
-J.~Hoffmann, S.~Borgeaud, A.~Mensch, et al. Training compute-optimal large language models.
-2022. arXiv:2203.15556.
+\bibitem[Hewitt and Liang(2019)]{hewitt2019}
+J.~Hewitt and P.~Liang. Designing and interpreting probes with control tasks. In \emph{Proceedings
+of EMNLP-IJCNLP}, pages 2733--2743, 2019. arXiv:1909.03368.
 
-\bibitem[Huang et al.(2026)]{largercap2605}
-J.~Huang, D.~Wurgaft, R.~Bansal, L.~Ruis, N.~Saphra, D.~Alvarez-Melis, A.~K.~Lampinen, C.~Potts, and E.~S.~Lubana. Why larger models learn more: effects of capacity, interference, and rare-task retention. 2026. arXiv:2605.29548.
+\bibitem[Hsieh et al.(2024)]{ruler2404}
+C.-P.~Hsieh, S.~Sun, S.~Kriman, S.~Acharya, D.~Rekesh, F.~Jia, Y.~Zhang, and B.~Ginsburg.
+RULER: what's the real context size of your long-context language models? \emph{COLM}, 2024.
+arXiv:2404.06654.
 
-\bibitem[Kaplan et al.(2020)]{kaplan2020}
-J.~Kaplan, S.~McCandlish, T.~Henighan, et al. Scaling laws for neural language models. 2020.
-arXiv:2001.08361.
+\bibitem[Jelassi et al.(2024)]{jelassi2024}
+S.~Jelassi, D.~Brandfonbrener, S.~M.~Kakade, and E.~Malach. Repeat after me: transformers are
+better than state space models at copying. \emph{ICML}, 2024. arXiv:2402.01032.
+
+\bibitem[Karim et al.(2026)]{karim2026}
+A.~Karim, F.~Sheaib, Z.~Khamis, M.~Chlon, J.~Awada, and L.~Chlon. Attention deficits in language
+models: causal explanations for procedural hallucinations. 2026. arXiv:2602.19239.
+
+\bibitem[Kim and Schuster(2023)]{kimschuster2023}
+N.~Kim and S.~Schuster. Entity tracking in language models. \emph{ACL}, 2023. arXiv:2305.02363.
 
 \bibitem[Kim et al.(2024)]{kim2405}
-N.~Kim, S.~Schuster, and S.~Toshniwal. Code pretraining improves entity tracking abilities of language
-models. 2024. arXiv:2405.21068.
+N.~Kim, S.~Schuster, and S.~Toshniwal. Code pretraining improves entity tracking abilities of
+language models. 2024. arXiv:2405.21068.
 
-\bibitem[Li and Merrill(2026)]{archentity2606}
-Y.~Li and W.~Merrill. Comparing transformers and hybrid models at the token level. 2026. arXiv:2606.20936.
+\bibitem[Lepori et al.(2026)]{lepori2026}
+M.~A.~Lepori, T.~Linzen, A.~Yuan, and K.~Filippova. Language models struggle to use representations
+learned in-context. 2026. arXiv:2602.04212.
 
-\bibitem[Liu et al.(2025)]{superposition2505}
-Y.~Liu, Z.~Liu, and J.~Gore. Superposition yields robust neural scaling. \emph{NeurIPS}, 2025. arXiv:2505.10465.
+\bibitem[Li et al.(2023)]{li2023iti}
+K.~Li, O.~Patel, F.~Vi\'egas, H.~Pfister, and M.~Wattenberg. Inference-time intervention: eliciting
+truthful answers from a language model. In \emph{Advances in Neural Information Processing Systems},
+2023. arXiv:2306.03341.
 
-\bibitem[Muennighoff et al.(2023)]{muennighoff2023}
-N.~Muennighoff, A.~M.~Rush, B.~Barak, et al. Scaling data-constrained language models. 2023.
-arXiv:2305.16264.
+\bibitem[Liu et al.(2024)]{mobilellm2024}
+Z.~Liu, C.~Zhao, F.~Iandola, et al. MobileLLM: optimizing sub-billion parameter language models
+for on-device use cases. \emph{ICML}, 2024. arXiv:2402.14905.
 
-\bibitem[Olsson et al.(2022)]{olsson2022}
-C.~Olsson, N.~Elhage, N.~Nanda, et al. In-context learning and induction heads. 2022.
-arXiv:2209.11895.
+\bibitem[OLMo et al.(2024)]{olmo2024}
+Team OLMo, P.~Walsh, L.~Soldaini, D.~Groeneveld, et al. 2 OLMo 2 Furious. 2024. arXiv:2501.00656.
 
-\bibitem[Radford et al.(2019)]{radford2019}
-A.~Radford, J.~Wu, R.~Child, D.~Luan, D.~Amodei, and I.~Sutskever. Language models are
-unsupervised multitask learners. OpenAI technical report, 2019.
+\bibitem[Orgad et al.(2025)]{orgad2024}
+H.~Orgad, M.~Toker, Z.~Gekhman, R.~Reichart, I.~Szpektor, H.~Kotek, and Y.~Belinkov. LLMs know more
+than they show: on the intrinsic representation of LLM hallucinations. In \emph{International
+Conference on Learning Representations}, 2025. arXiv:2410.02707.
 
-\bibitem[Schaeffer et al.(2023)]{mirage2304}
-R.~Schaeffer, B.~Miranda, and S.~Koyejo. Are emergent abilities of large language models a mirage? \emph{NeurIPS}, 2023. arXiv:2304.15004.
+\bibitem[Qwen Team(2024)]{qwen2024}
+Qwen Team. Qwen2.5 technical report. 2024. arXiv:2412.15115.
 
-\bibitem[Wang and Sun(2025)]{pillm2506}
-C.~Wang and J.~V.~Sun. Unable to forget: proactive interference reveals working memory limits in LLMs beyond context length. 2025. arXiv:2506.08184.
+\bibitem[Ravulapalli and Chadha(2026)]{decodable2609}
+M.~Ravulapalli and S.~S.~Chadha. Decodable in-context state and model output across training. 2026.
+arXiv:2609.31401.
 
-\bibitem[Xu(2026)]{mechhet2606}
-Y.~Xu. Pattern selectivity is not task-causal structure: a cross-architecture mechanistic study of
-composed-task circuits in 1B-class language models. 2026. arXiv:2606.05378.
+\bibitem[Ravulapalli et al.(2026)]{legible2609}
+M.~Ravulapalli, S.~S.~Chadha, and A.~M.~Hari. Legible failures: detecting and repairing in-context
+binding errors. 2026. arXiv:2609.11216.
+
+\bibitem[Touvron et al.(2023)]{touvron2023}
+H.~Touvron, T.~Lavril, G.~Izacard, et al. LLaMA: open and efficient foundation language models.
+2023. arXiv:2302.13971.
+
+\bibitem[Turner et al.(2023)]{turner2023}
+A.~M.~Turner, L.~Thiergart, G.~Leech, D.~Udell, J.~J.~Vazquez, U.~Mini, and M.~MacDiarmid. Steering
+language models with activation engineering. 2023. arXiv:2308.10248.
+
+\bibitem[Villuri et al.(2026)]{villuri2026}
+G.~Villuri, H.~Shaik, and A.~Doboli. When do internal probes beat reading the answer? Miscalibrated
+readouts and behavior-concealed knowledge in language models. 2026. arXiv:2609.04582.
+
+\bibitem[Yen et al.(2025)]{yen2025helmet}
+H.~Yen, T.~Gao, M.~Hou, K.~Ding, D.~Fleischer, P.~Izsak, M.~Wasserblat, and D.~Chen.
+HELMET: how to evaluate long-context language models effectively and thoroughly. \emph{ICLR}, 2025.
+arXiv:2410.02694.
+
+\bibitem[Zhang et al.(2022)]{zhang2022opt}
+S.~Zhang, S.~Roller, N.~Goyal, et al. OPT: open pre-trained transformer language models. 2022.
+arXiv:2205.01068.
 
 \end{thebibliography}
+
+\clearpage
+\appendix
+\section{Protocol details and result provenance}\label{app:protocol}
+\paragraph{Word pools and matching.}
+The entity and value pools contain common technical words filtered to single tokens when preceded by a space.
+The lists overlap in three words: \texttt{commit}, \texttt{index} and \texttt{lock}.
+Entities are sampled without replacement and values with replacement.
+The generator selects the queried entity uniformly after drawing the assignments.
+It uses the same seed formula in the original-query, wording and checkpoint measurements.
+Wording comparisons retain entity IDs, value IDs and query indices within each matched trial.
+
+\paragraph{Execution and storage.}
+The corrected capacity grid contains \NewNPrompts{} prompt evaluations across \NewNModels{} models.
+Each model has 180 cells: fifteen loads, two distractor conditions and six seeds.
+The original generator and the rerun's reconstructed generator pass an exact prompt-equality self-test over the full grid.
+The 768-token encoding limit exceeds the longest original-grid prompt; the earlier replay found no truncated questions.
+Float32 refers to model execution and saved candidate logits.
+The runner stores the sampled hidden states in float16 to reduce storage, then converts them to float32 for classifier fitting.
+The saved record identifies padding, position handling, software versions, device and the embedding-weight hash.
+The embedding hash is a repeated-checkpoint check, not a complete model checksum.
+
+The initial continuous-protocol results used bfloat16 execution on Trainium.
+The corrected records use float32 execution with TF32 disabled and dynamic padding on the recorded CPU device.
+GPT-2 receives mask-derived position IDs.
+The earlier model exclusions and scaling fits do not apply to these corrected inputs.
+We retain the old results as historical artifacts rather than combining them with the current curves.
+A factorial test that varies precision, padding and position handling separately remains necessary to explain the configuration difference.
+
+\paragraph{Capacity fitting.}
+The existing \texttt{capacity\_curve.py} fits
+$r(K)=1/(1+\exp\{\beta(\log K-\log K_{50})\})$
+to recall normalized by the no-distractor single-binding ceiling.
+The estimator uses the grid endpoint for its censoring rule and log-linear interpolation if nonlinear fitting fails.
+Its synthetic checks recover a planted crossing, retain an uncrossed endpoint as a bound, order planted curves correctly and reject an ineligible ceiling.
+Because the endpoint rule does not inspect every earlier crossing, a right-censored value does not establish threshold retention at every smaller load.
+The original measured curve remains the reference for an absolute threshold.
+Table~\ref{tab:measured} gives the current summary without a size-law regression.
+
+\begin{table}[t]
+\centering
+\caption{Corrected original-query measurements, with 576 trials per recall cell.
+$p_0$ denotes recall without distractors; $p_D$ includes the code-like block.
+Both fitted capacities normalize by $p_0(1)$.
+$>64$ denotes an endpoint above the normalized half-recall criterion; $\leq1$ denotes failure at the first grid point under the interpolation fallback.
+Capacities are descriptive fit outputs, not estimates of an intrinsic storage limit.}
+\label{tab:measured}
+\small
+\input{table_measured}
+\end{table}
+
+\paragraph{Source paths and reproduction.}
+The released measurement root is \texttt{results/measurement/} in the public repository.
+The corrected per-model records are \texttt{capacity\_fp32/<model>/main.json}.
+Compact trial identifiers and recorded predictions are under \texttt{predictions/}; \texttt{release\_manifest.json} maps them to the original run records and records file hashes.
+The wording factorial records are \texttt{frame3/<model>/main.json}.
+The runner is \texttt{analysis/gpu\_capacity\_dev.py}; the probe runner is \texttt{analysis/p3\_probe\_capacity.py}.
+The latter writes out-of-fold predictions and reports per-load recall from saved states without rerunning the language model.
+\texttt{analysis/p3\_paired\_ci.py} computes the paired intervals.
+
+The existing figure generator, \texttt{analysis/make\_p3\_revision\_figs.py}, accepts \texttt{--measurement-root} and \texttt{--out}.
+It reads the recorded JSON files and emits the current figures, tables and \texttt{numbers\_measured.tex}.
+Its structured output, \texttt{p3\_measured\_revision.json}, records input SHA-256 hashes and its own source hash.
+No model execution or probe fitting occurs during this build.
+The release verifier recomputes native recall and the paired comparisons from compact predictions.
+Large hidden-state tensors remain outside Git and require rerunning model execution and probe fitting; the recorded control summaries do not replace that fitting.
+Generated TeX and PDF assets accompany the manuscript.
+
+\section{Held-out probe test and controls}\label{app:heldout}
+\paragraph{Selection and chronology.}
+The first thirteen models formed an exploratory set.
+The remaining three were still being processed when the registration was frozen on 24 October 2026 at 17:27 UTC.
+Two pooled native-output summaries were already visible, as the registration states.
+No hidden-state probe had been fit on these three models at that time.
+Thus ``held-out'' describes the model-level analysis test, not previously unseen model families or unseen native-output behavior.
+
+\paragraph{Probe fitting.}
+For each model and condition, a standardized multinomial logistic regression uses inverse regularization strength 0.5 and up to 1{,}000 iterations.
+It trains on all measured loads in the training seeds and holds out seed groups $\{0,1\}$, $\{2,3\}$ and $\{4,5\}$ in turn.
+Scaling uses only training-fold statistics.
+The candidate-logit decoder uses the same procedure on the vector of all pool logits.
+The registered layer is the third saved depth, $\lfloor3L/4\rfloor$.
+The registered load is sixteen bindings.
+The primary condition is no distractor; the distractor condition is reported as secondary.
+The main comparison scores top predictions over the full pool, not predictions restricted to the listed values.
+
+\paragraph{Registered criteria.}
+P1 requires probe recall minus native-output recall of at least 0.10, with a positive lower 95\% bound, in at least two of three models.
+P2 requires a positive lower 95\% bound for probe recall minus candidate-logit-decoder recall in at least two models.
+P3 requires the foil probe's listed-value recall to lie within $[0.03,0.13]$ in all three primary-condition models.
+The foil target is the next listed entity's value, not the queried entity's value.
+The decision permits a confirmed result only if P1 and P2 hold; failure of P3 blocks interpreting the probe as reading the queried binding in the affected model.
+The observed primary-condition counts are \NewHeldPone{} of three for P1 and \NewHeldPtwo{} of three for P2; all three satisfy P3.
+Foil recall across the primary and secondary conditions ranges from \NewFoilLo{} to \NewFoilHi{}.
+Passing the foil interval is not a test of equivalence to chance.
+
+\begin{table}[t]
+\centering
+\caption{Held-out-model results at sixteen bindings, three-quarter depth and 576 trials per cell.
+Logit decoder: out-of-fold logistic regression on all candidate-value logits.
+The interval uses 10{,}000 paired resamples of prompts, conditional on fitted predictions.
+It does not include uncertainty from refitting probes or sampling training runs.
+Distractor text is the secondary condition.}
+\label{tab:heldout}
+\footnotesize
+\input{table_heldout}
+\end{table}
+
+\paragraph{Saved controls and versioning.}
+The probe runner also supports shuffled training labels, prediction of the queried entity, and a pre-question state control.
+A saved-array name collision left token indices rather than pre-question states in some records, so those records cannot support a pre-question probe.
+The reported held-out decision uses the registered foil control.
+The registration records source hashes for the probe runner, interval script and capacity estimator.
+The current probe runner has a later \texttt{--ctl-conds} option, added after the held-out run with its default preserving the earlier control behavior.
+The registered hash and later working-copy hash therefore differ; we do not describe the working copy as byte-identical to the frozen source.
+The frozen registration remains unchanged.
+
+\paragraph{Result files.}
+The primary numerical record is \texttt{probe\_cap/heldout\_paired\_K16.json}.
+Control predictions are summarized in \texttt{probe\_cap/heldout\_ctl3.json}.
+Saved out-of-fold predictions are in \texttt{probe\_cap/oof\_heldout/}.
+The exploratory comparisons remain in \texttt{probe\_cap/p3\_paired\_ci\_13\_K16.json}.
+The checkpoint sweep uses \texttt{probe\_cap/p3\_probe\_ckpt.json} and adjacent saved out-of-fold predictions.
+We do not pool the exploratory models into the registered decision.
+
+\section{Exact-cue and worked-example pilot}\label{app:wording}
+The exploratory pilot covers seven models at loads $\{1,2,4,8,16,32,64\}$, with three seeds of 96 trials per cell.
+Each alternative condition reuses the original condition's assignments, queried entity, gold value and trial identifiers.
+The exact-cue question is \texttt{$e_j$:}, which repeats the local form of a declaration.
+The worked-example condition appends answered questions of the form \texttt{The task for $e_i$ is: $v_i$}, then asks the original question about $e_j$.
+Example entities are sampled without replacement from the other listed entities, excluding $e_j$.
+At one binding there is no example; at two bindings there is one.
+Values repeat, so an example's answer can equal the target value even though the entity differs.
+This is additional supervision from the same context, rather than a change in wording alone.
+
+\begin{table}[t]
+\centering
+\caption{Native recall at sixteen bindings in the exploratory seven-model pilot, with 288 matched trials per condition and no distractors.
+Exact cue asks \texttt{$e_j$:}; two examples provide labeled answers for other listed entities before the original question.
+The original-query cells use the same three-seed subset of the main grid.
+The pilot and five-model factorial therefore have matched native baselines where their cohorts overlap.}
+\label{tab:wording-pilot}
+\small
+\input{table_wording_pilot}
+\end{table}
+
+The pilot also fits separate probes and candidate-logit decoders for each model and condition, with the same classifier rule as the main study.
+Three folds each hold out one seed and train on the other two, pooling the seven measured loads.
+A pilot fold therefore trains on \NewPilotTrain{} examples, compared with \NewMainTrain{} in the main fifteen-load, six-seed study.
+Scores across those studies reflect both the input condition and differences in classifier training size and load composition.
+They cannot identify a representation change attributable to wording alone.
+Table~\ref{tab:wording-readouts} reports the pilot's three-quarter-depth probe with its own output-score comparator and controls.
+
+\begin{table}[t]
+\centering
+\caption{Exploratory pilot readouts at sixteen bindings, with 288 out-of-fold predictions per condition.
+Probe: full-pool prediction from three-quarter depth.
+Logit dec.: trained full-pool candidate-logit decoder.
+Foil: listed-value recall when predicting the next listed entity's value.
+Shuffled: pool recall after shuffling the training labels.
+These columns use different chance baselines; the listed-value guess is approximately 0.076 and pool chance is approximately 0.014 to 0.015.
+Point estimates are descriptive and do not enter the registered held-out-model decision.}
+\label{tab:wording-readouts}
+\small
+\input{table_wording_readouts}
+\end{table}
+
+The source records are \texttt{frame\_test/<model>/main.json} and adjacent trial arrays.
+Probe, candidate-logit and control summaries are respectively \texttt{p3\_probe\_frame.json}, \texttt{p3\_readout\_frame.json} and \texttt{p3\_probe\_frame\_ctl\_L2.json} within \texttt{probe\_cap/}.
+The \texttt{L2} filename denotes the third saved layer index, not network layer two.
+The main paper's listed-error summaries use \texttt{anatomy/p3\_error\_anatomy\_13.json}, restricted to the original question, no distractors and sixteen bindings.
+For each model, the reference is the mean fraction of distinct listed nongold values among all nongold pool values, evaluated on the observed wrong-answer trials.
+It is a uniform-error reference, not a fitted model of the language model's errors.
+The generated revision summary retains each model's wrong-answer denominator and listed-answer count.
+
+\section{What recall alone leaves unidentified}\label{app:identity}
+A low output score does not identify the stage of failure.
+For illustration, suppose the queried association is available with probability $s$, a readout succeeds given availability with probability $a$, and either failure produces a uniform pool guess.
+Under these assumptions,
+\begin{equation}
+p=b+(1-b)sa.
+\label{eq:storage-access}
+\end{equation}
+For $u=(p-b)/(1-b)$, both $(s,a)=(u,1)$ and $(s,a)=(1,u)$ produce the same recall.
+This algebra shows an identifiability problem in the illustrative model.
+It does not establish that a real language model has two such stages or that probe accuracy estimates $s$.
+The matched-query and supervised-readout comparisons supply additional observations without assigning these latent probabilities.
+
+The distractor normalizations also answer different questions.
+Let $C_0=p_0(1)$, $C_D=p_D(1)$ and $g_D=(C_D-b)/(C_0-b)$.
+For $C_D>b$,
+\begin{equation}
+\frac{p_D(K)-b}{C_0-b}=g_D\frac{p_D(K)-b}{C_D-b}.
+\label{eq:ceiling-decomposition}
+\end{equation}
+Normalizing by the distractor condition's own ceiling removes its single-binding decline.
+The capacities in Table~\ref{tab:measured} retain that decline by using $C_0$ for both conditions.
+This identity alone does not establish that distractors preserve or change the curve's shape.
+
+\section{Earlier probe and steering evidence}\label{app:probes}
+The following results reanalyze saved runs from \citet{legible2609} and \citet{decodable2609}.
+They provide supporting evidence under related protocols and are separate from the current capacity, wording and registered readout comparisons.
+The three checkpoint sets use six distinct values from a pool of 25 and exactly 256 code-like distractor tokens.
+Their listed-value guess is \DvBaseline{}, and pool chance is \DvPoolChance{}.
+The fourth set uses four bindings without distractors and a different value pool.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{fig_p3_development.pdf}
+\caption{Earlier Pythia probe and steering runs under the six-binding protocol.
+(a) Middle-layer probe recall across five model sizes.
+(b) Pythia-1.4B native recall and probe accuracy conditional on a wrong output, at a layer selected on separate trials and at the final layer.
+(c) Fractions of wrong answers repaired by steering toward the gold value, probe value or a random direction.
+Dashed grey denotes the listed-value guess and dotted grey denotes pool chance.
+These data do not share the current capacity protocol or establish a size threshold for binding information.}
+\label{fig:development}
+\end{figure}
+
+\paragraph{Middle-layer probes.}
+Each checkpoint has \DvLadderTrials{} trials, split into \DvLadderTrain{} training trials and \DvLadderTest{} test trials.
+A standardized multinomial logistic regression reads layer $\lfloor L/2\rfloor$ at the last question token.
+Its regularization is selected by three-fold cross-validation over $\{0.01,0.03,0.1,0.3,1,3,10\}$.
+These particular middle-layer probes in Pythia-160M and 410M remain at or below \DvSmallMax{} across \DvSmallCkptAll{} checkpoints.
+The larger models' final scores range from \DvBigFinalLo{} to \DvBigFinalHi{}.
+The later-layer result in Figure~\ref{fig:checkpoint} prevents generalizing the smaller models' middle-layer scores to their whole hidden state.
+Repeated embedding hashes identify repeated downloads; the earlier Pythia-2.8B ladder retains only \DvTwoEightKept{} distinct checkpoint records and is excluded from that ladder.
+This exclusion does not apply to the current final-checkpoint Pythia-2.8B measurement.
+
+\paragraph{Layer selection and steering.}
+Pythia-1.4B has \DvStTrials{} trials per checkpoint, divided into thirds for probe training, layer selection and testing.
+At every layer, the probe uses inverse regularization strength 0.5.
+Selection chooses the probe most accurate on wrong outputs in the second third.
+The model's answer and the value used for steering are restricted to the six listed values.
+On the final test third, the chosen layer is \DvStLayer{} of \DvStFinalLayer{}, and the probe's pool prediction is correct on \DvStProbeWrong{} of \DvStWrong{} wrong answers (95\% interval \DvStProbeWrongLo{} to \DvStProbeWrongHi{}).
+The final-layer probe reaches \DvStProbeWrongFinal{} on the same wrong answers.
+The differing scores do not establish loss of the binding between those layers.
+
+The intervention adds a unit vector scaled to half the mean hidden-state norm at the selected site.
+It is applied to the output of the block after the layer whose state supplies the probe.
+The direction is either the difference of target and emitted-value probe weights, mapped back to raw coordinates, or the difference of target and emitted-value mean states.
+A fresh random direction of equal norm is the control.
+Gold-target steering requires the answer label; probe-target steering uses a separately supervised classifier's prediction.
+At the final Pythia-1.4B checkpoint, mean-difference steering where probe and output disagree raises accuracy from \DvStAcc{} to \DvGatedFinal{}.
+At the final Pythia-6.9B checkpoint, it raises accuracy from \DvSixGatedBase{} to \DvSixGatedFinal{}.
+These large interventions can impose a candidate answer, so they show controllability rather than ordinary causal use of the probed information.
+
+\begin{table}[t]
+\centering
+\caption{Earlier Pythia-1.4B layer-selection and steering results on the final test third.
+Wrong: number of wrong outputs.
+Probe on wrong: accuracy conditional on a wrong output at the selected and final layers.
+Repair rates condition on wrong outputs.
+Model and steered columns give overall test accuracy.}
+\label{tab:steer}
+\small
+\input{table_steer}
+\end{table}
+
+\paragraph{Wrong-output groups.}
+A separate saved set refits a selected-layer probe on the first two thirds and records \DvPostN{} test trials per checkpoint.
+It classifies each wrong output by whether the probe's top listed value is correct and whether the gold value's normalized probability among the six listed values reaches one sixth.
+The share with a correct probe rises from \DvPostProbeRightFirst{} to \DvPostProbeRightFinal{}.
+The saved rows lack prompt identifiers, so this describes changing shares rather than transitions of individual answers.
+Low gold-value probability is not evidence that the full logit pattern contains no answer information.
+
+\begin{table}[t]
+\centering
+\caption{Earlier Pythia-1.4B wrong-output groups on \DvPostN{} test trials per checkpoint.
+Probe right uses the six listed values.
+Output high means gold-value probability of at least one sixth over those values; output low means less.}
+\label{tab:errors}
+\small
+\input{table_errors}
+\end{table}
+
+\paragraph{Four-binding results.}
+The final-checkpoint runs in \citet{legible2609} use \DvKfTrials{} trials per model, four bindings, no distractors and \DvKfValues{} value words.
+Trial hashes assign probe, selection and test folds.
+The probe layer is selected on the selection fold.
+A value word repeats in \DvKfRepeat{} of prompts, and the regenerated test-fold listed-value guess is \DvKfBase{}.
+Table~\ref{tab:kfour} reports conditional probe recovery, error detection and interventions that replace the hidden state with a target-value mean.
+The wrong-target intervention tests whether an imposed wrong value disrupts correct outputs.
+These runs have no saved shuffled-label control or candidate-logit decoder.
+Their detection and repair results do not establish the current held-out-model comparison.
+
+\begin{table}[!htbp]
+\centering
+\caption{Earlier final-checkpoint probes and interventions with four bindings and no distractors.
+Probe on wrong: conditional recovery with Wilson 95\% intervals.
+Gold and probe repair: fractions of wrong outputs corrected by replacing the state with the relevant value mean.
+Wrong value keeps correct: fraction of correct outputs surviving replacement by another value mean.
+AUROC uses one minus the probe's probability for the model's emitted value.}
+\label{tab:kfour}
+\small
+\input{table_kfour}
+\end{table}
+
+\paragraph{Provenance limits.}
+These earlier runs were produced by \texttt{qgeom.py}, \texttt{dyn.py}, \texttt{steer.py} and \texttt{neuron\_legibility.py}.
+\texttt{analysis/p3\_development.py} recomputes their reported summaries from saved outputs.
+The \texttt{dyn.py} and four-binding outputs record no source-version hash, and the repository's four-binding runner is later than those runs.
+The four-binding measurements record Trainium hardware; several other records do not identify the device.
+The current result files preserve those omissions.
+We do not infer a common execution configuration or a common retrieval mechanism across these protocols.
+
 \end{document}

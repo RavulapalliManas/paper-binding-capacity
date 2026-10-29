@@ -1,0 +1,16 @@
+# arXiv form metadata for the revised paper.
+# Prepared form text; verify against the submission portal before upload.
+
+TITLE:
+In-Context Binding Capacity in Language Models: What the Query and Readout Change
+
+AUTHORS:
+Manas Venkata Sai Ravulapalli; Samrath Chadha
+
+AFFILIATION:
+Efficient Computation Inc.
+
+FIGURES: 5
+
+ABSTRACT:
+A low retrieval score can reflect the question and output rule as well as a model's ability to associate names with values. Across 16 open models from 70M to 2.8B parameters, we measure recall over load and compare alternative questions on matched assignments. At sixteen bindings, deleting is from the original question raises Pythia-410M recall from 0.226 to 0.896 without changing the weights or scoring rule. Under the original question, a preregistered test finds that a supervised hidden-state probe exceeds a trained candidate-logit decoder in all three held-out models. Two of those models also meet the registered ten-point probe advantage over native output. The query and decoder comparisons distinguish protocol-dependent retrieval from supervised recoverability, providing a basis for evaluating both before interpreting poor recall as a requirement for a larger model.

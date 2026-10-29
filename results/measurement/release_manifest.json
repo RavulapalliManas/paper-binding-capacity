@@ -1,0 +1,354 @@
+{
+  "schema": 1,
+  "files": {
+    "PREREG_p3_heldout_probe.md": "eab2cbd432124be2b03bfcfb11ee7748fac0b3ece69c91e19ce6cd7bf919055d",
+    "anatomy/p3_error_anatomy_13.json": "857de082874d285d5587639ab2138d7f511f574c824b840a9edb4384af6162f2",
+    "capacity_fp32/gpt2-large/main.json": "fe35871f74387cb2d07b41e4a5c3d57e5a2b5a10296446170b5b8ccaaba07a94",
+    "capacity_fp32/gpt2-medium/main.json": "93dfa48b07d7c90613904ce463b0d07d26a14e56b80d1468baecec9d61a42678",
+    "capacity_fp32/gpt2/main.json": "ba0ec97dadec86a19d6b26306b3c679eb1b21adb9c2b61dbec63bcd6625aac3a",
+    "capacity_fp32/olmo2-1b/main.json": "9b7165450325d4e7d2501dc79d253eb09298b90427ed6155493f4f5029e06edd",
+    "capacity_fp32/opt-1.3b/main.json": "a61a6074221b7207a924eb1186935b778fd9335bf3e16893ae3822a95bead35a",
+    "capacity_fp32/opt-125m/main.json": "197c1f7af729b7fd468401a3404c06d1fe43fca955a77c2c4e64d555dd1225a4",
+    "capacity_fp32/opt-350m/main.json": "cb546cdc0d26665b5a5aa485212bbc57e242681680c725601d6e0fadc14329a8",
+    "capacity_fp32/pythia-1.4b/main.json": "820b75282f49efd9a5819fb78016c3bf82cef69766dd4d9660b2ea027995be0c",
+    "capacity_fp32/pythia-160m/main.json": "f4be8754158dd783c89149494414117df9ef7cdf164aa60306945230a478e40d",
+    "capacity_fp32/pythia-1b/main.json": "8b5ecbc17a56820e1e8765554d0f78d421e5a5b1902dea6b1ccbd18f3026748b",
+    "capacity_fp32/pythia-2.8b/main.json": "c2c5087a1a72a688828fdb874004c4bf1e4f1b6d96de1a5a9a6cc595515ce12f",
+    "capacity_fp32/pythia-410m/main.json": "17d1a51bd198b669764c153864c12e923baad0995e09a68a1288142cfb52813e",
+    "capacity_fp32/pythia-70m/main.json": "735c738fdbcfba3a92c7eecebb247ae5a4d85709d3a5f0bf3fe3fe549e42a3f1",
+    "capacity_fp32/qwen2.5-0.5b/main.json": "6a94f9ed362d1b041c192b8e58573f24cd2327eb4005a3c5523841002c131583",
+    "capacity_fp32/qwen2.5-1.5b/main.json": "20eb7e8c885595eff6c55db934e05d7e926af797f62baef804fe875a5a9d8dc5",
+    "capacity_fp32/smollm2-360m/main.json": "f62e09934a7f21eabe9e597fe724db8ea94a24cfd939de7e7ef501d3b611604e",
+    "ckpt_traj/pythia-160m/step1000.json": "fee70f64c6bb5dbcc9b3f46977632010f8019620563e1fee57e3641ac76d8d97",
+    "ckpt_traj/pythia-160m/step16000.json": "f78bff4d1a425d71a659aa62abca4451122919d0f90b1a75c2fec201affc0bed",
+    "ckpt_traj/pythia-160m/step2000.json": "d0aaca1f63a72fd8715257b1ff60e131aa23fe354be1c76bdce61a799bb01c40",
+    "ckpt_traj/pythia-160m/step24000.json": "556b9b893b0d12e4f584ed3614c07d202d54cb92f71bbe1d248fa32e38d60d99",
+    "ckpt_traj/pythia-160m/step32000.json": "cdf6ac586e50aea3799d194f2a97e7b2155c2796b12692f2ee7a822518056b10",
+    "ckpt_traj/pythia-160m/step4000.json": "ed522e18e6f608b1245b56c48d0aff452ad9fe7a8a9942ef8b3558f8cc727d9c",
+    "ckpt_traj/pythia-160m/step48000.json": "68af102ca0d80d98d0be90ae52efb0d54d61b5cd024502cb422f08a835c9e06d",
+    "ckpt_traj/pythia-160m/step64000.json": "bfec4fb733809cac445000ad215d78d077801d4ceacc4c8092df72a5abbf2bf2",
+    "ckpt_traj/pythia-160m/step8000.json": "99c026ca4395f23fe7fbb852380dccb809f9973abee0fe37f220b83364c19e2b",
+    "ckpt_traj/pythia-160m/step96000.json": "cd72a3179f38e5dc68b7b48891332c6e30e3919e9d6875b832c192f5e4f7acb0",
+    "ckpt_traj/pythia-410m/step1000.json": "56a293053ce0e3d20acb4c472a2f8789aec9cf98a5a167947c488f8b21f6f6f7",
+    "ckpt_traj/pythia-410m/step16000.json": "82604d0c0bab205d5f60b451a7b1ff5f059cf542875a7395e61b9680fffddb8a",
+    "ckpt_traj/pythia-410m/step2000.json": "68217de86eba53dab31b8b1108249688d7378cdf596a14d83f581a28b9b467ec",
+    "ckpt_traj/pythia-410m/step24000.json": "74e652dd4cbdf4365e520bf7f6e870dba1f8b4c19e4dd53d8c0e945e23c856f5",
+    "ckpt_traj/pythia-410m/step32000.json": "ed6aeb4fa4f9dd8556609fd8c137f5a20966b1330788cf4522b48094cf11ea40",
+    "ckpt_traj/pythia-410m/step4000.json": "5ac75cd10b090d0a20c82ca42a558d399794f37f42bee4009f1f3837e212b090",
+    "ckpt_traj/pythia-410m/step48000.json": "d0bfb185f5ff112378b92f24b3bac32690c50396644c839241eed27c9dc3c0db",
+    "ckpt_traj/pythia-410m/step64000.json": "63e80ba21e24e53032492ba235bf700501ee8c7f4de44c8db77e4198f8dd5d0c",
+    "ckpt_traj/pythia-410m/step8000.json": "420a9a9732faa5f76260d983ef90571b8fe3740a4d4e5abcc3cc5838ac8d2e35",
+    "ckpt_traj/pythia-410m/step96000.json": "45950e0ebe257af8340f3a5b9e1097eb4c102f5366beaf92b643dcbd279b60a4",
+    "frame3/pythia-160m/main.json": "ee50faa87e971ca54e44a7854972ca360c784192683e227974306fabcfbb124a",
+    "frame3/pythia-1b/main.json": "7aa1299a9db3e9136aea0886e86d230fb5a396c315c1997bb80636aeaa9c87c8",
+    "frame3/pythia-410m/main.json": "5639e64cb62e88f315f65cb67e29c969e93cd888c789b2c4ffdaae9814ba4922",
+    "frame3/qwen2.5-0.5b/main.json": "1f07bc963e1ee2f4dde7131fc92aabf0a7047c46547f4c5352afe2c80eb9c389",
+    "frame3/smollm2-360m/main.json": "e618281abfca11cac8fa28227b98d38d591035ba7bd5baa9cbbc4701b005cdb1",
+    "frame_test/olmo2-1b/main.json": "2bbeed4434fef14d12edf4d7d18383a09d9aeccfd038a1065106b1175f238965",
+    "frame_test/opt-1.3b/main.json": "15ae3dc0ac74a749bfff90f3c760a5f5d800fb196929ac26195f11345609104a",
+    "frame_test/pythia-160m/main.json": "a478e25b242ae25d0fea83c3e18f9561a593e476379669e3fccd1ed4ea6877b8",
+    "frame_test/pythia-1b/main.json": "0d686a9947ac65b0b25c4ded412a9bce7873ff8f79185ddc7971f483d680dc62",
+    "frame_test/pythia-410m/main.json": "6296099792a367522d83148df1e997cf0a54799b2d495c392814bc62035c0f23",
+    "frame_test/qwen2.5-0.5b/main.json": "d29cc70d9816d1a4979e490fa1604133818dcab8d7a5e443ac9efbde68cea762",
+    "frame_test/smollm2-360m/main.json": "99293eddd03173cbe01e1eb45cb8e19b7c64f25516d6fa88bed6989ae8150537",
+    "predictions/capacity_fp32/gpt2-large/main.npz": "90cc22d2c95709e8329d9a851153e27158afe92e0aa82d3ca594c81cca718285",
+    "predictions/capacity_fp32/gpt2-medium/main.npz": "7b5004b7e3043dab8c906796baefb2843b92197d9fcd68650276d99dc7ff0417",
+    "predictions/capacity_fp32/gpt2/main.npz": "ecaa3e1f4bf1a5adaa533cbd05298ce95fe493f6e2fb112bc2a5fca9523e7fdc",
+    "predictions/capacity_fp32/olmo2-1b/main.npz": "e80d14f7d1bfdfcf4a5387e42986371f6f04f1b949763dac28d6676fbe922a7e",
+    "predictions/capacity_fp32/opt-1.3b/main.npz": "f6c8500fba4028358431728023bb33728871373559424b237bac8771f2de349b",
+    "predictions/capacity_fp32/opt-125m/main.npz": "8b2ae329de7ad7bdc4dabb9379e16f97fe8a8382ec158a5056b4f87a738079bb",
+    "predictions/capacity_fp32/opt-350m/main.npz": "be76d138e2da932687017d65b6798a68408422d3609c7f17542de30436cbb29a",
+    "predictions/capacity_fp32/pythia-1.4b/main.npz": "ced6b7d7e08d768147073a5e7321f72796f0a51bd41d8ad8f0715231a9531603",
+    "predictions/capacity_fp32/pythia-160m/main.npz": "8c6eaa12825a3bc65b50fdd7e8b733ad0005fc13edc0e0ebe300aece90e78bfa",
+    "predictions/capacity_fp32/pythia-1b/main.npz": "6da28998a23fd37a7a4164b1e20672ddcb8cf1d25cff47e5ac6862f24e63322b",
+    "predictions/capacity_fp32/pythia-2.8b/main.npz": "cb229e3acec94e7c1fb87c9ce0ddc56d05b5e37b7a39e29d00c2c135f7d3d3c1",
+    "predictions/capacity_fp32/pythia-410m/main.npz": "91d128fc6f54f3d150de55f7b08e86f85a986d5532a1858b3cf7144d350a42f2",
+    "predictions/capacity_fp32/pythia-70m/main.npz": "117f881cddd4c4e4cbdc6f90c0006738b6ae829beda73ca3d46c956b5b14348b",
+    "predictions/capacity_fp32/qwen2.5-0.5b/main.npz": "15fea054b81375dfb60bbcbd702832ee68d38586b7bdff16e3ab2a10d5230e03",
+    "predictions/capacity_fp32/qwen2.5-1.5b/main.npz": "9ffd591f8f9dcde1dbb636b4950c71d8c240515ec3d7d9477c7558105c6095ed",
+    "predictions/capacity_fp32/smollm2-360m/main.npz": "0144b649ca39e6d41bf138b168cccd4c4c45fda594b74d33e97b29b9406a9098",
+    "predictions/ckpt_traj/pythia-160m/step1000.npz": "91670428c9a7d0ac2c8f100f1bcddc8bd75e11aa3207061fa7a48b3d42505336",
+    "predictions/ckpt_traj/pythia-160m/step16000.npz": "af949711008c3bd4cb018c0eeb32b297771dbde698d8b14d64c7eae9ca7ad401",
+    "predictions/ckpt_traj/pythia-160m/step2000.npz": "914a62af087197c1d1f207619556272ffe1d25142d0dd2afcd4fadc475260733",
+    "predictions/ckpt_traj/pythia-160m/step24000.npz": "0f232867f7acc7b53f9dde639160aca2f925b84248557c9478cb0b99226e3698",
+    "predictions/ckpt_traj/pythia-160m/step32000.npz": "40b9586114e3b3d593d04b4a6f10937375e48ddd25aa06cd8d6a6633bbb00456",
+    "predictions/ckpt_traj/pythia-160m/step4000.npz": "115b1a002db3ddb17b0f43bada4a6d1a43ec786d2346a71d7cca5714b824b909",
+    "predictions/ckpt_traj/pythia-160m/step48000.npz": "dc3776f5c93147ace4d42c2c2e60417eaf47826bdc1396efe2e2192e5bcf3ad3",
+    "predictions/ckpt_traj/pythia-160m/step64000.npz": "855c7593d3cc73350381b4093589f7e37470f84de0e5030c9af1519b093f1839",
+    "predictions/ckpt_traj/pythia-160m/step8000.npz": "43ec5136267ce80e4334b27b7c43de9ad06997ec9fefcae36353243a0d7b3e1e",
+    "predictions/ckpt_traj/pythia-160m/step96000.npz": "aef74f8474615753a297374e4d89a17922a8d1e8eb9b3eee653eb975e67be0b0",
+    "predictions/ckpt_traj/pythia-410m/step1000.npz": "049751969f208180f5483e66a97802e16ea4c9bc7aae3183ba5e08f8d3c296fd",
+    "predictions/ckpt_traj/pythia-410m/step16000.npz": "3093dc8a4367bcfc36b83bbfe781d7cf837082a4eb0834c8b63b3ac4c6fb70ac",
+    "predictions/ckpt_traj/pythia-410m/step2000.npz": "ef076a969971050276aeda80e135a375ec92f77c24a65add3b525fe823b099ac",
+    "predictions/ckpt_traj/pythia-410m/step24000.npz": "22d481d01b95d2b3d925dcb41f20d1079daa908e8bbe58f7e8d24b8739304c85",
+    "predictions/ckpt_traj/pythia-410m/step32000.npz": "d7777039940c62cb079eb4e971342535a0027709d4ca6e9ee206bb8f6d2b58b0",
+    "predictions/ckpt_traj/pythia-410m/step4000.npz": "eaae45204e9fa4f6e1589bf18abe67ce3955a9385b9887df43ff919087ae53cb",
+    "predictions/ckpt_traj/pythia-410m/step48000.npz": "d9b69a56542124244a84973a8734ab43fc026b1004bd1fde47b6fa4be7c8eef0",
+    "predictions/ckpt_traj/pythia-410m/step64000.npz": "9eee79d8898c4ad93f3105d8a0e3d689e66d798843f731163333d851302cda64",
+    "predictions/ckpt_traj/pythia-410m/step8000.npz": "1fa12e0fc780ab74c245da695a5c94b59d9f271b5b612404e853f62a16e30f71",
+    "predictions/ckpt_traj/pythia-410m/step96000.npz": "daa2c826773193caae2cc37a7369d14b825f596599f9b08402bfd5bccca9c458",
+    "predictions/frame3/pythia-160m/main.npz": "da7aa97ba9e3da522a1a6b430d7e5dea08bb5e55292a0aaa41b6882ca574c5dd",
+    "predictions/frame3/pythia-1b/main.npz": "0cd2d0cf7edbe89bc83ecd87c859dc3885e909d67c59f7473d4de7c1e58f793b",
+    "predictions/frame3/pythia-410m/main.npz": "4856e9217d443a2cebfef52d151dd900b8597f20b42a2ae7f09d6be816387888",
+    "predictions/frame3/qwen2.5-0.5b/main.npz": "fc3a894c731193a06a49522c82af63d4fc8badf593a8ee57604002209cc65b9c",
+    "predictions/frame3/smollm2-360m/main.npz": "7540e785cfe7e20907208eb697b6706bacbf2010519098a1f2afeab7c9b0904d",
+    "predictions/frame_test/olmo2-1b/main.npz": "6d259df2eb3ae8ba80a06faf51d1862676424c07ed1c1f6aebbabb1a21fb4b64",
+    "predictions/frame_test/opt-1.3b/main.npz": "919f96b6f72ef08c0f2466bcc21032ff1e3d43fd0364816defa6f97d8b371b52",
+    "predictions/frame_test/pythia-160m/main.npz": "35a3a6fe98d4e72154046f9e646d21e218c090417bfea1c73414aa851d8cf524",
+    "predictions/frame_test/pythia-1b/main.npz": "a550a444d5cab55156a5e2d0529555ceb54e24d151153dbbee54ac6824da91f2",
+    "predictions/frame_test/pythia-410m/main.npz": "114a4e572ff8865129cfb37e449c4bb9e503d518eeae58e857f41d59eaffdc2a",
+    "predictions/frame_test/qwen2.5-0.5b/main.npz": "65848d5672c49bbb3639235db49a4623059da8f3db3e8050c85711c072235160",
+    "predictions/frame_test/smollm2-360m/main.npz": "36048ec2ab1bcdf833c655fbc72a4ed9a875ac5fae347e50b5a25bded3e46336",
+    "probe_cap/heldout_ctl3.json": "d4cdd458a5c6e7643a81214279cd9652ad988c9bf8013b91b69d73bc3cb7162d",
+    "probe_cap/heldout_paired_K16.json": "87cc651c527e5a16456c197937338cd65cf6c801f5d09b6ac90c1daa1ef0f720",
+    "probe_cap/p3_paired_ci_13_K16.json": "4d75ee6722060462e14471c0d9b181244210db233802ab5b96edab59c647eca8",
+    "probe_cap/p3_probe_ckpt.json": "284a26744600d20295fc033acd80a9e34726bc6929989a2d66f8cdc68cf25ed0",
+    "probe_cap/p3_probe_frame.json": "ce3937f105982eb2538300020d80d4551171ace4eef15fb8db52c4fed1e03999",
+    "probe_cap/p3_probe_frame_ctl_L2.json": "f694beac256a43efaeffdc1eb872e7a4f321a72c7341a339a3bcbf8c4a6e436b",
+    "probe_cap/p3_readout_frame.json": "89448aea5af9c5b44d150d1dab38527fbffa2180bcfdb4be5579e39b9cdfd5ba"
+  },
+  "predictions": [
+    {
+      "metadata": "capacity_fp32/gpt2/main.json",
+      "file": "predictions/capacity_fp32/gpt2/main.npz",
+      "source_array": "capacity_fp32/gpt2/main.npz"
+    },
+    {
+      "metadata": "capacity_fp32/gpt2-large/main.json",
+      "file": "predictions/capacity_fp32/gpt2-large/main.npz",
+      "source_array": "capacity_fp32/gpt2-large/main.npz"
+    },
+    {
+      "metadata": "capacity_fp32/gpt2-medium/main.json",
+      "file": "predictions/capacity_fp32/gpt2-medium/main.npz",
+      "source_array": "capacity_fp32/gpt2-medium/main.npz"
+    },
+    {
+      "metadata": "capacity_fp32/olmo2-1b/main.json",
+      "file": "predictions/capacity_fp32/olmo2-1b/main.npz",
+      "source_array": "capacity_fp32/olmo2-1b/main.npz"
+    },
+    {
+      "metadata": "capacity_fp32/opt-1.3b/main.json",
+      "file": "predictions/capacity_fp32/opt-1.3b/main.npz",
+      "source_array": "capacity_fp32/opt-1.3b/main.npz"
+    },
+    {
+      "metadata": "capacity_fp32/opt-125m/main.json",
+      "file": "predictions/capacity_fp32/opt-125m/main.npz",
+      "source_array": "capacity_fp32/opt-125m/main.npz"
+    },
+    {
+      "metadata": "capacity_fp32/opt-350m/main.json",
+      "file": "predictions/capacity_fp32/opt-350m/main.npz",
+      "source_array": "capacity_fp32/opt-350m/main.npz"
+    },
+    {
+      "metadata": "capacity_fp32/pythia-1.4b/main.json",
+      "file": "predictions/capacity_fp32/pythia-1.4b/main.npz",
+      "source_array": "capacity_fp32/pythia-1.4b/main.npz"
+    },
+    {
+      "metadata": "capacity_fp32/pythia-160m/main.json",
+      "file": "predictions/capacity_fp32/pythia-160m/main.npz",
+      "source_array": "capacity_fp32/pythia-160m/main.npz"
+    },
+    {
+      "metadata": "capacity_fp32/pythia-1b/main.json",
+      "file": "predictions/capacity_fp32/pythia-1b/main.npz",
+      "source_array": "capacity_fp32/pythia-1b/main.npz"
+    },
+    {
+      "metadata": "capacity_fp32/pythia-2.8b/main.json",
+      "file": "predictions/capacity_fp32/pythia-2.8b/main.npz",
+      "source_array": "capacity_fp32/pythia-2.8b/main.npz"
+    },
+    {
+      "metadata": "capacity_fp32/pythia-410m/main.json",
+      "file": "predictions/capacity_fp32/pythia-410m/main.npz",
+      "source_array": "capacity_fp32/pythia-410m/main.npz"
+    },
+    {
+      "metadata": "capacity_fp32/pythia-70m/main.json",
+      "file": "predictions/capacity_fp32/pythia-70m/main.npz",
+      "source_array": "capacity_fp32/pythia-70m/main.npz"
+    },
+    {
+      "metadata": "capacity_fp32/qwen2.5-0.5b/main.json",
+      "file": "predictions/capacity_fp32/qwen2.5-0.5b/main.npz",
+      "source_array": "capacity_fp32/qwen2.5-0.5b/main.npz"
+    },
+    {
+      "metadata": "capacity_fp32/qwen2.5-1.5b/main.json",
+      "file": "predictions/capacity_fp32/qwen2.5-1.5b/main.npz",
+      "source_array": "capacity_fp32/qwen2.5-1.5b/main.npz"
+    },
+    {
+      "metadata": "capacity_fp32/smollm2-360m/main.json",
+      "file": "predictions/capacity_fp32/smollm2-360m/main.npz",
+      "source_array": "capacity_fp32/smollm2-360m/main.npz"
+    },
+    {
+      "metadata": "frame_test/olmo2-1b/main.json",
+      "file": "predictions/frame_test/olmo2-1b/main.npz",
+      "source_array": "frame_test/olmo2-1b/main.npz"
+    },
+    {
+      "metadata": "frame_test/opt-1.3b/main.json",
+      "file": "predictions/frame_test/opt-1.3b/main.npz",
+      "source_array": "frame_test/opt-1.3b/main.npz"
+    },
+    {
+      "metadata": "frame_test/pythia-160m/main.json",
+      "file": "predictions/frame_test/pythia-160m/main.npz",
+      "source_array": "frame_test/pythia-160m/main.npz"
+    },
+    {
+      "metadata": "frame_test/pythia-1b/main.json",
+      "file": "predictions/frame_test/pythia-1b/main.npz",
+      "source_array": "frame_test/pythia-1b/main.npz"
+    },
+    {
+      "metadata": "frame_test/pythia-410m/main.json",
+      "file": "predictions/frame_test/pythia-410m/main.npz",
+      "source_array": "frame_test/pythia-410m/main.npz"
+    },
+    {
+      "metadata": "frame_test/qwen2.5-0.5b/main.json",
+      "file": "predictions/frame_test/qwen2.5-0.5b/main.npz",
+      "source_array": "frame_test/qwen2.5-0.5b/main.npz"
+    },
+    {
+      "metadata": "frame_test/smollm2-360m/main.json",
+      "file": "predictions/frame_test/smollm2-360m/main.npz",
+      "source_array": "frame_test/smollm2-360m/main.npz"
+    },
+    {
+      "metadata": "frame3/pythia-160m/main.json",
+      "file": "predictions/frame3/pythia-160m/main.npz",
+      "source_array": "frame3/pythia-160m/main.npz"
+    },
+    {
+      "metadata": "frame3/pythia-1b/main.json",
+      "file": "predictions/frame3/pythia-1b/main.npz",
+      "source_array": "frame3/pythia-1b/main.npz"
+    },
+    {
+      "metadata": "frame3/pythia-410m/main.json",
+      "file": "predictions/frame3/pythia-410m/main.npz",
+      "source_array": "frame3/pythia-410m/main.npz"
+    },
+    {
+      "metadata": "frame3/qwen2.5-0.5b/main.json",
+      "file": "predictions/frame3/qwen2.5-0.5b/main.npz",
+      "source_array": "frame3/qwen2.5-0.5b/main.npz"
+    },
+    {
+      "metadata": "frame3/smollm2-360m/main.json",
+      "file": "predictions/frame3/smollm2-360m/main.npz",
+      "source_array": "frame3/smollm2-360m/main.npz"
+    },
+    {
+      "metadata": "ckpt_traj/pythia-160m/step1000.json",
+      "file": "predictions/ckpt_traj/pythia-160m/step1000.npz",
+      "source_array": "ckpt_traj/pythia-160m/step1000.npz"
+    },
+    {
+      "metadata": "ckpt_traj/pythia-160m/step16000.json",
+      "file": "predictions/ckpt_traj/pythia-160m/step16000.npz",
+      "source_array": "ckpt_traj/pythia-160m/step16000.npz"
+    },
+    {
+      "metadata": "ckpt_traj/pythia-160m/step2000.json",
+      "file": "predictions/ckpt_traj/pythia-160m/step2000.npz",
+      "source_array": "ckpt_traj/pythia-160m/step2000.npz"
+    },
+    {
+      "metadata": "ckpt_traj/pythia-160m/step24000.json",
+      "file": "predictions/ckpt_traj/pythia-160m/step24000.npz",
+      "source_array": "ckpt_traj/pythia-160m/step24000.npz"
+    },
+    {
+      "metadata": "ckpt_traj/pythia-160m/step32000.json",
+      "file": "predictions/ckpt_traj/pythia-160m/step32000.npz",
+      "source_array": "ckpt_traj/pythia-160m/step32000.npz"
+    },
+    {
+      "metadata": "ckpt_traj/pythia-160m/step4000.json",
+      "file": "predictions/ckpt_traj/pythia-160m/step4000.npz",
+      "source_array": "ckpt_traj/pythia-160m/step4000.npz"
+    },
+    {
+      "metadata": "ckpt_traj/pythia-160m/step48000.json",
+      "file": "predictions/ckpt_traj/pythia-160m/step48000.npz",
+      "source_array": "ckpt_traj/pythia-160m/step48000.npz"
+    },
+    {
+      "metadata": "ckpt_traj/pythia-160m/step64000.json",
+      "file": "predictions/ckpt_traj/pythia-160m/step64000.npz",
+      "source_array": "ckpt_traj/pythia-160m/step64000.npz"
+    },
+    {
+      "metadata": "ckpt_traj/pythia-160m/step8000.json",
+      "file": "predictions/ckpt_traj/pythia-160m/step8000.npz",
+      "source_array": "ckpt_traj/pythia-160m/step8000.npz"
+    },
+    {
+      "metadata": "ckpt_traj/pythia-160m/step96000.json",
+      "file": "predictions/ckpt_traj/pythia-160m/step96000.npz",
+      "source_array": "ckpt_traj/pythia-160m/step96000.npz"
+    },
+    {
+      "metadata": "ckpt_traj/pythia-410m/step1000.json",
+      "file": "predictions/ckpt_traj/pythia-410m/step1000.npz",
+      "source_array": "ckpt_traj/pythia-410m/step1000.npz"
+    },
+    {
+      "metadata": "ckpt_traj/pythia-410m/step16000.json",
+      "file": "predictions/ckpt_traj/pythia-410m/step16000.npz",
+      "source_array": "ckpt_traj/pythia-410m/step16000.npz"
+    },
+    {
+      "metadata": "ckpt_traj/pythia-410m/step2000.json",
+      "file": "predictions/ckpt_traj/pythia-410m/step2000.npz",
+      "source_array": "ckpt_traj/pythia-410m/step2000.npz"
+    },
+    {
+      "metadata": "ckpt_traj/pythia-410m/step24000.json",
+      "file": "predictions/ckpt_traj/pythia-410m/step24000.npz",
+      "source_array": "ckpt_traj/pythia-410m/step24000.npz"
+    },
+    {
+      "metadata": "ckpt_traj/pythia-410m/step32000.json",
+      "file": "predictions/ckpt_traj/pythia-410m/step32000.npz",
+      "source_array": "ckpt_traj/pythia-410m/step32000.npz"
+    },
+    {
+      "metadata": "ckpt_traj/pythia-410m/step4000.json",
+      "file": "predictions/ckpt_traj/pythia-410m/step4000.npz",
+      "source_array": "ckpt_traj/pythia-410m/step4000.npz"
+    },
+    {
+      "metadata": "ckpt_traj/pythia-410m/step48000.json",
+      "file": "predictions/ckpt_traj/pythia-410m/step48000.npz",
+      "source_array": "ckpt_traj/pythia-410m/step48000.npz"
+    },
+    {
+      "metadata": "ckpt_traj/pythia-410m/step64000.json",
+      "file": "predictions/ckpt_traj/pythia-410m/step64000.npz",
+      "source_array": "ckpt_traj/pythia-410m/step64000.npz"
+    },
+    {
+      "metadata": "ckpt_traj/pythia-410m/step8000.json",
+      "file": "predictions/ckpt_traj/pythia-410m/step8000.npz",
+      "source_array": "ckpt_traj/pythia-410m/step8000.npz"
+    },
+    {
+      "metadata": "ckpt_traj/pythia-410m/step96000.json",
+      "file": "predictions/ckpt_traj/pythia-410m/step96000.npz",
+      "source_array": "ckpt_traj/pythia-410m/step96000.npz"
+    }
+  ],
+  "scope": "Recorded integer predictions and trial IDs; no hidden states or refitted classifiers.",
+  "exporter_sha256": "0c3a5d0dc5d78adc7a7a79377e587fc395d1281f13e8ab9c8a76c5679a9c2fca"
+}
