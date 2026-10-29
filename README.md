@@ -18,13 +18,13 @@ python3 -m pip install -r requirements.txt
 make
 ```
 
-`make` regenerates the current figures and TeX tables from committed results, checks recorded predictions and paired intervals, compiles the paper three times, rejects LaTeX warnings, and creates the self-contained source archive. Outputs stay under ignored `build/`; the checkout stays clean.
+`make` regenerates the current figures and TeX tables from committed results, checks recorded predictions, paired intervals and figure data/labels, compiles the paper three times, rejects LaTeX warnings, and creates the self-contained source archive. Outputs stay under ignored `build/`; the checkout stays clean.
 
 - `build/p3_capacity.pdf`: compiled paper.
 - `build/P3_capacity_arxiv.zip`: exact TeX, style, table and figure dependencies for the paper.
 - `build/assets/`: regenerated tables, numerical macros and figures.
 
-Run `make verify` to check the data and generated assets without LaTeX. To use a different interpreter, run `make PYTHON=/path/to/python`. The recorded results reproduce without downloading model weights, fitting a probe or running inference.
+Run `make verify` to check the data and generated assets without LaTeX. To use a different interpreter, run `make PYTHON=/path/to/python`. The recorded results reproduce without downloading model weights, fitting a probe or running inference. The build directory is fixed at `build/` so compilation and packaging use the same verified figures.
 
 ## Code and evidence map
 

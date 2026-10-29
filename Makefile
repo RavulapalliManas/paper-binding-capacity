@@ -1,5 +1,8 @@
 PYTHON ?= python3
 BUILD ?= build
+ifneq ($(BUILD),build)
+$(error BUILD must be build to match the manuscript's generated-figure path)
+endif
 
 .PHONY: all assets verify pdf source
 all: pdf source

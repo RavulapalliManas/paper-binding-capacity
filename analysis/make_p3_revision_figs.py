@@ -62,13 +62,28 @@ def jl(name):
 def save_with_data_hash(fig, path):
     """Fingerprint plotted series and labels, independently of PDF fonts/dates."""
     import hashlib
+    fig.canvas.draw()
     panels = []
     for ax in fig.axes:
         panel = {"title": ax.get_title(loc="left") or ax.get_title(),
                  "xlabel": ax.get_xlabel(), "ylabel": ax.get_ylabel(),
                  "scales": [ax.get_xscale(), ax.get_yscale()],
                  "limits": [list(ax.get_xlim()), list(ax.get_ylim())],
+                 "ticks": {},
+                 "text": [{"text": text.get_text(), "position": list(text.get_position())}
+                          for text in ax.texts if text.get_visible()],
+                 "legend": ([text.get_text() for text in ax.get_legend().get_texts()]
+                            if ax.get_legend() else []),
                  "lines": [], "collections": []}
+        for name, axis in [("x", ax.xaxis), ("y", ax.yaxis)]:
+            panel["ticks"][name] = {
+                kind: [{"position": float(tick.get_loc()),
+                        "labels": [label.get_text() for label in (tick.label1, tick.label2)
+                                   if label.get_visible()]}
+                       for tick in ticks]
+                for kind, ticks in [("major", axis.get_major_ticks()),
+                                    ("minor", axis.get_minor_ticks())]}
+            panel["ticks"][name]["offset"] = axis.get_offset_text().get_text()
         for line in ax.lines:
             panel["lines"].append({"x": np.asarray(line.get_xdata(), dtype=float).tolist(),
                                    "y": np.asarray(line.get_ydata(), dtype=float).tolist(),
@@ -82,7 +97,11 @@ def save_with_data_hash(fig, path):
                 item["offsets"] = np.asarray(collection.get_offsets(), dtype=float).tolist()
             panel["collections"].append(item)
         panels.append(panel)
-    payload = json.dumps(panels, sort_keys=True, separators=(",", ":"), allow_nan=False)
+    content = {"panels": panels,
+               "text": [text.get_text() for text in fig.texts if text.get_visible()],
+               "legends": [[text.get_text() for text in legend.get_texts()]
+                           for legend in fig.legends]}
+    payload = json.dumps(content, sort_keys=True, separators=(",", ":"), allow_nan=False)
     digest = hashlib.sha256(payload.encode()).hexdigest()
     fig.savefig(path, metadata={"Subject": "p3-series-sha256:"+digest})
 
