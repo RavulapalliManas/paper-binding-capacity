@@ -52,10 +52,11 @@ The usefulness of this approach depends on reliably retrieving the association n
 Before treating poor recall as evidence that a larger model is needed, we ask how much the failure depends on the question and readout.
 We study this issue as more name--value pairs are supplied to \NewNModels{} open models from 70M to 2.8B parameters.
 At sixteen bindings, deleting \texttt{is} from the question raises Pythia-410M recall from \NewFourTenOriginal{} to \NewFourTenColon{} on the same assignments, without changing the weights or scoring rule.
-A preregistered test holds the original question fixed and compares classifiers trained on hidden activations with classifiers trained on candidate-value logits.
-At sixteen bindings, three-quarter depth and no distractors, the hidden-state classifiers achieve higher accuracy over all test trials in all three held-out models.
+With the original question unchanged, we also train classifiers to predict the assigned value from either the model's hidden states or its scores for candidate values.
+We specify this test before fitting the classifiers on three additional models.
+At sixteen bindings, three-quarter depth and no distractors, the hidden-state classifiers predict more values correctly than the classifiers using candidate-value scores across all test trials in each additional model.
 Two also meet the registered ten-percentage-point advantage over choosing the highest-scoring candidate value.
-The results show that an apparent retrieval limit can change substantially with the procedure used to query the model and read its states.
+How much a model appears to retrieve therefore depends on how it is asked and how its answer is obtained.
 \end{abstract}
 
 \section{Introduction}\label{sec:intro}
@@ -69,7 +70,7 @@ Understanding how much information can be used reliably therefore requires more 
 This question is particularly relevant for small models, where inference cost or device memory restricts the choice of model.
 Longer pretraining can make smaller models attractive for repeated use \citep{touvron2023}, and on-device models explicitly target size-constrained settings \citep{mobilellm2024}.
 When size is constrained, we need to know both how well a model retrieves supplied information and what a failure tells us about its limitations.
-A low retrieval score could be a reason to reconsider the model, but that decision depends on whether the score reflects a general limit or a failure under the chosen question and readout.
+Before replacing a model that retrieves poorly, we need to know whether it can do better with a different question or a different way of predicting the answer.
 
 We study this issue with associations whose values are determined by the current prompt.
 Consider a list containing \texttt{cache: rotate}, \texttt{token: verify}, and \texttt{socket: flush}.
@@ -85,26 +86,28 @@ For example, asking \texttt{The task for token is:} gives Pythia-410M recall of 
 Deleting \texttt{is}, to ask \texttt{The task for token:}, raises recall to \NewFourTenColon{} on the same assignments and queried entities.
 The model and scoring rule are unchanged.
 The lower score therefore cannot be a bound on what this model retrieves from those assignments under other questions.
-With the original question fixed, does a hidden-state classifier predict values more accurately than native output or a trained output-score decoder?
+A further question concerns the information available when the original question is used.
+Can a classifier predict the assigned value more accurately from the model's hidden state than the model predicts it from its output scores?
 
-We address these questions through two comparisons.
-First, we change the query while retaining the assignments and queried entity.
-Second, we keep the original query fixed and compare the model's native choice with supervised decoders trained on either its hidden states or its output scores.
-The output-score decoder is important: choosing the highest-scoring value is only one use of those scores, and a classifier may recover a correct answer from their full pattern.
-Comparing the two trained decoders tests whether the probe's advantage persists when the output scores also have a learned decision rule.
-Both classifiers learn from labeled examples; their success does not establish that the unmodified model uses the same information \citep{hewitt2019,belinkov2022}.
+We test this by training a classifier, called a probe, to predict the value from a hidden state recorded at the end of the question.
+We also train a classifier to predict the value from the model's scores for all candidate values.
+This second classifier matters because choosing the highest-scoring value is only one way to use those scores.
+Their full pattern may allow a trained classifier to recover answers missed by that choice.
+We ask whether hidden states support more accurate predictions when both classifiers receive labeled training examples.
+Their success does not establish that the unmodified model uses the same information \citep{hewitt2019,belinkov2022}.
 
 Copying and phone-book experiments show that transformers can retrieve associations from context \citep{jelassi2024}, and probes can recover correct-answer information on trials where models answer incorrectly \citep{orgad2024,karim2026}.
 Our earlier study also compared trained state and candidate-logit decoders \citep{decodable2609}.
-Here we bring that comparison together with matched changes in the query and with measurements across retrieval load.
-We then register the layer, load and decision criteria before fitting probes on additional models.
+We use the two classifiers to examine how predictions from hidden states and output scores differ as more associations enter the context.
+We also vary the question on the same assignments.
+After exploring these effects, we specify the layer, load and criteria for a test on additional models before fitting their probes.
 
 Across \NewNModels{} models, the original-query curves show substantial failures as the number of bindings increases (Section~\ref{sec:capacity}).
 Matched wording changes improve recall in five models, while exact-cue and worked-example pilots show that the gains depend on both model and format (Section~\ref{sec:wording}).
 Under the original query, hidden-state probes exceed trained candidate-logit decoders in all three held-out models at the registered layer and load (Section~\ref{sec:hidden}).
 Checkpoint comparisons show that probe recall also depends on the sampled layer (Section~\ref{sec:development}).
-The resulting capacity estimates describe retrieval under a specified query and readout.
-They do not supply a query-independent storage limit or establish how well the model will perform in an application.
+A model's measured capacity thus depends on the question and the method used to predict its answer.
+These estimates cannot tell us how much the model stores regardless of the question, or how reliably it will perform in an application.
 
 \section{Task and evaluation}\label{sec:setup}
 We use randomly assigned name--value pairs so that the answer is determined by the current list.
@@ -114,7 +117,8 @@ The repeated values matter for the chance baselines below.
 
 We restrict values to single tokens so that correctness can be evaluated at one output position, without a separate rule for parsing generated answers.
 The baseline question is \texttt{The task for $e_j$ is:}.
-It provides a common reference for the load and readout comparisons; Section~\ref{sec:wording} tests the consequences of changing it.
+The main load and classifier experiments use this question.
+Section~\ref{sec:wording} tests alternatives.
 We select the value in $\mathcal V$ with the highest next-token logit, the model's unnormalized score.
 We call this the native output and measure recall as the fraction of trials where it equals the queried entity's value.
 Tokens outside the pool do not compete, so the score measures restricted retrieval rather than free-form instruction following.
@@ -234,37 +238,39 @@ Two further conditions test whether the gain follows from a shorter question or 
 Asking only \texttt{$e_j$ is:} removes more introductory words but retains \texttt{is}; it produces smaller gains than deleting \texttt{is} in every tested model.
 Rewriting each assignment as \texttt{The task for $e_i$ is: $v_i$} matches the original question's form and also improves recall, despite lengthening the list.
 Neither the shorter question retaining \texttt{is} nor the matched list reproduces the largest gain.
-These variants also change token positions and continuation patterns, so they do not isolate the linguistic or circuit mechanism responsible.
+The variants change token positions and the text the model must continue, so we cannot tell which linguistic feature or circuit causes the gain.
 
 \citet{jelassi2024} use phone-book entries followed by worked lookup examples, whereas the original question here supplies no demonstration.
 We test both an exact-cue question, \texttt{$e_j$:}, and two answered questions about other entities in the same list.
 Because values repeat, an example about another entity can display the target value.
-The example condition therefore tests added demonstrations, including possible target-value repetition, rather than wording alone.
+Any gain from examples could therefore reflect both the demonstrations and repetition of the target value; it cannot be attributed to wording alone.
 On 288 trials at sixteen bindings, Pythia-410M reaches \NewPilotFourTenExact{} with the exact cue and \NewPilotFourTenExamples{} with examples, against \NewPilotFourTenOriginal{} under the original question.
 Examples do not help every model: Pythia-160M falls from \NewPilotSmallOriginal{} to \NewPilotSmallExamples{}, although its exact-cue recall reaches \NewPilotSmallExact{}.
 OLMo-2-1B also loses recall under the exact cue relative to its original question.
 Appendix~\ref{app:wording} gives all seven pilot models, prompt construction and readout comparisons.
 
 These variants were chosen after inspecting failures under the original question, so the comparison is exploratory.
-They nevertheless provide direct counterexamples to treating the baseline curve as a limit on retrieval under other questions.
-Changing the query also changes the hidden states, so the gain does not show that the correct association was already recoverable under the original query.
-We examine that question next, keeping the original query fixed.
+They show that the baseline curve does not bound recall under other questions.
+A different question also produces different hidden states, however.
+The gain does not tell us whether a classifier could have recovered the answer from the states produced by the original question.
+To test that possibility, we return to the original question.
 
 \section{Comparing hidden-state and output-score decoders}\label{sec:hidden}
-A query change establishes that the model can perform better on the same assignments, but leaves open what can be predicted from its state under the original query.
-We therefore return to that query and train a supervised classifier to predict the correct value from the hidden state.
+Can a classifier predict the assigned value from a hidden state more accurately than the model answers the original question?
+We train a supervised classifier on the hidden states produced by that question.
 We sample the internal vector after a transformer block, called the residual-stream activation, at the last question token.
 The sampled blocks lie at quarter, half, three-quarter and full depth.
 A multinomial logistic regression, the hidden-state probe, learns to predict the assigned value from that vector \citep{alain2016}.
 The language model stays frozen while the probe learns from labeled prompts.
-Each trial is evaluated out of fold: the probe trains on other seed groups, with standardization fit only to those training groups.
+To predict a trial's value, the probe trains on prompts generated with other seeds.
+We also fit the standardization of its inputs using only those training prompts.
 
 A probe that beats native output might be learning a better decision rule than choosing the highest-scoring value.
-A classifier trained on the entire vector of output scores could also recover answers missed by that choice.
+A classifier trained on the scores for every value in the candidate pool could also recover answers missed by that choice.
 We therefore train a second multinomial logistic regression on all candidate-value logits, with the same labels, folds and regularization rule as the hidden-state probe.
-The candidate-logit decoder thus learns a new decision rule from the model's existing output scores.
-A hidden-state probe that outperforms it recovers more correct answers than this particular score mapping.
-The comparison does not establish optimal decoding of either representation or rule out a stronger nonlinear score decoder.
+We call this classifier the candidate-logit decoder.
+If the hidden-state probe predicts more values correctly, its advantage survives this attempt to learn a better rule from the output scores.
+A nonlinear classifier or another decoding method could still make better predictions from either input.
 
 \begin{figure}[t]
 \centering
@@ -277,32 +283,38 @@ There are 576 trials per model and condition.
 The registration fixes the layer, load and decision rule before probes are fit on these models.}
 \label{fig:heldout}
 \end{figure}
-To test the comparison on additional models, we used the first thirteen models for exploration and registered the analysis for Pythia-1.4B, Pythia-2.8B and Qwen2.5-1.5B before fitting their probes.
-The registration fixes three-quarter depth, sixteen bindings and no distractors, preventing selection of the layer and load from these models' probe results.
+We first explored the probe results in thirteen models.
+Before fitting probes for Pythia-1.4B, Pythia-2.8B and Qwen2.5-1.5B, we registered a test at three-quarter depth, sixteen bindings and no distractors.
+This choice prevents us from selecting the layer and load after seeing these models' probe results.
 It requires a probe advantage of at least 0.10 over native output, with a positive lower confidence bound, in at least two models.
 A separate criterion requires a positive lower bound over the candidate-logit decoder in at least two models.
-A foil probe predicts the next listed entity's value; its registered acceptance interval checks whether the main probe's success could be matched by reading another listed value.
-Two pooled native-output summaries were visible at registration, so the held-out status applies to the probe comparison rather than to every observed model statistic.
+To check whether the probe could succeed by reading another association, a foil probe learns to predict the next listed entity's value.
+We specify an acceptance interval for its recall in the registration.
+Two pooled summaries of the models' native output were already visible when we registered the test.
+We had not fit their probes, so these models were held out for the probe comparison, but their native performance was not entirely unseen.
 
-Both primary comparison criteria pass (Figure~\ref{fig:heldout}).
+The results meet both criteria (Figure~\ref{fig:heldout}).
 \NewHeldPone{} of three models meet the registered advantage over native output, and \NewHeldPtwo{} of three exceed the trained candidate-logit decoder with positive lower bounds.
 Pythia-1.4B reaches \NewHeldOneFourProbe{} probe recall, compared with \NewHeldOneFourOutput{} native recall and \NewHeldOneFourLogits{} for the score decoder.
 Pythia-2.8B reaches \NewHeldTwoEightProbe{}, compared with \NewHeldTwoEightOutput{} and \NewHeldTwoEightLogits{}.
 Qwen2.5-1.5B reaches \NewHeldQwenProbe{}, compared with \NewHeldQwenOutput{} and \NewHeldQwenLogits{}; its positive gain over output misses the registered ten-point minimum.
 All three primary foil controls meet their registered interval (Appendix~\ref{app:heldout}).
 
-Each additional model uses its own trained classifier, so this test extends the comparison to new models without testing transfer of a trained probe.
+We train a separate classifier for each additional model.
+The test therefore asks whether the comparison holds in new models, not whether a classifier trained on one model works on another.
 The original query is not the only condition in which a probe advantage occurs.
 Under the exact cue, the Pythia-160M probe reaches \NewPilotSmallProbe{} recall, against \NewPilotSmallExact{} native recall and \NewPilotSmallLogits{} for its score decoder.
-The improved query and the trained probe thus address different comparisons: native recall is higher than under the original query, yet the probe still exceeds both readouts in this condition.
+The exact cue improves the model's own recall, and a classifier trained on its hidden state predicts still more values correctly than either output-based method.
 This pattern does not hold consistently with worked examples.
-The pilot fits its own classifiers with smaller training folds, so these are within-condition readout comparisons, not matched estimates of how wording changes the representation (Appendix~\ref{app:wording}).
+These pilot classifiers train on fewer examples than the main-study classifiers.
+We can compare their predictions for the same question, but cannot attribute differences between the pilot and main study to wording alone (Appendix~\ref{app:wording}).
 
 \section{Probes across pretraining}\label{sec:development}
 The hidden-state comparison also requires choosing a layer.
 This matters when following a model through pretraining: a low probe score at one depth need not mean that the answer is equally difficult to decode elsewhere in the network.
 We examine this dependence by sampling four depths in Pythia-160M and Pythia-410M, using the same capacity protocol at ten checkpoints from step 1{,}000 to 96{,}000.
-The comparison asks how the sampled readouts change during training; it does not test when binding information first appears anywhere in the model.
+We follow probe recall at these four depths during training.
+This does not determine when binding information first appears elsewhere in the model.
 
 \begin{figure}[t]
 \centering
@@ -331,14 +343,14 @@ The layer, scoring population and metric differ between the studies, so the cont
 The earlier error-group and steering experiments use different protocols; their results and qualifications appear in Appendix~\ref{app:probes}.
 
 \section{Discussion}\label{sec:use}
-The query gains show why a low capacity score need not immediately be taken as a reason to use a larger model.
-Supervised decoders provide another comparison, but require training labels and access to output scores or internal activations.
-These comparisons still leave open how reliable the chosen retrieval procedure is at the load an application requires.
+Changing the question can improve recall without increasing model size.
+Training a classifier on hidden states or output scores can also improve predictions, but requires labeled examples and access to those states or scores.
+Neither result tells us whether the resulting accuracy is sufficient for an application.
 
 For target recall $\pi$, the relevant measured loads are $\{K:p_D(K)\geq\pi\}$ under its selected protocol.
 A fitted $K_{50}$ cannot supply that set, because it rescales by single-binding performance and smooths a curve that may be nonmonotone.
 Every model here fails a 0.9 criterion at two bindings under the original question, while the wording controls establish that some failures are query-dependent.
-Protocol selection should therefore precede testing on new contexts at the loads the application requires.
+We should choose the question and prediction method first, then test them on new contexts at the loads the application requires.
 
 Retrieving several values correctly is a stricter requirement than retrieving one.
 If their marginal recalls are $p_1,\ldots,p_m$, then
@@ -355,8 +367,8 @@ Joint retrieval must therefore be tested before using these scores to predict to
 
 The same question also motivates a circuit-level account: how does a fixed model retrieve the association relevant to a query while other associations compete in context?
 Such an account would need to explain the observed dependence on query wording, sampled layer and readout, as well as what changes during pretraining.
-Our comparisons establish conditions under which the measured predictions differ, but do not identify the causal operations responsible.
-Interventions would be needed to test how those operations use information about the queried pair.
+We observe different predictions after changing the question or the way an answer is decoded.
+To explain these differences, a circuit study would need interventions that test which operations use information about the queried pair.
 
 \section{Related work}\label{sec:related}
 \citet{jelassi2024} show that pretrained transformers retrieve phone-book entries using prompts with worked examples.
@@ -377,7 +389,9 @@ Whether these scores predict application performance remains untested.
 \citet{lepori2026} extend the distinction to models that encode novel semantics in context but struggle to use them in downstream tasks.
 Our work builds on this evidence that correct-answer information can be recovered despite an incorrect model output.
 \citet{villuri2026} show that output calibration explains much of such a gap in a synthetic verification task, motivating a learned score decoder before attributing the advantage to internal access.
-We extend our earlier trained-decoder comparison \citep{decodable2609} with matched query changes and a preregistered test on additional models.
+Our earlier study compared classifiers trained on hidden states and candidate-value logits \citep{decodable2609}.
+Here, matched assignments reveal how changing the question affects recall.
+In three additional models, classifiers trained on hidden states predict more values correctly than those trained on candidate-value logits under criteria registered before probe fitting.
 The results concern the supervised decoders tested here, subject to the methodological limits of probing \citep{hewitt2019,belinkov2022}.
 
 \citet{billa2026} find task-relevant probe information before behavioral improvement in transformers, while our earlier binding study follows probe accuracy and steering across training \citep{decodable2609}.
@@ -390,9 +404,9 @@ Activation steering can change a model's answer \citep{li2023iti,turner2023}; es
 The task measures static, single-token retrieval with pool-restricted scoring.
 It does not evaluate natural-language coreference, state updates, generated tool calls or joint retrieval, and we do not measure whether its capacity summaries predict those tasks.
 The five-model wording factorial and seven-model pilot are exploratory and use no distractors.
-Their results establish sensitivity to the tested questions, not robustness across paraphrases or a linguistic cause.
+Recall changes under the questions we tested; we have not shown robustness across paraphrases or identified a linguistic cause.
 Load changes length, distractors change both length and content, and the execution correction combines precision, padding and position handling.
-These comparisons leave the corresponding causal effects unresolved.
+We cannot separate the effects of these changes.
 
 The probe results depend on supervision and the choice of decoder.
 Each model and condition receives separately fitted classifiers, and the candidate-logit decoder is one linear comparator rather than an optimal decoder of all output information.
@@ -404,9 +418,10 @@ Earlier steering uses a different protocol and large vectors that can impose an 
 
 \section{Conclusion}\label{sec:conclusion}
 A recall curve measures retrieval under the question and readout used to obtain it.
-Our matched query changes recover associations missed by the baseline question, and our preregistered comparison finds that supervised hidden-state probes exceed trained candidate-logit decoders.
-These observations limit the interpretation of low native recall: it need not be a limit on retrieval under another question, and it does not determine how accurately a supervised readout can predict the answer.
-For small-model evaluation, the relevant question is therefore how reliably the model retrieves under a specified procedure at the required load.
+Changing the question recovers associations that the baseline question misses.
+With that baseline question unchanged, trained classifiers predict more values correctly from hidden states than from candidate-value logits in our preregistered test.
+Low native recall therefore leaves two questions open: whether another question would elicit the answer, and whether a trained classifier could predict it more accurately.
+When evaluating a small model, we need to specify how we ask for information and obtain the answer, then measure reliability at the required load.
 Testing that procedure on new formats and joint retrieval tasks is necessary before using the resulting scores to predict application performance.
 
 {\raggedright
@@ -662,7 +677,7 @@ Logit dec.: trained full-pool candidate-logit decoder.
 Foil: listed-value recall when predicting the next listed entity's value.
 Shuffled: pool recall after shuffling the training labels.
 These columns use different chance baselines; the listed-value guess is approximately 0.076 and pool chance is approximately 0.014 to 0.015.
-Point estimates are descriptive and do not enter the registered held-out-model decision.}
+These descriptive estimates are not used to decide whether the held-out test passes.}
 \label{tab:wording-readouts}
 \small
 \input{table_wording_readouts}
@@ -698,7 +713,7 @@ This identity alone does not establish that distractors preserve or change the c
 
 \section{Earlier probe and steering evidence}\label{app:probes}
 We reanalyze saved runs from \citet{legible2609} and \citet{decodable2609}.
-These experiments use different protocols from the capacity, wording and registered readout comparisons, so we report them separately.
+These earlier experiments use different prompts and evaluation procedures from the current study, so we report them separately.
 The three checkpoint sets use six distinct values from a pool of 25 and exactly 256 code-like distractor tokens.
 Their listed-value guess is \DvBaseline{}, and pool chance is \DvPoolChance{}.
 The fourth set uses four bindings without distractors and a different value pool.
@@ -711,7 +726,7 @@ The fourth set uses four bindings without distractors and a different value pool
 (b) Pythia-1.4B native recall and probe accuracy conditional on a wrong output, at a layer selected on separate trials and at the final layer.
 (c) Fractions of wrong answers repaired by steering toward the gold value, probe value or a random direction.
 Dashed grey denotes the listed-value guess and dotted grey denotes pool chance.
-These data do not share the current capacity protocol or establish a size threshold for binding information.}
+These runs use a different protocol and cannot establish a model-size threshold for binding information.}
 \label{fig:development}
 \end{figure}
 
@@ -757,7 +772,7 @@ To examine wrong outputs more closely, an earlier experiment refit a selected-la
 We analyze its \DvPostN{} test trials per checkpoint.
 It classifies each wrong output by whether the probe's top listed value is correct and whether the gold value's normalized probability among the six listed values reaches one sixth.
 The share with a correct probe rises from \DvPostProbeRightFirst{} to \DvPostProbeRightFinal{}.
-The saved rows lack prompt identifiers, so this describes changing shares rather than transitions of individual answers.
+The saved rows lack prompt identifiers, so we cannot track individual answers across checkpoints.
 Low gold-value probability is not evidence that the full logit pattern contains no answer information.
 
 \begin{table}[t]
