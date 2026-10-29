@@ -47,16 +47,18 @@
 \maketitle
 
 \begin{abstract}
-Supplying task-specific information in a prompt offers a way to adapt a language model without retraining it.
-The usefulness of this approach depends on reliably retrieving the association needed for the current question, especially when model size is constrained.
-Before treating poor recall as evidence that a larger model is needed, we ask how much the failure depends on the question and readout.
-We study this issue as more name--value pairs are supplied to \NewNModels{} open models from 70M to 2.8B parameters.
+Supplying information in a prompt lets a language model adapt to a task without retraining.
+When retrieval deteriorates as more associations enter the context, what does that decline tell us about the model's capacity?
+A low score leaves open whether another question would elicit the answer or whether a trained classifier could predict it more accurately from the model's internal state.
+This distinction matters when model size is constrained: poor recall alone does not tell us whether a larger model is needed.
+We measure recall as more name--value pairs are supplied to \NewNModels{} open models from 70M to 2.8B parameters.
+In subsets of these models, we compare questions on matched assignments and supervised predictions from hidden states and candidate-value scores.
 At sixteen bindings, deleting \texttt{is} from the question raises Pythia-410M recall from \NewFourTenOriginal{} to \NewFourTenColon{} on the same assignments, without changing the weights or scoring rule.
 With the original question unchanged, we also train classifiers to predict the assigned value from either the model's hidden states or its scores for candidate values.
 We specify this test before fitting the classifiers on three additional models.
 At sixteen bindings, three-quarter depth and no distractors, the hidden-state classifiers predict more values correctly than the classifiers using candidate-value scores across all test trials in each additional model.
 Two also meet the registered ten-percentage-point advantage over choosing the highest-scoring candidate value.
-How much a model appears to retrieve therefore depends on how it is asked and how its answer is obtained.
+These comparisons connect failures under load to the question and prediction method, limiting what low recall can establish about model capacity.
 \end{abstract}
 
 \section{Introduction}\label{sec:intro}
@@ -98,16 +100,24 @@ Their success does not establish that the unmodified model uses the same informa
 
 Copying and phone-book experiments show that transformers can retrieve associations from context \citep{jelassi2024}, and probes can recover correct-answer information on trials where models answer incorrectly \citep{orgad2024,karim2026}.
 Our earlier study also compared trained state and candidate-logit decoders \citep{decodable2609}.
-We use the two classifiers to examine how predictions from hidden states and output scores differ as more associations enter the context.
-We also vary the question on the same assignments.
+
+The contribution here is to examine what a load-dependent retrieval failure means by bringing these comparisons into the same task.
+Changing the question on matched assignments tests whether the model can retrieve more of the supplied information without changing its weights.
+Keeping the question fixed and training both classifiers tests whether hidden states allow more accurate predictions than the candidate-value scores.
+The first comparison concerns what another question elicits; the second concerns what additional supervision can recover from the states produced by the original question.
+Neither comparison alone answers the other.
 After exploring these effects, we specify the layer, load and criteria for a test on additional models before fitting their probes.
 
 Across \NewNModels{} models, the original-query curves show substantial failures as the number of bindings increases (Section~\ref{sec:capacity}).
 Matched wording changes improve recall in five models, while exact-cue and worked-example pilots show that the gains depend on both model and format (Section~\ref{sec:wording}).
 Under the original query, hidden-state probes exceed trained candidate-logit decoders in all three held-out models at the registered layer and load (Section~\ref{sec:hidden}).
 Checkpoint comparisons show that probe recall also depends on the sampled layer (Section~\ref{sec:development}).
-A model's measured capacity thus depends on the question and the method used to predict its answer.
-These estimates cannot tell us how much the model stores regardless of the question, or how reliably it will perform in an application.
+
+These results make the interpretation of capacity the central issue, beyond the score assigned to each model.
+A low score can coexist with better retrieval under another question and with more accurate supervised predictions under the original one.
+For small-model research, the next question is which of these failures persists after the question and prediction method have been chosen.
+For a circuit-level explanation, the challenge is to explain why the same weights produce these different outcomes.
+Our measurements constrain such an explanation, but do not identify the causal operations or establish reliability in an application.
 
 \section{Task and evaluation}\label{sec:setup}
 We use randomly assigned name--value pairs so that the answer is determined by the current list.
