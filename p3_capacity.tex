@@ -83,18 +83,15 @@ The score decoder matters because a probe could beat the native choice even when
 Only after that comparison can a probe advantage be interpreted as predictive information recoverable beyond the specified score decoder.
 It still does not identify a mechanism or establish that the model uses the probed information \citep{hewitt2019,belinkov2022}.
 
-These questions connect two existing research directions.
 Copying and phone-book lookup studies show that transformers can retrieve associations from context \citep{jelassi2024}, while probing studies recover correct-answer information on trials where a model answers incorrectly \citep{orgad2024,karim2026}.
 We extend our earlier comparison of trained state and candidate-logit decoders \citep{decodable2609} by examining it alongside load and matched query changes, then testing a fixed comparison prospectively on additional models.
 The matched assignments let us distinguish a query-dependent change in retrieval from differences in the underlying examples.
-The trained score decoder gives the internal measurement a more informative comparator than the native choice alone.
 
-The measurements establish complementary results.
 Matched wording controls improve retrieval in five models, with additional exact-cue and worked-example tests showing that gains depend on both model and query (Section~\ref{sec:wording}).
 Original-query curves across \NewNModels{} models quantify the load-dependent failures that those controls address (Section~\ref{sec:capacity}).
 At the registered layer and load, hidden-state probes exceed trained candidate-logit decoders in all three held-out models (Section~\ref{sec:hidden}).
 Checkpoint measurements then show why a middle-layer probe cannot stand for the whole network (Section~\ref{sec:development}).
-Together, these comparisons make the protocol part of the empirical capacity claim and identify what must be checked before using that claim to guide small-model selection.
+Capacity curves therefore need to specify the question and readout used to measure them.
 
 \section{Measuring retrieval under a specified protocol}\label{sec:setup}
 \paragraph{Task and scoring.}
@@ -274,12 +271,12 @@ Pythia-2.8B reaches \NewHeldTwoEightProbe{}, compared with \NewHeldTwoEightOutpu
 Qwen2.5-1.5B reaches \NewHeldQwenProbe{}, compared with \NewHeldQwenOutput{} and \NewHeldQwenLogits{}; its positive gain over output misses the registered ten-point minimum.
 All three primary foil controls meet their registered interval (Appendix~\ref{app:heldout}).
 
-The prospective result supports the fixed analysis recipe on additional models, each with its own trained classifier.
-It does not show transfer of a probe between models or repair of a deployed system.
+The result extends the probe comparison to additional models, using a separately trained classifier for each.
+It does not show transfer of a probe between models.
 The alternative-query pilot gives a useful extension: under the exact-cue question, the Pythia-160M probe reaches \NewPilotSmallProbe{} recall, against \NewPilotSmallExact{} native recall and \NewPilotSmallLogits{} for its score decoder.
 Improved native recall coexists with a probe advantage in this condition.
 The worked-example conditions show a different pattern across models (Appendix~\ref{app:wording}).
-The central conclusion remains supervised and protocol-specific: answer prediction from a sampled internal state can exceed prediction by the specified output-score decoder.
+Under these conditions, a supervised probe can predict answers more accurately from an intermediate state than the trained output-score decoder.
 
 \section{Pretraining evidence depends on the layer tested}\label{sec:development}
 Load curves ask how retrieval changes when more associations compete in a fixed model.
@@ -315,7 +312,7 @@ That gain requires a supervised probe and a large intervention that can impose a
 Our earlier study also compared trained state and candidate-logit decoders, finding no detected final-state advantage on late-checkpoint model errors.
 The present test instead compares intermediate-state decoding with candidate-logit decoding, using accuracy over all trials under the capacity protocol.
 These differences prevent attributing the contrasting results to layer choice alone.
-Their joint implication is methodological: a developmental claim must identify the state, decoder, scoring population and metric before interpreting a gap as information lost at the output.
+Comparing these developmental results requires matching the layer, decoder, scoring population and metric before interpreting a gap as information lost at the output.
 
 \section{What a capacity measurement can decide}\label{sec:use}
 The practical use of these measurements is to distinguish evaluation choices before treating a low score as a model-size requirement.
@@ -398,9 +395,7 @@ The next experiment must freeze the selected protocol and measure joint retrieva
 That test would establish whether the recovered retrieval changes a practical small-model decision.
 
 \paragraph{Code and data.}
-The paper source, recorded results, compact trial predictions and reproduction commands are available at
-\url{https://github.com/RavulapalliManas/paper-binding-capacity}.
-Appendix~\ref{app:protocol} identifies the released evidence and the limits of reproducing the earlier runs.
+Code and data are available at \url{https://github.com/RavulapalliManas/paper-binding-capacity}.
 
 \section*{Acknowledgements}
 We thank Kevin Li for proofreading, for help with the paper's readability, and for the suggestions that led to this paper.
@@ -522,7 +517,7 @@ arXiv:2205.01068.
 
 \clearpage
 \appendix
-\section{Protocol details and result provenance}\label{app:protocol}
+\section{Experimental details}\label{app:protocol}
 \paragraph{Word pools and matching.}
 The entity and value pools contain common technical words filtered to single tokens when preceded by a space.
 The lists overlap in three words: \texttt{commit}, \texttt{index} and \texttt{lock}.
@@ -534,29 +529,24 @@ Wording comparisons retain entity IDs, value IDs and query indices within each m
 \paragraph{Execution and storage.}
 The corrected capacity grid contains \NewNPrompts{} prompt evaluations across \NewNModels{} models.
 Each model has 180 cells: fifteen loads, two distractor conditions and six seeds.
-The original generator and the rerun's reconstructed generator pass an exact prompt-equality self-test over the full grid.
 The 768-token encoding limit exceeds the longest original-grid prompt; the earlier replay found no truncated questions.
 Float32 refers to model execution and saved candidate logits.
 The runner stores the sampled hidden states in float16 to reduce storage, then converts them to float32 for classifier fitting.
-The saved record identifies padding, position handling, software versions, device and the embedding-weight hash.
-The embedding hash is a repeated-checkpoint check, not a complete model checksum.
 
 The initial continuous-protocol results used bfloat16 execution on Trainium.
 The corrected records use float32 execution with TF32 disabled and dynamic padding on the recorded CPU device.
 GPT-2 receives mask-derived position IDs.
 The earlier model exclusions and scaling fits do not apply to these corrected inputs.
-We retain the old results as historical artifacts rather than combining them with the current curves.
 A factorial test that varies precision, padding and position handling separately remains necessary to explain the configuration difference.
 
 \paragraph{Capacity fitting.}
-The existing \texttt{capacity\_curve.py} fits
+We fit
 $r(K)=1/(1+\exp\{\beta(\log K-\log K_{50})\})$
 to recall normalized by the no-distractor single-binding ceiling.
 The estimator uses the grid endpoint for its censoring rule and log-linear interpolation if nonlinear fitting fails.
-Its synthetic checks recover a planted crossing, retain an uncrossed endpoint as a bound, order planted curves correctly and reject an ineligible ceiling.
 Because the endpoint rule does not inspect every earlier crossing, a right-censored value does not establish threshold retention at every smaller load.
 The original measured curve remains the reference for an absolute threshold.
-Table~\ref{tab:measured} gives the current summary without a size-law regression.
+Table~\ref{tab:measured} gives the fitted capacities.
 
 \begin{table}[t]
 \centering
@@ -570,22 +560,11 @@ Capacities are descriptive fit outputs, not estimates of an intrinsic storage li
 \input{table_measured}
 \end{table}
 
-\paragraph{Source paths and reproduction.}
-The released measurement root is \texttt{results/measurement/} in the public repository.
-The corrected per-model records are \texttt{capacity\_fp32/<model>/main.json}.
-Compact trial identifiers and recorded predictions are under \texttt{predictions/}; \texttt{release\_manifest.json} maps them to the original run records and records file hashes.
-The wording factorial records are \texttt{frame3/<model>/main.json}.
-The runner is \texttt{analysis/gpu\_capacity\_dev.py}; the probe runner is \texttt{analysis/p3\_probe\_capacity.py}.
-The latter writes out-of-fold predictions and reports per-load recall from saved states without rerunning the language model.
-\texttt{analysis/p3\_paired\_ci.py} computes the paired intervals.
-
-The existing figure generator, \texttt{analysis/make\_p3\_revision\_figs.py}, accepts \texttt{--measurement-root} and \texttt{--out}.
-It reads the recorded JSON files and emits the current figures, tables and \texttt{numbers\_measured.tex}.
-Its structured output, \texttt{p3\_measured\_revision.json}, records input SHA-256 hashes and its own source hash.
-No model execution or probe fitting occurs during this build.
-The release verifier recomputes native recall and the paired comparisons from compact predictions.
-Large hidden-state tensors remain outside Git and require rerunning model execution and probe fitting; the recorded control summaries do not replace that fitting.
-Generated TeX and PDF assets accompany the manuscript.
+\paragraph{Reproducing the experiments.}
+The repository's \texttt{analysis/gpu\_capacity\_dev.py} evaluates models, \texttt{analysis/p3\_probe\_capacity.py} fits probes and candidate-logit decoders, and \texttt{analysis/p3\_paired\_ci.py} computes paired confidence intervals.
+Results are in \texttt{results/measurement/}, with per-trial assignments and predictions in its \texttt{predictions/} subdirectory.
+Running \texttt{make} builds the figures, tables and paper from these results.
+Hidden activations are not distributed; fitting probes requires rerunning model evaluation.
 
 \section{Held-out probe test and controls}\label{app:heldout}
 \paragraph{Selection and chronology.}
@@ -627,22 +606,12 @@ Distractor text is the secondary condition.}
 \input{table_heldout}
 \end{table}
 
-\paragraph{Saved controls and versioning.}
+\paragraph{Additional controls.}
 The probe runner also supports shuffled training labels, prediction of the queried entity, and a pre-question state control.
 A saved-array name collision left token indices rather than pre-question states in some records, so those records cannot support a pre-question probe.
 The reported held-out decision uses the registered foil control.
-The registration records source hashes for the probe runner, interval script and capacity estimator.
-The current probe runner has a later \texttt{--ctl-conds} option, added after the held-out run with its default preserving the earlier control behavior.
-The registered hash and later working-copy hash therefore differ; we do not describe the working copy as byte-identical to the frozen source.
-The frozen registration remains unchanged.
-
-\paragraph{Result files.}
-The primary numerical record is \texttt{probe\_cap/heldout\_paired\_K16.json}.
-Control predictions are summarized in \texttt{probe\_cap/heldout\_ctl3.json}.
-Saved out-of-fold predictions are in \texttt{probe\_cap/oof\_heldout/}.
-The exploratory comparisons remain in \texttt{probe\_cap/p3\_paired\_ci\_13\_K16.json}.
-The checkpoint sweep uses \texttt{probe\_cap/p3\_probe\_ckpt.json} and adjacent saved out-of-fold predictions.
-We do not pool the exploratory models into the registered decision.
+The released probe script adds a \texttt{--ctl-conds} option after the held-out run, preserving the original default control conditions.
+Its source therefore differs from the version identified by the preregistered hash.
 
 \section{Exact-cue and worked-example pilot}\label{app:wording}
 The exploratory pilot covers seven models at loads $\{1,2,4,8,16,32,64\}$, with three seeds of 96 trials per cell.
@@ -686,13 +655,9 @@ Point estimates are descriptive and do not enter the registered held-out-model d
 \input{table_wording_readouts}
 \end{table}
 
-The source records are \texttt{frame\_test/<model>/main.json} and adjacent trial arrays.
-Probe, candidate-logit and control summaries are respectively \texttt{p3\_probe\_frame.json}, \texttt{p3\_readout\_frame.json} and \texttt{p3\_probe\_frame\_ctl\_L2.json} within \texttt{probe\_cap/}.
-The \texttt{L2} filename denotes the third saved layer index, not network layer two.
-The main paper's listed-error summaries use \texttt{anatomy/p3\_error\_anatomy\_13.json}, restricted to the original question, no distractors and sixteen bindings.
+The listed-error analysis uses the original question, no distractors and sixteen bindings.
 For each model, the reference is the mean fraction of distinct listed nongold values among all nongold pool values, evaluated on the observed wrong-answer trials.
 It is a uniform-error reference, not a fitted model of the language model's errors.
-The generated revision summary retains each model's wrong-answer denominator and listed-answer count.
 
 \section{What recall alone leaves unidentified}\label{app:identity}
 A low output score does not identify the stage of failure.
@@ -821,7 +786,6 @@ These earlier runs were produced by \texttt{qgeom.py}, \texttt{dyn.py}, \texttt{
 \texttt{analysis/p3\_development.py} recomputes their reported summaries from saved outputs.
 The \texttt{dyn.py} and four-binding outputs record no source-version hash, and the repository's four-binding runner is later than those runs.
 The four-binding measurements record Trainium hardware; several other records do not identify the device.
-The current result files preserve those omissions.
 We do not infer a common execution configuration or a common retrieval mechanism across these protocols.
 
 \end{document}
